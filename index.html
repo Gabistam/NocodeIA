@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 1 — Travailler efficacement avec une IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+/* ---------- HEADER ---------- */
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+/* ---------- TABS ---------- */
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+
+/* ---------- LAYOUT ---------- */
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+
+/* famille tags */
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+/* term items */
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+/* buttons */
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+/* progress per activity */
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+/* result panel */
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+/* chain (ecosystem) */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* quiz rows */
+.q-row{display:grid;grid-template-columns:1fr 230px;gap:14px;align-items:center;padding:14px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.q-row select{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);font-family:var(--sans);font-size:.85rem;background:#fff}
+.q-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.q-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.q-row .expl{grid-column:1/-1;font-size:.84rem;color:var(--dark2);display:none;padding-top:6px;border-top:1px dashed var(--border)}
+.q-row.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+@media(max-width:700px){.q-row{grid-template-columns:1fr}}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+textarea.f-input.code{font-family:var(--mono);font-size:.84rem;min-height:150px}
+.pillar-field{border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#fff}
+.pillar-field.filled{border-color:#6ee7b7;background:#f0fdf4}
+.pillar-head{display:flex;align-items:center;gap:10px;font-weight:700}
+.pillar-num{width:28px;height:28px;border-radius:8px;background:var(--dark);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:.8rem}
+.pillar-field.filled .pillar-num{background:var(--secondary)}
+.pillar-hint{font-size:.8rem;color:var(--muted);margin:4px 0 8px 38px}
+.pillar-field textarea{margin-left:0}
+
+/* pillars overview */
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(2){border-top-color:var(--purple)}
+.pillar:nth-child(3){border-top-color:var(--secondary)}
+.pillar:nth-child(4){border-top-color:var(--accent)}
+.pillar:nth-child(5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+/* steps */
+.steps{counter-reset:step;margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+
+/* check list */
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+/* table */
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+/* project cards */
+.project{border-radius:12px;padding:20px;border:1px solid var(--border);background:#fff}
+.project .emoji{font-size:2rem}
+.project h4{font-size:1.1rem;margin:6px 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+/* route */
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+/* levels */
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+
+/* glossary mini */
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+
+/* nested AI levels */
+.nest{border-radius:14px;padding:16px 18px;margin-top:12px}
+.nest-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:4px}
+.nest-head .muted{flex-basis:100%;margin:0}
+.nest.n1{background:#eff6ff;border:2px solid #bfdbfe;margin-top:16px}
+.nest.n2{background:#ecfdf5;border:2px solid #a7f3d0}
+.nest.n3{background:#f5f3ff;border:2px solid #ddd6fe}
+.nest.n4{background:var(--dark);border:2px solid #10b981;color:#fff}
+.nest.n4 strong{color:#34d399}
+/* modality cards */
+.modality{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.modality .m-top{display:flex;justify-content:space-between;align-items:center}
+.modality .m-ico{font-size:1.6rem}
+.modality h4{font-size:1.05rem;margin-top:2px}
+.modality p{font-size:.86rem;color:var(--dark2);margin:0}
+.modality .m-tools{font-family:var(--mono);font-size:.74rem;background:var(--dark);color:#e2e8f0;padding:7px 10px;border-radius:7px}
+.modality .m-use{font-size:.8rem;color:var(--muted);border-top:1px dashed var(--border);padding-top:8px;margin-top:auto}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="badge">🤖 NoCode AI / Vibe Coding — Séance 1</span>
+    <h1>Travailler efficacement avec une IA</h1>
+    <p class="subtitle">Comprendre l'écosystème IA, structurer ses prompts, faire clarifier un besoin et choisir entre une conversation et un agent. Première brique du parcours « de l'idée au MVP ».</p>
+    <div class="meta-pills">
+      <span class="meta-pill">🧭 Séance 1 sur 6</span>
+      <span class="meta-pill">🛠️ 7 activités pratiques</span>
+      <span class="meta-pill">🧩 5 familles de notions</span>
+      <span class="meta-pill">📝 Livrable : mini-brief</span>
+    </div>
+    <div class="global-progress">
+      <div class="label"><span>Progression de la séance</span><span id="globalPct">0 / 8</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+
+<div class="tabs-wrap">
+  <nav class="tabs" role="tablist" aria-label="Sections de la séance">
+    <button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button>
+    <button class="tab" data-tab="ia" data-act="types" role="tab">🌐 Panorama de l'IA <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="1" data-act="eco" role="tab">🧠 Écosystème IA <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="2" data-act="builder" role="tab">🏛️ Les 5 Piliers <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="3" data-act="tp" role="tab">🔧 Mini-TP prompt <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="4" data-act="brief" role="tab">🎤 Interview IA <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="5" data-act="ctx" role="tab">🗂️ Contexte & mémoire <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="6" data-act="agent" role="tab">🤝 Chat vs Agent <span class="done-mark">✅</span></button>
+    <button class="tab" data-tab="7" data-act="vf" role="tab">🏁 Bilan <span class="done-mark">✅</span></button>
+  </nav>
+</div>
+
+<main>
+
+<!-- ============ 0. DÉMARRAGE ============ -->
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Le module en une phrase</div>
+    <div class="key-box">
+      <div class="big">Être capable de transformer un besoin en MVP fonctionnel en utilisant l'IA pour concevoir, générer, comprendre, corriger, tester et déployer une application.</div>
+    </div>
+    <p class="lead">Ce module ne vise pas à maîtriser un framework en profondeur. Il vise à <strong>piloter intelligemment un environnement de développement assisté par IA</strong> sans perdre le contrôle de ce qui est produit.</p>
+    <h3>Le parcours complet</h3>
+    <div class="route">
+      <div class="route-step here"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div>
+      <div class="route-step here"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div>
+      <div class="route-step"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div>
+      <div class="route-step"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div>
+      <div class="route-step"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div>
+      <div class="route-step"><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div>
+      <div class="route-step"><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div>
+      <div class="route-step"><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div>
+    </div>
+    <p class="muted">En bleu : les étapes travaillées aujourd'hui.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🧭</span>Le fil pédagogique</div>
+    <div class="table-wrap"><table>
+      <tr><th>Étape</th><th>Ce que vous saurez faire</th></tr>
+      <tr><td><strong>Séance 1</strong> — aujourd'hui</td><td>Je sais parler à l'IA.</td></tr>
+      <tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr>
+      <tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr>
+      <tr><td>Séance 4</td><td>Je sais construire une vraie application.</td></tr>
+      <tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr>
+      <tr><td>Séance 5</td><td>Je sais contrôler ce que l'IA produit.</td></tr>
+      <tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr>
+    </table></div>
+    <div class="objectif-box"><strong class="title">La progression clé du module</strong>
+      <span class="term-item">Prompt Engineering</span> ➜ <span class="term-item">Context Engineering</span> ➜ <span class="term-item">Agentic Coding</span>
+      <p style="margin-top:10px">Aujourd'hui, on pose la première marche : savoir formuler une demande claire et savoir quand déléguer.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">🎬</span>Le projet fil rouge</div>
+    <p>Individuel ou en binôme. Trois sujets volontairement familiers : la difficulté doit porter sur la méthode, pas sur le métier.</p>
+    <div class="grid grid-3">
+      <div class="project"><div class="emoji">🎬</div><h4>CinéList</h4><p class="muted">Watchlist de films et séries, favoris, notes et avis.</p></div>
+      <div class="project"><div class="emoji">🎮</div><h4>GameBacklog</h4><p class="muted">Bibliothèque de jeux : à jouer, en cours, terminé, notes.</p></div>
+      <div class="project"><div class="emoji">🎓</div><h4>CampusHub</h4><p class="muted">Événements et activités étudiantes avec inscriptions.</p></div>
+    </div>
+    <h3>Socle fonctionnel commun (obligatoire)</h3>
+    <div class="chips">
+      <span class="chip">Authentification</span><span class="chip">Base de données</span><span class="chip">≥ 2 entités métier</span><span class="chip">Relation entre données</span><span class="chip">CRUD</span><span class="chip">Recherche / filtrage</span><span class="chip">Espace personnel / dashboard</span><span class="chip">Responsive</span><span class="chip">Design System</span><span class="chip">Git / GitHub</span><span class="chip">Déploiement</span>
+    </div>
+    <p class="muted" style="margin-top:12px">Bonus (uniquement si le MVP fonctionne) : intégration d'une API IA, d'une API externe ou d'une automatisation.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">🧰</span>Stack de référence et livrables</div>
+    <div class="chain" style="margin-top:0">
+      <span class="term-item">Coding Agent</span><span class="chain-arrow">→</span>
+      <span class="term-item">Next.js / TypeScript</span><span class="chain-arrow">→</span>
+      <span class="term-item">Supabase</span><span class="chain-arrow">→</span>
+      <span class="term-item">Git / GitHub</span><span class="chain-arrow">→</span>
+      <span class="term-item">Vercel</span>
+    </div>
+    <p>La méthode est <strong>indépendante de l'outil</strong> : Codex, Claude Code, Antigravity, Cursor, Copilot, OpenCode… Un autre choix technique (ex. MongoDB) est possible si vous êtes capable de le défendre et d'avancer en autonomie.</p>
+    <div class="grid grid-2" style="margin-top:14px">
+      <div class="mini-card"><h4>📦 Livrables du projet</h4>
+        <ul class="clean"><li>Repository GitHub à jour</li><li>Application déployée (URL publique)</li><li><code>PROJECT.md</code>, <code>DESIGN.md</code>, <code>AGENTS.md</code>, <code>README.md</code></li><li><code>AI-LOG.md</code> : journal des décisions IA</li></ul>
+      </div>
+      <div class="mini-card"><h4>📊 Évaluation</h4>
+        <ul class="clean"><li><strong>Projet — 70 %</strong> : fonctionnalités, BDD/Auth/CRUD, UX/UI, qualité et sécurité, méthodologie IA, Git et déploiement</li><li><strong>QCM individuel — 30 %</strong> : notions IA, prompting, contexte, Git, sécurité, workflow</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong>
+      <ul class="clean">
+        <li>distinguer les grandes familles d'IA et les différents types d'IA générative ;</li>
+        <li>distinguer LLM, chatbot, agent, API, MCP, RAG et automatisation ;</li>
+        <li>savoir quand utiliser une conversation et quand utiliser un agent ;</li>
+        <li>structurer un prompt avec la méthode des 5 Piliers ;</li>
+        <li>utiliser l'IA pour clarifier un besoin flou ;</li>
+        <li>comprendre les notions de contexte, de projet et de mémoire ;</li>
+        <li>porter un regard critique sur les réponses d'une IA.</li>
+      </ul>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>
+      Chaque onglet contient une activité à réaliser avec l'outil IA de votre choix ouvert à côté. Validez chaque activité pour faire avancer la barre de progression. Les onglets marqués ✅ sont terminés.
+    </div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="ia">Commencer : panorama de l'IA ▸</button></div>
+  </div>
+</section>
+
+<!-- ============ PANORAMA DE L'IA ============ -->
+<section class="panel" data-panel="ia">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🌐</span>Qu'est-ce que l'intelligence artificielle ?</div>
+    <p class="lead">L'intelligence artificielle regroupe l'ensemble des techniques qui permettent à une machine de réaliser des tâches demandant habituellement l'intelligence humaine : percevoir, comprendre, prédire, décider… et, plus récemment, <strong>créer</strong>.</p>
+    <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Situer l'IA générative dans l'ensemble plus large de l'IA, puis distinguer ses différents types pour savoir lesquels mobiliser dans un projet web.</div>
+    <h3>Des poupées russes</h3>
+    <p>Les termes « IA », « machine learning », « deep learning » et « IA générative » ne sont pas synonymes : chacun est un sous-ensemble du précédent.</p>
+    <div class="nest n1"><div class="nest-head"><span class="famille-tag f1">Niveau 1</span><strong>Intelligence artificielle</strong><span class="muted">Toute technique qui imite une capacité humaine, y compris des règles écrites à la main.</span></div>
+      <div class="nest n2"><div class="nest-head"><span class="famille-tag f2">Niveau 2</span><strong>Machine learning</strong><span class="muted">La machine apprend à partir d'exemples au lieu de suivre des règles écrites.</span></div>
+        <div class="nest n3"><div class="nest-head"><span class="famille-tag f4">Niveau 3</span><strong>Deep learning</strong><span class="muted">Apprentissage par réseaux de neurones à nombreuses couches, capables de traiter images, sons et langage.</span></div>
+          <div class="nest n4"><div class="nest-head"><span class="famille-tag f3">Niveau 4</span><strong>IA générative</strong><span class="muted" style="color:#cbd5e1">Des modèles qui produisent un contenu nouveau : texte, code, image, son, vidéo. C'est la partie qui nous intéresse.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🧬</span>Les grandes approches de l'IA</div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>📐 IA à base de règles</h4>
+        <p class="muted">Aussi appelée IA symbolique ou système expert. Un humain écrit les règles : « si… alors… ». La machine n'apprend rien, elle applique.</p>
+        <p><strong>Exemples :</strong> chatbot à arbre de décision, filtre anti-spam par mots-clés, adversaires dans les jeux vidéo classiques.</p>
+        <p class="muted" style="margin:0">Prévisible et explicable, mais rigide face aux cas non prévus.</p>
+      </div>
+      <div class="mini-card"><h4>📈 Machine learning</h4>
+        <p class="muted">La machine déduit elle-même des régularités à partir de grandes quantités de données.</p>
+        <ul class="clean">
+          <li><strong>Supervisé :</strong> apprend à partir d'exemples étiquetés (« spam » / « pas spam »). Ex. détection de fraude, estimation d'un prix.</li>
+          <li><strong>Non supervisé :</strong> trouve seul des groupes dans des données brutes. Ex. segmentation de clients.</li>
+          <li><strong>Par renforcement :</strong> apprend par essai-erreur grâce à des récompenses. Ex. robotique, jeux, affinage des chatbots à partir de retours humains.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mini-card" style="margin-top:16px"><h4>🧠 Deep learning</h4>
+      <p class="muted" style="margin:0">Branche du machine learning qui utilise des réseaux de neurones profonds. C'est lui qui a rendu possibles la reconnaissance d'images, la reconnaissance vocale, la traduction automatique moderne… puis l'IA générative.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">⚖️</span>Deux grandes familles d'usage : prédire ou créer</div>
+    <div class="table-wrap"><table>
+      <tr><th></th><th>🔎 IA prédictive (ou discriminative)</th><th>✨ IA générative</th></tr>
+      <tr><td><strong>Ce qu'elle fait</strong></td><td>Classe, détecte, prédit, recommande à partir de données existantes.</td><td>Produit un contenu nouveau à partir d'une consigne (le prompt).</td></tr>
+      <tr><td><strong>Type de sortie</strong></td><td>Une étiquette, un score, une probabilité, un classement.</td><td>Un texte, un code, une image, un son, une vidéo.</td></tr>
+      <tr><td><strong>Question typique</strong></td><td>« Ce mail est-il un spam ? »</td><td>« Rédige une réponse à ce mail. »</td></tr>
+      <tr><td><strong>Exemples</strong></td><td>Recommandations d'une plateforme de streaming, détection de fraude, reconnaissance faciale, lecture automatique de texte (OCR), identification d'une plante sur photo.</td><td>ChatGPT, Claude, Gemini, Midjourney, générateurs de voix, de musique ou de vidéo.</td></tr>
+      <tr><td><strong>Risque principal</strong></td><td>Biais et erreurs de classement.</td><td>Hallucinations : un résultat plausible mais faux.</td></tr>
+    </table></div>
+    <div class="instruction-box"><strong class="title">IA « faible » et IA « générale »</strong>Toutes les IA actuelles sont dites <strong>étroites</strong> (ou faibles) : elles sont performantes sur des tâches précises, sans compréhension générale du monde comparable à celle d'un humain. L'IA <strong>générale</strong> (AGI), capable de tout apprendre comme un humain, reste un objectif de recherche dont la faisabilité et l'échéance sont débattues.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">✨</span>Les différents types d'IA générative</div>
+    <p class="lead">On classe généralement les IA génératives selon le <strong>type de contenu</strong> qu'elles produisent (on parle de <em>modalité</em>). Les outils cités sont des exemples : le marché évolue très vite.</p>
+    <div class="grid grid-3">
+      <div class="modality"><div class="m-top"><span class="m-ico">💬</span><span class="famille-tag f1">Pratiqué</span></div><h4>Texte</h4><p>Rédiger, résumer, reformuler, traduire, structurer, expliquer.</p><div class="m-tools">ChatGPT, Claude, Gemini, Le Chat, Copilot</div><div class="m-use">Dans le projet : brief, user stories, documentation, contenus de l'application.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">⌨️</span><span class="famille-tag f1">Pratiqué</span></div><h4>Code</h4><p>Générer, expliquer, corriger et tester du code ; piloter un repository.</p><div class="m-tools">Claude Code, Codex, Cursor, GitHub Copilot, Antigravity</div><div class="m-use">Dans le projet : construction de l'application avec un coding agent.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🎨</span><span class="famille-tag f1">Pratiqué</span></div><h4>Design & interfaces</h4><p>Produire des maquettes, des écrans, des composants ou un Design System à partir d'une description.</p><div class="m-tools">Claude Design, Figma AI, v0, 21st.dev</div><div class="m-use">Dans le projet : Design System, écrans, composants.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🧱</span><span class="famille-tag f4">Démonstration</span></div><h4>Applications (app builders)</h4><p>Générer une application complète à partir d'une conversation, sans écrire de code.</p><div class="m-tools">Lovable, Bolt, v0, Replit Agent</div><div class="m-use">Dans le module : point de comparaison avec le vibe coding contrôlé.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🖼️</span><span class="famille-tag f3">Option</span></div><h4>Image</h4><p>Créer ou retoucher des visuels : illustrations, photos réalistes, logos, moodboards.</p><div class="m-tools">Midjourney, GPT Image, Stable Diffusion, Adobe Firefly, Ideogram</div><div class="m-use">Dans le projet : visuels, placeholders, recherche de direction artistique.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🔊</span><span class="famille-tag f5">Culture générale</span></div><h4>Audio, voix & musique</h4><p>Synthèse vocale, clonage de voix, doublage, génération musicale.</p><div class="m-tools">ElevenLabs, Suno, Udio</div><div class="m-use">Dans le projet : éventuellement une voix off de démonstration.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🎬</span><span class="famille-tag f5">Culture générale</span></div><h4>Vidéo</h4><p>Générer ou animer des séquences vidéo à partir de texte ou d'images.</p><div class="m-tools">Sora, Veo, Runway, Kling</div><div class="m-use">Dans le projet : éventuellement une vidéo de présentation.</div></div>
+      <div class="modality"><div class="m-top"><span class="m-ico">🔀</span><span class="famille-tag f1">Pratiqué</span></div><h4>Multimodal</h4><p>Un même modèle comprend et produit plusieurs types de contenus : il lit une capture d'écran, analyse un PDF, décrit une image, génère du texte et du code.</p><div class="m-tools">Les grands modèles actuels (GPT, Claude, Gemini)</div><div class="m-use">Dans le projet : montrer une capture d'un bug ou d'une maquette à l'IA.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">⚙️</span>Comment ça marche (version simplifiée)</div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🔤 Texte et code : les Transformers</h4><p class="muted" style="margin:0">Le modèle découpe le texte en petits morceaux (les <em>tokens</em>) et prédit, un token après l'autre, le plus probable compte tenu de tout ce qui précède. Il ne « cherche » pas la vérité : il produit la suite la plus vraisemblable. D'où la puissance… et les hallucinations.</p></div>
+      <div class="mini-card"><h4>🌫️ Image et vidéo : la diffusion</h4><p class="muted" style="margin:0">Le modèle part d'un bruit aléatoire et le « débruite » progressivement, étape par étape, en se laissant guider par le prompt jusqu'à obtenir une image cohérente. C'est pourquoi le même prompt donne des résultats différents à chaque essai.</p></div>
+    </div>
+    <h3>Modèles propriétaires ou ouverts</h3>
+    <div class="table-wrap"><table>
+      <tr><th></th><th>Propriétaires</th><th>Ouverts (open-weight)</th></tr>
+      <tr><td><strong>Principe</strong></td><td>Accessibles via une application ou une API ; le modèle reste chez l'éditeur.</td><td>Les poids du modèle sont publiés : on peut l'exécuter sur sa propre machine ou son serveur.</td></tr>
+      <tr><td><strong>Exemples</strong></td><td>GPT, Claude, Gemini</td><td>Llama, Mistral (certains modèles), Qwen, DeepSeek</td></tr>
+      <tr><td><strong>Points forts</strong></td><td>Très performants, rien à installer.</td><td>Contrôle des données, personnalisation, pas de dépendance à un fournisseur.</td></tr>
+      <tr><td><strong>Points de vigilance</strong></td><td>Coût à l'usage, données envoyées à un tiers.</td><td>Matériel nécessaire, mise en place plus technique.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🔍</span>Activité — Quel type d'IA ?</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Pour chaque situation, identifiez le type d'IA en jeu : IA à règles, IA prédictive, ou IA générative (en précisant sa modalité). Vérifiez, puis lisez les explications.</div>
+    <div id="typesQuiz"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="typesQuizTxt">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="typesQuizFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-primary" data-quiz-check="types">✔ Vérifier</button>
+      <button class="btn btn-warning btn-reveal" data-quiz-reveal="types">👁 Révéler</button>
+      <button class="btn btn-ghost" data-quiz-reset="types">↺ Recommencer</button>
+    </div>
+    <div class="result-panel" id="typesResult"></div>
+    <div class="key-box" style="margin-top:22px"><div class="big">Dans ce module, on travaille surtout avec l'IA générative de texte, de code et d'interfaces.</div><p style="margin:8px 0 0">Reste à comprendre comment ces modèles sont outillés : c'est l'objet du chapitre suivant.</p></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="1">Suite : l'écosystème IA ▸</button></div>
+  </div>
+</section>
+
+<!-- ============ 1. ÉCOSYSTÈME ============ -->
+<section class="panel" data-panel="1">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🧠</span>L'écosystème IA : qui fait quoi ?</div>
+    <p class="lead">Les mots « IA », « ChatGPT », « agent » ou « bot » sont souvent utilisés comme synonymes. Ils désignent pourtant des briques différentes, qui s'empilent.</p>
+    <div class="objectif-box"><strong class="title">Objectif</strong>Savoir nommer précisément chaque brique et reconnaître laquelle est en jeu dans une situation donnée.</div>
+    <p class="muted">Cliquez sur chaque notion pour afficher sa fiche. Parcourez les 7.</p>
+    <div class="chain" id="chain"></div>
+    <div class="concept-detail" id="conceptDetail"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span id="ecoSeenTxt">0 / 7</span></div><div class="progress-track"><div class="progress-fill" id="ecoSeenFill"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🧩</span>Une analogie pour tout retenir</div>
+    <div class="table-wrap"><table>
+      <tr><th>Brique</th><th>Dans l'analogie de la voiture</th></tr>
+      <tr><td><span class="famille-tag f1">LLM</span></td><td>Le moteur : puissant, mais il ne va nulle part tout seul.</td></tr>
+      <tr><td><span class="famille-tag f1">Chatbot</span></td><td>La voiture autour du moteur : volant, tableau de bord, sièges.</td></tr>
+      <tr><td><span class="famille-tag f4">Agent</span></td><td>Le chauffeur : vous lui donnez une destination, il conduit, regarde la route et corrige.</td></tr>
+      <tr><td><span class="famille-tag f3">API</span></td><td>Le moteur livré seul pour l'installer dans votre propre véhicule (votre application).</td></tr>
+      <tr><td><span class="famille-tag f3">MCP</span></td><td>La prise standard qui permet de brancher n'importe quel accessoire.</td></tr>
+      <tr><td><span class="famille-tag f3">RAG</span></td><td>Le GPS chargé avec vos propres cartes avant de partir.</td></tr>
+      <tr><td><span class="famille-tag f4">Workflow</span></td><td>La ligne de bus : un trajet fixe, déclenché à heure fixe, où l'IA n'est qu'un arrêt parmi d'autres.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">🔍</span>Activité — Quelle brique est en jeu ?</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Pour chaque situation, sélectionnez la brique principale. Plusieurs situations peuvent partager la même réponse. Vérifiez, lisez les explications, puis recommencez si besoin.</div>
+    <div id="ecoQuiz"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="ecoQuizTxt">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="ecoQuizFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-primary" data-quiz-check="eco">✔ Vérifier</button>
+      <button class="btn btn-warning btn-reveal" data-quiz-reveal="eco">👁 Révéler</button>
+      <button class="btn btn-ghost" data-quiz-reset="eco">↺ Recommencer</button>
+    </div>
+    <div class="result-panel" id="ecoResult"></div>
+  </div>
+</section>
+
+<!-- ============ 2. LES 5 PILIERS ============ -->
+<section class="panel" data-panel="2">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🏛️</span>Prompting : la méthode des 5 Piliers</div>
+    <p class="lead">Un modèle ne lit pas dans vos pensées. Tout ce que vous ne dites pas, il le devine, et il devine « en moyenne ». Les 5 Piliers réduisent la part de devinette.</p>
+    <div class="pillars">
+      <div class="pillar"><div class="n">Pilier 1</div><h4>Contexte</h4><p>La situation : qui vous êtes, sur quel projet, pour quel public, avec quelles contraintes existantes.</p><div class="q">« Qu'est-ce que l'IA doit savoir pour comprendre ma situation ? »</div></div>
+      <div class="pillar"><div class="n">Pilier 2</div><h4>Rôle</h4><p>L'expertise que l'IA doit adopter : développeur senior, UX designer, product owner, formateur…</p><div class="q">« Qui serait le meilleur interlocuteur pour cette tâche ? »</div></div>
+      <div class="pillar"><div class="n">Pilier 3</div><h4>Objectif / Action</h4><p>Ce qui doit être produit, avec un verbe d'action précis : rédige, compare, liste, corrige, explique.</p><div class="q">« Quel résultat exact j'attends ? »</div></div>
+      <div class="pillar"><div class="n">Pilier 4</div><h4>Contraintes</h4><p>Format, longueur, ton, technologies, niveau de détail, ce qu'il ne faut pas faire.</p><div class="q">« Quelles limites doit respecter la réponse ? »</div></div>
+      <div class="pillar"><div class="n">Pilier 5</div><h4>Exemple</h4><p>Un modèle de sortie, une référence, un extrait : montrer vaut mieux qu'expliquer.</p><div class="q">« À quoi ressemble une bonne réponse ? »</div></div>
+    </div>
+    <div class="key-box"><div class="big">Contexte → Rôle → Objectif/Action → Contraintes → Exemple</div><p style="margin:8px 0 0">Puis deux réflexes systématiques : <strong style="color:#34d399">Itérer</strong> et <strong style="color:#fbbf24">Vérifier</strong>.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔁</span>Les deux réflexes : itérer et vérifier</div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🔁 Itérer</h4>
+        <p class="muted">Le premier jet est un brouillon. On affine par petites corrections ciblées plutôt que tout redemander.</p>
+        <ul class="clean"><li>« Garde la structure, mais raccourcis chaque point. »</li><li>« Le ton est trop formel, adapte-le à des étudiants. »</li><li>« Propose 3 variantes différentes. »</li><li>« Qu'est-ce qui manque pour que ce soit utilisable ? »</li></ul>
+      </div>
+      <div class="mini-card"><h4>🔎 Vérifier</h4>
+        <p class="muted">Une IA produit une réponse plausible, pas forcément vraie. Elle peut <strong>halluciner</strong> : inventer une fonction, une librairie, une source ou un chiffre.</p>
+        <ul class="clean"><li>Le code s'exécute-t-il réellement ?</li><li>La librairie ou la méthode existe-t-elle dans la documentation officielle ?</li><li>Les chiffres et sources sont-ils vérifiables ?</li><li>Ai-je compris ce qui est proposé ?</li></ul>
+      </div>
+    </div>
+    <div class="instruction-box"><strong class="title">Astuce</strong>Demandez explicitement à l'IA de signaler ses incertitudes : <em>« Indique les points dont tu n'es pas sûr et ce que je dois vérifier. »</em></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">🛠️</span>Activité — Construire un prompt pilier par pilier</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Choisissez une vraie tâche liée au projet fil rouge (ex. « obtenir une liste de fonctionnalités pour CinéList »). Remplissez les 5 piliers : le prompt s'assemble automatiquement. Copiez-le, testez-le dans votre IA et observez le résultat.</div>
+    <div id="builder"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Force du prompt</span><span id="builderTxt">0 / 5 piliers</span></div><div class="progress-track"><div class="progress-fill" id="builderFill"></div></div></div>
+    <h3>Prompt assemblé</h3>
+    <pre class="prompt" id="builderOut">Remplissez les piliers pour voir votre prompt apparaître ici.</pre>
+    <div class="actions-row">
+      <button class="btn btn-primary" id="builderCopy">📋 Copier le prompt</button>
+      <button class="btn btn-ghost" id="builderReset">↺ Recommencer</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. MINI-TP ============ -->
+<section class="panel" data-panel="3">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">🔧</span>Mini-TP — Du mauvais prompt au prompt structuré</div>
+    <div class="objectif-box"><strong class="title">Objectif</strong>Constater par l'expérience l'écart de qualité entre une demande vague et une demande structurée, sur la même tâche et avec le même outil.</div>
+    <div class="instruction-box"><strong class="title">Déroulé</strong>
+      <div class="steps">
+        <div class="step"><span class="s-num">1</span><span>Choisissez un des prompts faibles ci-dessous et envoyez-le tel quel à votre IA, dans une <strong>nouvelle conversation</strong>.</span></div>
+        <div class="step"><span class="s-num">2</span><span>Réécrivez-le avec les 5 Piliers dans la zone prévue.</span></div>
+        <div class="step"><span class="s-num">3</span><span>Envoyez votre version dans une <strong>autre nouvelle conversation</strong> (pour ne pas mélanger les contextes).</span></div>
+        <div class="step"><span class="s-num">4</span><span>Comparez les deux réponses et notez ce qui a changé.</span></div>
+      </div>
+    </div>
+    <h3>Choisissez votre prompt faible</h3>
+    <div class="actions-row" id="badPicker" style="margin-top:6px"></div>
+    <pre class="prompt" id="badPrompt" style="margin-top:14px"></pre>
+    <p class="muted" id="badWhy"></p>
+
+    <label class="f-label" for="tpRewrite">Votre version structurée</label>
+    <textarea class="f-input code" id="tpRewrite" placeholder="Contexte : …&#10;Rôle : …&#10;Objectif : …&#10;Contraintes : …&#10;Exemple : …"></textarea>
+
+    <h3>Auto-contrôle</h3>
+    <div class="checklist" id="tpChecklist">
+      <label><input type="checkbox"> Mon prompt donne le <strong>contexte</strong> (projet, public, situation).</label>
+      <label><input type="checkbox"> Il attribue un <strong>rôle</strong> à l'IA.</label>
+      <label><input type="checkbox"> Il formule un <strong>objectif</strong> avec un verbe d'action et un livrable précis.</label>
+      <label><input type="checkbox"> Il pose des <strong>contraintes</strong> (format, longueur, ton, techno, interdits).</label>
+      <label><input type="checkbox"> Il fournit un <strong>exemple</strong> ou un format de sortie attendu.</label>
+      <label><input type="checkbox"> J'ai testé les deux prompts dans deux conversations séparées.</label>
+      <label><input type="checkbox"> J'ai fait au moins une <strong>itération</strong> sur la réponse obtenue.</label>
+    </div>
+    <label class="f-label" for="tpObs">Ce qui a changé entre les deux réponses</label>
+    <textarea class="f-input" id="tpObs" placeholder="Précision, pertinence, format, longueur, niveau de détail, erreurs éventuelles…"></textarea>
+    <div class="progress-wrap"><div class="progress-label"><span>Avancement du mini-TP</span><span id="tpTxt">0 / 9</span></div><div class="progress-track"><div class="progress-fill" id="tpFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-warning btn-reveal" id="tpReveal">👁 Révéler une version corrigée</button>
+      <button class="btn btn-ghost" id="tpReset">↺ Recommencer</button>
+    </div>
+    <div class="reveal-content" id="tpSolution"><h3>Exemple de version structurée</h3><pre class="prompt" id="tpSolutionTxt"></pre></div>
+  </div>
+</section>
+
+<!-- ============ 4. INTERVIEW IA ============ -->
+<section class="panel" data-panel="4">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">🎤</span>Prompt Magic : se faire interviewer par l'IA</div>
+    <p class="lead">Quand le besoin est flou, il est impossible de remplir correctement les 5 Piliers. Plutôt que d'inventer, on inverse les rôles : <strong>c'est l'IA qui pose les questions</strong>.</p>
+    <pre class="prompt"><span class="hl">Avant de réaliser la tâche, pose-moi les questions nécessaires pour clarifier mon besoin.</span>
+<span class="hl3">Pose-les une par une</span> et propose-moi des options quand j'hésite.
+Lorsque tu disposes de suffisamment d'informations, <span class="hl2">reformule le brief et demande-moi de le valider.</span></pre>
+    <div class="actions-row" style="margin-top:10px"><button class="btn btn-primary btn-sm" id="copyMagic">📋 Copier le prompt d'interview</button></div>
+    <div class="grid grid-3" style="margin-top:18px">
+      <div class="mini-card"><h4>🧩 Pourquoi ça marche</h4><p class="muted">L'IA connaît les questions qu'un chef de projet poserait : cible, usages, priorités, contraintes. Vous n'avez qu'à répondre.</p></div>
+      <div class="mini-card"><h4>🎯 Quand l'utiliser</h4><p class="muted">Idée de projet, rédaction d'un cahier des charges, choix technique, tout sujet où vous ne savez pas encore tout ce que vous voulez.</p></div>
+      <div class="mini-card"><h4>⚠️ À surveiller</h4><p class="muted">C'est vous qui décidez. Si une question vous oriente vers une solution que vous ne voulez pas, dites-le.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📝</span>Activité — Transformer une idée vague en mini-brief</div>
+    <div class="instruction-box"><strong class="title">Point de départ, volontairement imprécis</strong>
+      <span class="term-item">« Je voudrais créer une application pour étudiants. »</span>
+      <p style="margin-top:10px">Vous pouvez aussi partir de votre projet fil rouge (CinéList, GameBacklog ou CampusHub).</p>
+    </div>
+    <div class="steps" id="briefSteps">
+      <div class="step"><input type="checkbox" id="bs1"><span class="s-num">1</span><label for="bs1">Demandez à l'IA de vous interviewer, avec le prompt ci-dessus suivi de l'idée de départ.</label></div>
+      <div class="step"><input type="checkbox" id="bs2"><span class="s-num">2</span><label for="bs2">Répondez à ses questions honnêtement, même par « je ne sais pas encore ».</label></div>
+      <div class="step"><input type="checkbox" id="bs3"><span class="s-num">3</span><label for="bs3">Faites reformuler le besoin, corrigez ce qui ne vous convient pas, validez.</label></div>
+      <div class="step"><input type="checkbox" id="bs4"><span class="s-num">4</span><label for="bs4">Reportez le résultat dans le mini-brief ci-dessous.</label></div>
+    </div>
+
+    <h3>Mon mini-brief</h3>
+    <div class="grid grid-2">
+      <div><label class="f-label" for="b_name">Nom provisoire du projet</label><input class="f-input" id="b_name" data-brief placeholder="Ex. CampusHub"></div>
+      <div><label class="f-label" for="b_target">Utilisateurs cibles</label><input class="f-input" id="b_target" data-brief placeholder="Qui va utiliser l'application ?"></div>
+    </div>
+    <label class="f-label" for="b_problem">Problème à résoudre</label>
+    <textarea class="f-input" id="b_problem" data-brief placeholder="Quelle difficulté concrète rencontrent ces utilisateurs aujourd'hui ?"></textarea>
+    <label class="f-label" for="b_value">Proposition de valeur</label>
+    <input class="f-input" id="b_value" data-brief placeholder="En une phrase : pourquoi utiliser cette application plutôt qu'autre chose ?">
+    <label class="f-label" for="b_features">Fonctionnalités du MVP (une par ligne, 3 à 5)</label>
+    <textarea class="f-input" id="b_features" data-brief placeholder="Créer un compte&#10;Ajouter un élément&#10;…"></textarea>
+    <label class="f-label" for="b_out">Hors périmètre (ce qu'on ne fait pas dans le MVP)</label>
+    <textarea class="f-input" id="b_out" data-brief placeholder="Ce qui attendra une version ultérieure"></textarea>
+    <div class="grid grid-2">
+      <div><label class="f-label" for="b_constraints">Contraintes</label><input class="f-input" id="b_constraints" data-brief placeholder="Techniques, délais, accessibilité, budget…"></div>
+      <div><label class="f-label" for="b_success">Critère de réussite</label><input class="f-input" id="b_success" data-brief placeholder="Comment saura-t-on que le MVP fonctionne ?"></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-label"><span>Brief complété</span><span id="briefTxt">0 / 12</span></div><div class="progress-track"><div class="progress-fill" id="briefFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-success" id="briefGen">⚙️ Générer le brief</button>
+      <button class="btn btn-ghost" id="briefReset">↺ Recommencer</button>
+    </div>
+    <div id="briefOutWrap" style="display:none">
+      <h3>Brief généré (Markdown)</h3>
+      <pre class="prompt" id="briefOut"></pre>
+      <div class="actions-row">
+        <button class="btn btn-primary" id="briefCopy">📋 Copier</button>
+        <button class="btn btn-ghost" id="briefDl">⬇️ Télécharger brief.md</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Conservez ce fichier : il servira de base au <code>PROJECT.md</code> de la séance suivante.</p>
+    </div>
+    <div class="key-box" style="margin-top:22px"><div class="big">Une IA ne remplace pas un brief. Elle peut aider à le construire.</div></div>
+  </div>
+</section>
+
+<!-- ============ 5. CONTEXTE & MÉMOIRE ============ -->
+<section class="panel" data-panel="5">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">🗂️</span>Contexte, projets et mémoire</div>
+    <p class="lead">La qualité d'une réponse dépend de ce que le modèle « voit » au moment où il répond. Gérer ce qu'il voit, c'est le début du <strong>Context Engineering</strong>.</p>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4><span class="famille-tag f3">Contexte</span> Fenêtre de contexte</h4><p class="muted">Tout ce que le modèle lit à un instant donné : vos messages, ses réponses, les fichiers joints, les instructions. Elle est limitée : dans une très longue conversation, les éléments anciens pèsent moins ou sont résumés, et la réponse dérive.</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f3">Conversation</span> Unité de travail</h4><p class="muted">Un fil de discussion. Idéal pour une tâche précise. Rien ne passe d'une conversation à l'autre, sauf via un projet ou la mémoire.</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f3">Projet</span> Espace partagé</h4><p class="muted">Un espace qui regroupe des conversations autour d'instructions et de fichiers communs (brief, charte, documentation). Chaque nouvelle conversation du projet démarre avec ce socle.</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f3">Mémoire</span> Persistance</h4><p class="muted">Des informations que l'outil retient sur vous d'une conversation à l'autre (préférences, contexte récurrent). Pratique, mais à relire et à maîtriser : ce qui est retenu influence toutes les réponses.</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f3">Spécialisation</span> Conversations dédiées</h4><p class="muted">Une conversation = un sujet. Mélanger le debug, le design et le marketing dans le même fil pollue le contexte.</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f3">Assistant</span> Assistants personnalisés</h4><p class="muted">Des assistants configurés une fois (instructions + fichiers de référence) et réutilisables, parfois partageables : GPTs, Gems, agents personnalisés…</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Bonnes pratiques</div>
+    <ul class="clean">
+      <li><strong>Une conversation par tâche.</strong> Nouvelle tâche, nouvelle conversation.</li>
+      <li><strong>Relancer proprement quand ça dérive :</strong> demandez un résumé de l'état du travail, ouvrez une conversation neuve et collez ce résumé.</li>
+      <li><strong>Placer les références stables dans un projet</strong> (brief, Design System, règles) plutôt que de les recoller à chaque fois.</li>
+      <li><strong>Relire régulièrement la mémoire</strong> de l'outil et supprimer ce qui n'est plus vrai.</li>
+    </ul>
+    <div class="warn-box"><strong>⛔ Ne jamais partager</strong> : mots de passe, clés API secrètes, données personnelles de tiers, informations confidentielles d'une entreprise. Une conversation n'est pas un coffre-fort.</div>
+    <div class="objectif-box"><strong class="title">Vers la séance 2</strong>Vous créerez des fichiers <code>PROJECT.md</code>, <code>DESIGN.md</code> et <code>AGENTS.md</code> : c'est exactement le principe du projet, appliqué à un repository de code.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔍</span>Activité — Où ranger cette information ?</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Pour chaque élément, choisissez l'endroit le plus adapté. Attention : certains éléments ne doivent aller <strong>nulle part</strong>.</div>
+    <div id="ctxQuiz"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="ctxQuizTxt">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="ctxQuizFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-primary" data-quiz-check="ctx">✔ Vérifier</button>
+      <button class="btn btn-warning btn-reveal" data-quiz-reveal="ctx">👁 Révéler</button>
+      <button class="btn btn-ghost" data-quiz-reset="ctx">↺ Recommencer</button>
+    </div>
+    <div class="result-panel" id="ctxResult"></div>
+  </div>
+</section>
+
+<!-- ============ 6. CHAT VS AGENT ============ -->
+<section class="panel" data-panel="6">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">🤝</span>Chat ou agent : répondre ou agir</div>
+    <div class="table-wrap"><table>
+      <tr><th></th><th>💬 Chat</th><th>🤖 Agent</th></tr>
+      <tr><td><strong>Principe</strong></td><td>Vous posez une question, il répond.</td><td>Vous confiez un objectif, il agit pour l'atteindre.</td></tr>
+      <tr><td><strong>Accès</strong></td><td>Ce que vous lui donnez dans la conversation.</td><td>Votre environnement : fichiers, terminal, navigateur, outils connectés.</td></tr>
+      <tr><td><strong>Fonctionnement</strong></td><td>Un échange question → réponse.</td><td>Une boucle : observer → planifier → agir → vérifier → recommencer.</td></tr>
+      <tr><td><strong>Qui applique ?</strong></td><td>Vous (copier-coller, exécution).</td><td>L'agent, sous votre supervision.</td></tr>
+      <tr><td><strong>Idéal pour</strong></td><td>Comprendre, réfléchir, rédiger, explorer des options.</td><td>Exécuter des tâches en plusieurs étapes dans de vrais fichiers.</td></tr>
+      <tr><td><strong>Risque principal</strong></td><td>Réponse fausse mais convaincante.</td><td>Modifications nombreuses, rapides et mal contrôlées.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🧭</span>Deux grandes familles d'agents</div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4><span class="famille-tag f4">Work / Cowork</span></h4><p class="muted">Agents de travail bureautique : ils manipulent vos documents, tableurs, présentations, navigateur ou messagerie pour accomplir une tâche de bout en bout (trier des fichiers, compiler un rapport, remplir un tableau).</p></div>
+      <div class="mini-card"><h4><span class="famille-tag f4">Coding agents</span></h4><p class="muted">Agents de développement : ils lisent un repository, créent et modifient des fichiers, lancent des commandes et des tests. Ex. Claude Code, Codex, Cursor, Copilot, Antigravity, OpenCode. Ce sont eux que vous piloterez dès la séance 3.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">⚖️</span>La logique de délégation</div>
+    <p>Déléguer n'est pas tout ou rien. Il existe des niveaux, et chacun implique un niveau de contrôle différent.</p>
+    <div class="levels">
+      <div class="level"><span class="lv">N1</span><span><strong>Je fais, l'IA conseille.</strong> Elle explique, vous écrivez.</span><span class="risk f2">Contrôle maximal</span></div>
+      <div class="level"><span class="lv">N2</span><span><strong>L'IA propose, je valide.</strong> Elle rédige un plan ou un code, vous décidez de l'appliquer.</span><span class="risk f1">Recommandé</span></div>
+      <div class="level"><span class="lv">N3</span><span><strong>L'IA exécute, je vérifie.</strong> Elle agit, vous relisez chaque modification avant de l'accepter.</span><span class="risk f3">Vigilance</span></div>
+      <div class="level"><span class="lv">N4</span><span><strong>L'IA exécute seule.</strong> Aucune relecture avant intégration.</span><span class="risk f5">À éviter en apprentissage</span></div>
+    </div>
+    <div class="key-box"><div class="big">Plus vous déléguez, plus vous devez vérifier.</div><p style="margin:8px 0 0">Deux questions avant de déléguer : la tâche nécessite-t-elle d'agir dans des fichiers ou des outils ? Suis-je capable de vérifier le résultat ?</p></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">🔍</span>Activité — Chat ou agent ?</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Pour chaque tâche, choisissez l'outil le plus adapté. Pensez à la question clé : faut-il agir dans un environnement, ou seulement produire une réponse ?</div>
+    <div id="agentQuiz"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="agentQuizTxt">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="agentQuizFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-primary" data-quiz-check="agent">✔ Vérifier</button>
+      <button class="btn btn-warning btn-reveal" data-quiz-reveal="agent">👁 Révéler</button>
+      <button class="btn btn-ghost" data-quiz-reset="agent">↺ Recommencer</button>
+    </div>
+    <div class="result-panel" id="agentResult"></div>
+  </div>
+</section>
+
+<!-- ============ 7. BILAN ============ -->
+<section class="panel" data-panel="7">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Vrai ou faux ? Testez vos acquis</div>
+    <div class="instruction-box"><strong class="title">Consigne</strong>Répondez à chaque affirmation, puis vérifiez. Lisez attentivement les explications, y compris pour les bonnes réponses.</div>
+    <div id="vfQuiz"></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="vfTxt">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="vfFill"></div></div></div>
+    <div class="actions-row">
+      <button class="btn btn-primary" id="vfCheck">✔ Vérifier</button>
+      <button class="btn btn-warning btn-reveal" id="vfReveal">👁 Révéler</button>
+      <button class="btn btn-ghost" id="vfReset">↺ Recommencer</button>
+    </div>
+    <div class="result-panel" id="vfResult"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">📖</span>Mémo des notions de la séance</div>
+    <div class="actions-row" style="margin-top:0">
+      <span class="famille-tag f1">Fondamentaux IA</span><span class="famille-tag f2">Prompting</span><span class="famille-tag f3">Contexte</span><span class="famille-tag f4">Agents & automatisation</span><span class="famille-tag f5">Esprit critique</span>
+    </div>
+    <div class="gloss" id="gloss"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist">
+      <label><input type="checkbox"> Un prompt structuré avec les 5 Piliers, testé et comparé à une version vague.</label>
+      <label><input type="checkbox"> Un mini-brief issu d'une interview IA (<code>brief.md</code>).</label>
+      <label><input type="checkbox"> Un projet fil rouge choisi ou pressenti.</label>
+      <label><input type="checkbox"> Un outil IA conversationnel et, si possible, un coding agent installés et fonctionnels.</label>
+    </div>
+    <div class="key-box"><div class="big">Une IA ne remplace pas un brief. Elle peut aider à le construire.</div></div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Du besoin au contexte projet</strong>Problème, cible, MVP, user stories, parcours utilisateur, Design System, puis création de <code>PROJECT.md</code>, <code>DESIGN.md</code> et <code>AGENTS.md</code>. Apportez votre mini-brief.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 1 — Travailler efficacement avec une IA</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+
+/* ---------- Mode formateur (boutons Révéler) ---------- */
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+
+/* ---------- Utilitaires ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez les fiches puis recommencez.'; return 'Reprenez les fiches de la section, puis recommencez l\'activité.'; }
+
+/* ---------- Progression globale ---------- */
+const ACTS = ['types','eco','builder','tp','brief','ctx','agent','vf'];
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Séance complète : toutes les activités sont validées !' : 'Activité validée ✅');
+}
+
+/* ---------- Onglets ---------- */
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* ================= 1. ÉCOSYSTÈME ================= */
+const CONCEPTS = [
+  {id:'LLM', fam:'f1', famName:'Fondamentaux IA',
+   def:'Large Language Model. Modèle entraîné sur d\'immenses volumes de texte, qui génère une réponse en prédisant, élément par élément, la suite la plus probable.',
+   limite:'Seul, il ne navigue pas sur Internet, ne se souvient de rien entre deux appels et n\'agit sur aucun système. Ses connaissances s\'arrêtent à sa date d\'entraînement.',
+   ex:'Familles GPT, Claude, Gemini, Mistral, Llama.',
+   retenir:'C\'est le moteur. Tout le reste est construit autour.'},
+  {id:'Chatbot', fam:'f1', famName:'Fondamentaux IA',
+   def:'Application conversationnelle construite autour d\'un LLM : interface, historique de conversation, gestion de fichiers, parfois recherche web ou mémoire.',
+   limite:'Il répond, mais c\'est vous qui appliquez ce qu\'il propose.',
+   ex:'ChatGPT, Claude, Gemini, Le Chat, Copilot Chat.',
+   retenir:'Ne confondez pas le produit (ChatGPT) et le modèle qu\'il utilise (GPT).'},
+  {id:'Agent', fam:'f4', famName:'Agents & automatisation',
+   def:'Système qui utilise un LLM pour atteindre un objectif en plusieurs étapes, en agissant sur un environnement : lire et modifier des fichiers, lancer des commandes, utiliser des outils.',
+   limite:'Il agit vite et beaucoup : sans supervision, il peut introduire des erreurs difficiles à repérer.',
+   ex:'Claude Code, Codex, Cursor (mode agent), Antigravity, OpenCode, agents Cowork.',
+   retenir:'Boucle : observer → planifier → agir → vérifier. Un agent ≠ un modèle.'},
+  {id:'API', fam:'f3', famName:'Contexte & intégration',
+   def:'Application Programming Interface. Porte d\'accès programmatique à un modèle : votre application envoie une requête et reçoit une réponse, sans interface de chat.',
+   limite:'Facturée à l\'usage et protégée par une clé secrète, qui ne doit jamais apparaître côté client ni dans un repository.',
+   ex:'Une application Next.js qui envoie un avis utilisateur à un modèle pour en obtenir un résumé.',
+   retenir:'C\'est ainsi qu\'on intègre l\'IA dans son propre produit.'},
+  {id:'MCP', fam:'f3', famName:'Contexte & intégration',
+   def:'Model Context Protocol. Standard ouvert qui permet de connecter un assistant ou un agent à des outils et sources de données externes (GitHub, Drive, Notion, base de données…).',
+   limite:'Chaque connexion donne des droits à l\'IA : on ne connecte que ce qui est nécessaire.',
+   ex:'Un agent qui lit vos tickets GitHub ou interroge votre base Supabase via un connecteur.',
+   retenir:'Ce n\'est pas un modèle : c\'est une prise standard entre l\'IA et vos outils.'},
+  {id:'RAG', fam:'f3', famName:'Contexte & intégration',
+   def:'Retrieval-Augmented Generation. On recherche d\'abord les passages pertinents dans une base de documents, puis on les injecte dans le contexte du modèle avant qu\'il réponde.',
+   limite:'La qualité dépend des documents fournis et de la recherche : une mauvaise source donne une mauvaise réponse.',
+   ex:'Un assistant d\'école qui répond à partir du règlement intérieur et des emplois du temps.',
+   retenir:'Il ancre les réponses dans vos propres données et réduit les hallucinations.'},
+  {id:'Workflow', fam:'f4', famName:'Agents & automatisation',
+   def:'Enchaînement d\'étapes automatisées, déclenché par un événement, dans lequel l\'IA est une brique parmi d\'autres.',
+   limite:'Le chemin est prédéfini : il ne s\'adapte pas comme un agent à une situation imprévue.',
+   ex:'n8n, Make, Zapier : nouveau formulaire → résumé par l\'IA → email → ligne dans un tableur.',
+   retenir:'Idéal pour les tâches répétitives et prévisibles.'}
+];
+const seen = new Set();
+function renderChain(){
+  const c = $('#chain'); c.innerHTML='';
+  CONCEPTS.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>showConcept(i)); c.appendChild(b);
+    if(i<CONCEPTS.length-1){ const a=document.createElement('span'); a.className='chain-arrow'; a.textContent='→'; c.appendChild(a); }
+  });
+  showConcept(0);
+}
+function showConcept(i){
+  const k=CONCEPTS[i]; seen.add(i);
+  $$('.chain-node').forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+  $('#conceptDetail').innerHTML =
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(k.famName)+'</span></div>'+
+    '<div class="row"><span class="k">Définition</span><span>'+esc(k.def)+'</span></div>'+
+    '<div class="row"><span class="k">Limite</span><span>'+esc(k.limite)+'</span></div>'+
+    '<div class="row"><span class="k">Exemples</span><span>'+esc(k.ex)+'</span></div>'+
+    '<div class="row"><span class="k">À retenir</span><strong>'+esc(k.retenir)+'</strong></div>';
+  setProgress('ecoSeenFill','ecoSeenTxt',seen.size,CONCEPTS.length);
+}
+renderChain();
+
+/* ================= Moteur de quiz (sélection) ================= */
+const QUIZZES = {
+  types:{ box:'typesQuiz', result:'typesResult', txt:'typesQuizTxt', fill:'typesQuizFill',
+    options:['IA à règles','IA prédictive','Générative — texte','Générative — code','Générative — image','Générative — audio','Générative — vidéo'],
+    items:[
+      {q:'Une plateforme de streaming vous propose des séries en fonction de votre historique de visionnage.', a:'IA prédictive', e:'Elle prédit ce qui a le plus de chances de vous plaire à partir de données : elle ne crée aucun contenu.'},
+      {q:'Le chatbot d\'un service client vous fait choisir parmi des boutons et suit un arbre de questions fixe.', a:'IA à règles', e:'Tous les chemins ont été écrits à l\'avance par un humain : aucune génération, aucun apprentissage.'},
+      {q:'Vous obtenez une affiche pour un événement CampusHub à partir d\'une simple description.', a:'Générative — image', e:'Un visuel nouveau est créé à partir d\'un prompt, typiquement par un modèle de diffusion.'},
+      {q:'Vous faites rédiger la FAQ de votre application à partir de votre mini-brief.', a:'Générative — texte', e:'Production d\'un texte nouveau par un LLM.'},
+      {q:'Une banque bloque automatiquement un paiement jugé suspect.', a:'IA prédictive', e:'Classification d\'une transaction (frauduleuse ou non) à partir de régularités apprises.'},
+      {q:'Un agent crée un composant React de formulaire de connexion à partir de votre consigne.', a:'Générative — code', e:'Génération de code, ici par un coding agent.'},
+      {q:'Vous générez la voix off de la démonstration de votre application à partir d\'un script.', a:'Générative — audio', e:'Synthèse vocale : un son nouveau est produit à partir d\'un texte.'},
+      {q:'Vous obtenez un court clip de présentation de votre produit à partir d\'un prompt.', a:'Générative — vidéo', e:'Génération de séquences vidéo à partir d\'une description.'},
+      {q:'Un filtre de messagerie classe en spam tout mail dont l\'objet contient « GAGNEZ ».', a:'IA à règles', e:'Une règle « si… alors… » écrite à la main. Un filtre anti-spam moderne, lui, apprend à partir d\'exemples (IA prédictive).'},
+      {q:'Une application identifie l\'espèce d\'une plante à partir d\'une photo.', a:'IA prédictive', e:'Elle reconnaît et classe l\'image dans une catégorie existante : elle ne produit pas de nouvelle image.'}
+    ]},
+  eco:{ box:'ecoQuiz', result:'ecoResult', txt:'ecoQuizTxt', fill:'ecoQuizFill',
+    options:['LLM','Chatbot','Agent','API','MCP','RAG','Workflow'],
+    items:[
+      {q:'Vous discutez avec ChatGPT pour reformuler un email de candidature.', a:'Chatbot', e:'Interface conversationnelle : vous demandez, il répond, vous copiez le résultat.'},
+      {q:'Claude Code lit votre repository, lance les tests, modifie un fichier puis relance les tests.', a:'Agent', e:'Il agit en plusieurs étapes dans votre environnement et vérifie lui-même le résultat.'},
+      {q:'Votre application Next.js envoie le texte d\'un avis à un modèle et affiche le résumé obtenu.', a:'API', e:'Appel programmatique depuis votre propre code, sans interface de chat.'},
+      {q:'Votre assistant peut lire les issues de votre repo GitHub grâce à un connecteur standardisé.', a:'MCP', e:'Le protocole MCP relie l\'IA à un outil externe de façon standard.'},
+      {q:'L\'assistant du site de l\'école répond en s\'appuyant sur le règlement intérieur indexé.', a:'RAG', e:'Les passages pertinents du règlement sont récupérés puis injectés dans le contexte avant la réponse.'},
+      {q:'Chaque nouvelle inscription déclenche : résumé par l\'IA → email de confirmation → ligne dans un tableur.', a:'Workflow', e:'Enchaînement prédéfini déclenché par un événement ; l\'IA n\'est qu\'une étape.'},
+      {q:'Le modèle lui-même, sans interface, sans mémoire et sans outil, qui génère du texte.', a:'LLM', e:'C\'est la brique de base : le moteur de génération.'},
+      {q:'Vous demandez à Cursor d\'ajouter une page profil : il crée deux composants et modifie la navigation.', a:'Agent', e:'Plusieurs fichiers modifiés de façon autonome pour atteindre un objectif : c\'est un comportement d\'agent.'}
+    ]},
+  ctx:{ box:'ctxQuiz', result:'ctxResult', txt:'ctxQuizTxt', fill:'ctxQuizFill',
+    options:['Conversation dédiée','Projet','Mémoire / préférences','Assistant personnalisé','Nulle part'],
+    items:[
+      {q:'Le brief et le Design System de votre projet fil rouge, utiles dans toutes vos conversations sur ce projet.', a:'Projet', e:'Référence stable partagée entre plusieurs conversations : c\'est le rôle du projet.'},
+      {q:'« Je préfère des réponses courtes, avec des exemples de code en TypeScript. »', a:'Mémoire / préférences', e:'Préférence personnelle valable partout : mémoire ou instructions personnelles.'},
+      {q:'Déboguer une erreur précise dans le formulaire de connexion.', a:'Conversation dédiée', e:'Tâche ponctuelle et ciblée : une conversation neuve évite la pollution du contexte.'},
+      {q:'Un outil réutilisable par toute la promo pour transformer une idée en user stories.', a:'Assistant personnalisé', e:'Instructions configurées une fois, réutilisables et partageables.'},
+      {q:'La clé secrète service_role de votre base Supabase.', a:'Nulle part', e:'Un secret ne se colle jamais dans une IA. Il vit dans un fichier .env non versionné.'},
+      {q:'Brainstormer dix noms possibles pour votre application.', a:'Conversation dédiée', e:'Exploration courte et autonome : une conversation dédiée suffit.'},
+      {q:'Le mot de passe de votre compte GitHub, « pour que l\'IA puisse pousser le code ».', a:'Nulle part', e:'Jamais. Un agent s\'authentifie via des mécanismes prévus (CLI, token limité), jamais avec votre mot de passe.'}
+    ]},
+  agent:{ box:'agentQuiz', result:'agentResult', txt:'agentQuizTxt', fill:'agentQuizFill',
+    options:['Chat','Agent'],
+    items:[
+      {q:'Comprendre ce qu\'est une clé étrangère dans une base de données.', a:'Chat', e:'Besoin d\'explication : aucune action dans un environnement n\'est nécessaire.'},
+      {q:'Renommer une variable dans 30 fichiers puis vérifier que le build passe toujours.', a:'Agent', e:'Modifications multiples dans des fichiers + exécution d\'une commande de vérification.'},
+      {q:'Rédiger cinq user stories à partir de votre mini-brief.', a:'Chat', e:'Production de texte à relire et ajuster : le chat suffit.'},
+      {q:'Trier 200 fichiers PDF dans des dossiers selon leur contenu.', a:'Agent', e:'Tâche répétitive qui nécessite d\'agir sur des fichiers : agent de type Cowork.'},
+      {q:'Hésiter entre deux noms pour votre application et vouloir un avis argumenté.', a:'Chat', e:'Réflexion et conseil : pas d\'action à exécuter.'},
+      {q:'Ajouter une page profil à votre application, lancer le serveur et corriger les erreurs affichées.', a:'Agent', e:'Création de fichiers, exécution et correction en boucle : typique d\'un coding agent.'},
+      {q:'Obtenir une explication ligne par ligne d\'un bout de code que vous avez collé.', a:'Chat', e:'Compréhension d\'un extrait fourni : le chat est plus simple et suffisant.'}
+    ]}
+};
+const quizState = {};
+function renderQuiz(key){
+  const Q = QUIZZES[key]; const box = $('#'+Q.box); box.innerHTML='';
+  const order = shuffle(Q.items); quizState[key] = {order, checked:false};
+  order.forEach((it,idx)=>{
+    const row=document.createElement('div'); row.className='q-row';
+    const opts = '<option value="">— Choisir —</option>'+Q.options.map(o=>'<option>'+esc(o)+'</option>').join('');
+    row.innerHTML = '<div><span class="q-num">'+String(idx+1).padStart(2,'0')+'</span>'+esc(it.q)+'</div>'+
+      '<select aria-label="Réponse '+(idx+1)+'">'+opts+'</select>'+
+      '<div class="expl"></div>';
+    row.querySelector('select').addEventListener('change',()=>updateQuizProgress(key));
+    box.appendChild(row);
+  });
+  $('#'+Q.result).classList.remove('show');
+  updateQuizProgress(key);
+}
+function updateQuizProgress(key){
+  const Q=QUIZZES[key]; const sels=$$('#'+Q.box+' select');
+  setProgress(Q.fill,Q.txt,sels.filter(s=>s.value).length,sels.length);
+}
+function checkQuiz(key, silent){
+  const Q=QUIZZES[key]; const rows=$$('#'+Q.box+' .q-row'); const st=quizState[key];
+  const answered = rows.filter(r=>r.querySelector('select').value).length;
+  if(!silent && answered<rows.length){ toast('Répondez à toutes les situations avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,i)=>{
+    const it=st.order[i]; const v=r.querySelector('select').value; const good = v===it.a;
+    if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    r.querySelector('.expl').innerHTML = (good?'✅ ':'❌ Réponse attendue : <strong>'+esc(it.a)+'</strong>. ')+esc(it.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  const R=$('#'+Q.result);
+  R.innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  R.classList.add('show');
+  if(!silent) markDone(key);
+}
+function revealQuiz(key){
+  const Q=QUIZZES[key]; const st=quizState[key];
+  $$('#'+Q.box+' .q-row').forEach((r,i)=>{ r.querySelector('select').value=st.order[i].a; });
+  updateQuizProgress(key); checkQuiz(key,true);
+}
+Object.keys(QUIZZES).forEach(renderQuiz);
+$$('[data-quiz-check]').forEach(b=>b.addEventListener('click',()=>checkQuiz(b.dataset.quizCheck)));
+$$('[data-quiz-reveal]').forEach(b=>b.addEventListener('click',()=>revealQuiz(b.dataset.quizReveal)));
+$$('[data-quiz-reset]').forEach(b=>b.addEventListener('click',()=>renderQuiz(b.dataset.quizReset)));
+
+/* ================= 2. CONSTRUCTEUR 5 PILIERS ================= */
+const PILLARS = [
+  {k:'Contexte', hint:'Qui êtes-vous ? Sur quel projet ? Pour quel public ? Quelle situation ?', ph:'Je suis étudiant en développement web. Je conçois CinéList, une application de watchlist pour des étudiants qui veulent suivre les films et séries qu\'ils regardent.'},
+  {k:'Rôle', hint:'Quelle expertise l\'IA doit-elle adopter ?', ph:'Agis comme un product owner expérimenté dans les applications grand public.'},
+  {k:'Objectif / Action', hint:'Verbe d\'action + livrable précis.', ph:'Propose la liste des fonctionnalités du MVP, classées par priorité.'},
+  {k:'Contraintes', hint:'Format, longueur, ton, techno, niveau, ce qu\'il ne faut pas faire.', ph:'8 fonctionnalités maximum, présentées dans un tableau (fonctionnalité, utilité, priorité). Pas de code. Vocabulaire accessible.'},
+  {k:'Exemple', hint:'Un modèle de sortie ou une référence.', ph:'| Ajouter un film à ma liste | Garder une trace de ce que je veux voir | Haute |'}
+];
+function renderBuilder(){
+  const b=$('#builder'); b.innerHTML='';
+  PILLARS.forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='pillar-field';
+    d.innerHTML='<div class="pillar-head"><span class="pillar-num">'+(i+1)+'</span>'+esc(p.k)+'</div><div class="pillar-hint">'+esc(p.hint)+'</div><textarea class="f-input" data-p="'+i+'" placeholder="'+esc(p.ph)+'"></textarea>';
+    b.appendChild(d);
+  });
+  $$('#builder textarea').forEach(t=>t.addEventListener('input',updateBuilder));
+  updateBuilder();
+}
+function updateBuilder(){
+  const tas=$$('#builder textarea'); let n=0; const parts=[];
+  tas.forEach((t,i)=>{
+    const v=t.value.trim(); const filled=v.length>=8;
+    t.closest('.pillar-field').classList.toggle('filled',filled);
+    if(filled){ n++; parts.push(PILLARS[i].k+' :\n'+v); }
+  });
+  setProgress('builderFill','builderTxt',n,5,' piliers');
+  $('#builderOut').textContent = parts.length ? parts.join('\n\n')+'\n\nSi des informations te manquent, pose-moi tes questions avant de répondre.' : 'Remplissez les piliers pour voir votre prompt apparaître ici.';
+  if(n===5) markDone('builder');
+}
+renderBuilder();
+$('#builderCopy').addEventListener('click',()=>{ if(!$$('#builder textarea').some(t=>t.value.trim())){toast('Remplissez au moins un pilier.');return;} copyText($('#builderOut').textContent); });
+$('#builderReset').addEventListener('click',renderBuilder);
+
+/* ================= 3. MINI-TP ================= */
+const BAD = [
+  {label:'A — « Fais-moi un site »', p:'Fais-moi un site pour mon projet.',
+   why:'Aucun contexte, aucun objectif précis, aucun format : l\'IA va produire quelque chose de générique.',
+   sol:'Contexte : je suis étudiant en développement web. Je prépare CinéList, une application qui permet à des étudiants de gérer une watchlist de films et séries, de noter ce qu\'ils ont vu et de laisser un avis.\n\nRôle : agis comme un product designer expérimenté.\n\nObjectif : propose l\'arborescence des écrans du MVP et la navigation principale.\n\nContraintes : 6 écrans maximum. Présente le résultat sous forme de liste hiérarchique. Pour chaque écran, indique en une phrase son rôle. Ne propose pas encore de code.\n\nExemple de format :\n- Accueil : présente les films populaires et invite à se connecter\n- Ma liste : …\n\nSi une information te manque, pose-moi tes questions avant de répondre.'},
+  {label:'B — « Corrige mon code »', p:'Mon code marche pas, corrige-le.',
+   why:'Ni code, ni erreur, ni comportement attendu : l\'IA ne peut que deviner, et risque de tout réécrire.',
+   sol:'Contexte : application Next.js / TypeScript. Sur la page de connexion, le clic sur « Se connecter » ne fait rien et la console affiche l\'erreur ci-dessous. Comportement attendu : redirection vers /dashboard.\n\nRôle : agis comme un développeur senior pédagogue.\n\nObjectif : identifie la cause la plus probable, explique-la simplement, puis propose une correction.\n\nContraintes : ne réécris pas tout le fichier, montre uniquement les lignes à modifier, explique chaque modification et indique comment tester la correction. Si plusieurs causes sont possibles, classe-les.\n\nExemple / éléments fournis :\n[erreur console collée ici]\n[composant LoginForm.tsx collé ici]'},
+  {label:'C — « Des idées de fonctionnalités »', p:'Donne-moi des idées de fonctionnalités.',
+   why:'Pour quelle application ? Pour qui ? Combien ? Sous quelle forme ? La réponse sera une liste générique et interminable.',
+   sol:'Contexte : je conçois GameBacklog, une application qui aide des joueurs étudiants à organiser leur bibliothèque de jeux (à jouer, en cours, terminé) et à noter leurs jeux.\n\nRôle : agis comme un product owner spécialisé dans les applications grand public.\n\nObjectif : propose des fonctionnalités pour le MVP et pour une version ultérieure.\n\nContraintes : 5 fonctionnalités MVP maximum et 5 idées « plus tard ». Présente-les dans deux tableaux (fonctionnalité, bénéfice utilisateur, complexité estimée : faible / moyenne / forte). Pas de code.\n\nExemple de ligne attendue :\n| Changer le statut d\'un jeu | Suivre sa progression en un clic | Faible |'}
+];
+let badIdx=0;
+function renderBadPicker(){
+  const w=$('#badPicker'); w.innerHTML='';
+  BAD.forEach((b,i)=>{ const btn=document.createElement('button'); btn.className='btn btn-sm '+(i===badIdx?'btn-primary':'btn-ghost'); btn.textContent=b.label; btn.addEventListener('click',()=>{badIdx=i;renderBadPicker();}); w.appendChild(btn); });
+  $('#badPrompt').textContent=BAD[badIdx].p;
+  $('#badWhy').textContent='Pourquoi il est faible : '+BAD[badIdx].why;
+  $('#tpSolutionTxt').textContent=BAD[badIdx].sol;
+}
+function updateTP(){
+  const cbs=$$('#tpChecklist input'); let n=cbs.filter(c=>c.checked).length;
+  if($('#tpRewrite').value.trim().length>=20) n++;
+  if($('#tpObs').value.trim().length>=10) n++;
+  setProgress('tpFill','tpTxt',n,cbs.length+2);
+  if(n===cbs.length+2) markDone('tp');
+}
+renderBadPicker();
+$$('#tpChecklist input').forEach(c=>c.addEventListener('change',updateTP));
+$('#tpRewrite').addEventListener('input',updateTP);
+$('#tpObs').addEventListener('input',updateTP);
+$('#tpReveal').addEventListener('click',()=>$('#tpSolution').classList.toggle('shown'));
+$('#tpReset').addEventListener('click',()=>{ $$('#tpChecklist input').forEach(c=>c.checked=false); $('#tpRewrite').value=''; $('#tpObs').value=''; $('#tpSolution').classList.remove('shown'); updateTP(); });
+updateTP();
+
+/* ================= 4. INTERVIEW / BRIEF ================= */
+const MAGIC = 'Avant de réaliser la tâche, pose-moi les questions nécessaires pour clarifier mon besoin.\nPose-les une par une et propose-moi des options quand j\'hésite.\nLorsque tu disposes de suffisamment d\'informations, reformule le brief et demande-moi de le valider.\n\nMon idée : Je voudrais créer une application pour étudiants.';
+$('#copyMagic').addEventListener('click',()=>copyText(MAGIC));
+function updateBrief(){
+  const steps=$$('#briefSteps input').filter(c=>c.checked).length;
+  const fields=$$('[data-brief]').filter(f=>f.value.trim().length>=3).length;
+  setProgress('briefFill','briefTxt',steps+fields,4+$$('[data-brief]').length);
+}
+$$('#briefSteps input').forEach(c=>c.addEventListener('change',updateBrief));
+$$('[data-brief]').forEach(f=>f.addEventListener('input',updateBrief));
+function briefMd(){
+  const v=id=>$('#'+id).value.trim();
+  const list=id=>v(id).split('\n').map(s=>s.trim()).filter(Boolean).map(s=>'- '+s.replace(/^[-*•]\s*/,'')).join('\n');
+  const orTodo=s=>s||'_À compléter_';
+  return '# Mini-brief — '+(v('b_name')||'Projet sans nom')+'\n\n'+
+    '## Problème\n'+orTodo(v('b_problem'))+'\n\n'+
+    '## Utilisateurs cibles\n'+orTodo(v('b_target'))+'\n\n'+
+    '## Proposition de valeur\n'+orTodo(v('b_value'))+'\n\n'+
+    '## Fonctionnalités du MVP\n'+(list('b_features')||'_À compléter_')+'\n\n'+
+    '## Hors périmètre\n'+(list('b_out')||'_À compléter_')+'\n\n'+
+    '## Contraintes\n'+orTodo(v('b_constraints'))+'\n\n'+
+    '## Critère de réussite\n'+orTodo(v('b_success'))+'\n';
+}
+$('#briefGen').addEventListener('click',()=>{
+  const filled=$$('[data-brief]').filter(f=>f.value.trim().length>=3).length;
+  if(filled<6){ toast('Complétez au moins 6 champs du brief ('+filled+' / 8).'); return; }
+  $('#briefOut').textContent=briefMd(); $('#briefOutWrap').style.display='block'; markDone('brief');
+});
+$('#briefCopy').addEventListener('click',()=>copyText(briefMd()));
+$('#briefDl').addEventListener('click',()=>{
+  const blob=new Blob([briefMd()],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='brief.md'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+$('#briefReset').addEventListener('click',()=>{ $$('[data-brief]').forEach(f=>f.value=''); $$('#briefSteps input').forEach(c=>c.checked=false); $('#briefOutWrap').style.display='none'; updateBrief(); });
+updateBrief();
+
+/* ================= 7. VRAI / FAUX ================= */
+const VF = [
+  {q:'Un LLM consulte Internet en temps réel pour construire chacune de ses réponses.', a:false, e:'Un LLM seul s\'appuie sur ses données d\'entraînement. La recherche web est un outil ajouté par certaines applications, pas une capacité du modèle.'},
+  {q:'Un coding agent peut créer et modifier des fichiers dans votre projet.', a:true, e:'C\'est précisément ce qui le distingue d\'un chat : il agit dans votre environnement. D\'où la nécessité de relire ses modifications.'},
+  {q:'Plus un prompt est long, meilleure est la réponse.', a:false, e:'C\'est la pertinence qui compte : contexte utile, objectif clair, contraintes précises. Un prompt long mais confus reste confus.'},
+  {q:'Une IA peut inventer une fonction ou une librairie qui n\'existe pas.', a:true, e:'C\'est une hallucination. La réponse est plausible mais fausse : on vérifie dans la documentation officielle et on teste.'},
+  {q:'MCP est un modèle d\'IA concurrent de GPT et de Claude.', a:false, e:'MCP est un protocole de connexion entre une IA et des outils externes, pas un modèle.'},
+  {q:'Demander à l\'IA de m\'interviewer est pertinent quand mon besoin est encore flou.', a:true, e:'L\'IA pose les questions d\'un chef de projet, vous répondez, puis elle reformule un brief à valider.'},
+  {q:'Dans une très longue conversation, l\'IA garde tous les détails du début avec la même précision.', a:false, e:'La fenêtre de contexte est limitée : les éléments anciens peuvent être résumés ou moins pris en compte. D\'où l\'intérêt de relancer une conversation avec un résumé.'},
+  {q:'Le RAG permet d\'appuyer les réponses d\'une IA sur des documents spécifiques.', a:true, e:'Les passages pertinents sont récupérés puis injectés dans le contexte avant la génération.'},
+  {q:'Coller une clé API secrète dans une conversation est sans risque, puisque la conversation est privée.', a:false, e:'Un secret partagé est un secret compromis. Les clés vivent dans des variables d\'environnement, jamais dans un chat ni dans un repository.'},
+  {q:'ChatGPT et GPT désignent exactement la même chose.', a:false, e:'ChatGPT est un produit (chatbot) ; GPT désigne la famille de modèles qu\'il utilise.'}
+];
+let vfOrder=[];
+function renderVF(){
+  vfOrder=shuffle(VF); const box=$('#vfQuiz'); box.innerHTML='';
+  vfOrder.forEach((it,i)=>{
+    const r=document.createElement('div'); r.className='vf-row';
+    r.innerHTML='<div class="vf-q"><span class="q-num">'+String(i+1).padStart(2,'0')+'</span>'+esc(it.q)+'</div><div class="vf-btns"><button class="vf-btn" data-v="true">Vrai</button><button class="vf-btn" data-v="false">Faux</button></div><div class="expl"></div>';
+    $$('.vf-btn',r).forEach(b=>b.addEventListener('click',()=>{ $$('.vf-btn',r).forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); r.dataset.ans=b.dataset.v; updateVF(); }));
+    box.appendChild(r);
+  });
+  $('#vfResult').classList.remove('show'); updateVF();
+}
+function updateVF(){ const rows=$$('#vfQuiz .vf-row'); setProgress('vfFill','vfTxt',rows.filter(r=>r.dataset.ans).length,rows.length); }
+function checkVF(silent){
+  const rows=$$('#vfQuiz .vf-row');
+  if(!silent && rows.some(r=>!r.dataset.ans)){ toast('Répondez à toutes les affirmations avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,i)=>{
+    const it=vfOrder[i]; const good = (r.dataset.ans==='true')===it.a; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked',good?'correct':'wrong');
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ ')+'<strong>'+(it.a?'Vrai':'Faux')+'.</strong> '+esc(it.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#vfResult').innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#vfResult').classList.add('show');
+  if(!silent) markDone('vf');
+}
+$('#vfCheck').addEventListener('click',()=>checkVF(false));
+$('#vfReveal').addEventListener('click',()=>{ $$('#vfQuiz .vf-row').forEach((r,i)=>{ r.dataset.ans=String(vfOrder[i].a); $$('.vf-btn',r).forEach(b=>b.classList.toggle('sel',b.dataset.v===r.dataset.ans)); }); updateVF(); checkVF(true); });
+$('#vfReset').addEventListener('click',renderVF);
+renderVF();
+
+/* ================= MÉMO ================= */
+const GLOSS = [
+  ['Intelligence artificielle','f1','Techniques permettant à une machine de réaliser des tâches demandant habituellement l\'intelligence humaine.'],
+  ['Machine learning','f1','Approche où la machine apprend des régularités à partir de données plutôt que de règles écrites.'],
+  ['Deep learning','f1','Machine learning fondé sur des réseaux de neurones à nombreuses couches.'],
+  ['IA prédictive','f1','IA qui classe, détecte ou prédit à partir de données existantes.'],
+  ['IA générative','f1','IA qui produit un contenu nouveau (texte, code, image, son, vidéo) à partir d\'une consigne.'],
+  ['Multimodal','f1','Capacité d\'un modèle à comprendre ou produire plusieurs types de contenus.'],
+  ['Open-weight','f1','Modèle dont les poids sont publiés et peuvent être exécutés sur sa propre infrastructure.'],
+  ['LLM','f1','Modèle de langage qui génère du texte en prédisant la suite la plus probable.'],
+  ['Chatbot','f1','Application conversationnelle construite autour d\'un LLM.'],
+  ['Hallucination','f5','Réponse plausible mais fausse ou inventée (fonction, source, chiffre).'],
+  ['5 Piliers','f2','Contexte, Rôle, Objectif/Action, Contraintes, Exemple.'],
+  ['Itérer','f2','Affiner une réponse par corrections ciblées successives.'],
+  ['Vérifier','f5','Tester, confronter à la documentation, comprendre avant d\'utiliser.'],
+  ['Interview IA','f2','Demander à l\'IA de poser les questions qui clarifient un besoin flou.'],
+  ['Fenêtre de contexte','f3','Ensemble limité d\'informations que le modèle lit au moment de répondre.'],
+  ['Projet','f3','Espace qui partage instructions et fichiers entre plusieurs conversations.'],
+  ['Mémoire','f3','Informations conservées d\'une conversation à l\'autre sur l\'utilisateur.'],
+  ['Agent','f4','Système qui agit en plusieurs étapes dans un environnement pour atteindre un objectif.'],
+  ['API','f3','Accès programmatique à un modèle depuis sa propre application.'],
+  ['MCP','f3','Protocole standard de connexion entre une IA et des outils externes.'],
+  ['RAG','f3','Recherche de documents pertinents injectés dans le contexte avant la génération.'],
+  ['Workflow','f4','Enchaînement automatisé d\'étapes déclenché par un événement.'],
+  ['Délégation','f4','Niveau d\'autonomie confié à l\'IA ; plus il est élevé, plus la vérification est nécessaire.']
+];
+const famNames={f1:'Fondamentaux IA',f2:'Prompting',f3:'Contexte',f4:'Agents & automatisation',f5:'Esprit critique'};
+$('#gloss').innerHTML = GLOSS.map(g=>'<div class="gloss-item"><div class="gt"><span class="term-item">'+esc(g[0])+'</span><span class="famille-tag '+g[1]+'">'+famNames[g[1]]+'</span></div><div>'+esc(g[2])+'</div></div>').join('');
+
+})();
+</script>
+</body>
+</html>
