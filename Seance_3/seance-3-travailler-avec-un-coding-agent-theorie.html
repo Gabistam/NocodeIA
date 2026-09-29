@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 3 — Travailler avec un coding agent · Théorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.84em}
+pre code,.key-box code,.nest.n4 code{background:transparent;border:none;padding:0;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header.practice{background:linear-gradient(135deg,#0f172a 0%,#064e3b 60%,#047857 100%)}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+header.practice::after{background:radial-gradient(circle,rgba(52,211,153,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+.tab .lock-mark{font-size:.8rem}
+
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+@media(max-width:600px){.card{padding:20px 16px}}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+ol{padding-left:22px}ol li{padding:3px 0}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-card.bad{border-color:#fecaca;background:#fef2f2}
+.mini-card.good{border-color:#a7f3d0;background:#f0fdf4}
+.mini-card pre.prompt{margin-top:8px}
+
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+.chain .term-item,.objectif-box .term-item{padding:6px 12px}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative;margin:12px 0}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* QCM */
+.qcm-q{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.qcm-q .qt{font-weight:600;margin-bottom:10px}
+.qcm-opts{display:grid;gap:8px}
+.qcm-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:.9rem;background:#fff;text-align:left;width:100%;color:var(--text)}
+.qcm-opt:hover{background:#f8fafc;border-color:#93c5fd}
+.qcm-opt .l{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:18px}
+.qcm-opt.sel{border-color:var(--primary);background:#eff6ff}
+.qcm-q.checked .qcm-opt{cursor:default}
+.qcm-opt.good{border-color:#6ee7b7;background:#ecfdf5}
+.qcm-opt.bad{border-color:#fca5a5;background:#fef2f2}
+.qcm-q.correct{border-color:#6ee7b7}
+.qcm-q.wrong{border-color:#fca5a5}
+.qcm-q .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:8px;border-top:1px dashed var(--border)}
+.qcm-q.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem;color:var(--text)}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* Cas 1 matching */
+.match-grid{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:16px;margin-top:10px}
+@media(max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.m-term{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:10px 12px;border-radius:8px;border:2px solid var(--dark);text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m-term:hover{border-color:#60a5fa}
+.m-term.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+.m-def{background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.86rem;text-align:left;display:flex;gap:10px;align-items:flex-start;color:var(--text)}
+.m-def:hover{border-color:#93c5fd}
+.pair-badge{font-family:var(--mono);font-size:.72rem;font-weight:700;min-width:24px;height:24px;border-radius:6px;display:inline-grid;place-items:center;background:#e2e8f0;color:var(--muted);flex-shrink:0}
+.paired .pair-badge{background:var(--primary);color:#fff}
+.m-def.paired{border-color:#93c5fd;background:#eff6ff}
+.m-term.good,.m-def.good{border-color:#10b981}
+.m-def.good{background:#ecfdf5}
+.m-term.bad,.m-def.bad{border-color:#ef4444}
+.m-def.bad{background:#fef2f2}
+.round-pills{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.round-pill{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.round-pill.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.round-pill.ok{background:var(--secondary-light);color:#065f46;border-color:#6ee7b7}
+
+/* Cas 2 */
+.group{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;background:#fff}
+.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.group-head strong{font-size:1rem}
+.g-label{font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:600;color:var(--dark2)}
+.choice.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.choice.good{background:#10b981;color:#fff;border-color:#10b981}
+.choice.bad{background:#ef4444;color:#fff;border-color:#ef4444}
+.sit{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f8fafc;font-size:.88rem;margin-bottom:8px;color:var(--text)}
+.sit:hover{border-color:#fbbf24}
+.sit .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2e8f0;color:var(--muted);white-space:nowrap}
+.sit.sel{border-color:var(--accent);background:#fffbeb}
+.sit.sel .tag{background:var(--accent);color:#fff}
+.sit.good{border-color:#10b981;background:#ecfdf5}
+.sit.good .tag{background:#10b981;color:#fff}
+.sit.bad{border-color:#ef4444;background:#fef2f2}
+.sit.bad .tag{background:#ef4444;color:#fff}
+.group .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:10px;border-top:1px dashed var(--border)}
+.group.checked .expl{display:block}
+.group.correct{border-color:#6ee7b7}
+.group.wrong{border-color:#fca5a5}
+.group.half{border-color:#fcd34d}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+
+.steps{margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.past{background:#ecfdf5;border-color:#a7f3d0}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+@media(max-width:600px){.level{grid-template-columns:40px 1fr}.level .risk{grid-column:2;justify-self:start}}
+
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(5n+2){border-top-color:var(--purple)}
+.pillar:nth-child(5n+3){border-top-color:var(--secondary)}
+.pillar:nth-child(5n+4){border-top-color:var(--accent)}
+.pillar:nth-child(5n+5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+details.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-family:var(--mono);color:var(--primary);font-weight:700}
+details.acc[open] summary::after{content:"−"}
+details.acc[open] summary{border-bottom:1px dashed var(--border)}
+details.acc > div{padding:12px 16px;font-size:.9rem}
+
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+.lock-wrap{text-align:center;padding:30px 10px}
+.lock-wrap .big-lock{font-size:3rem}
+.lock-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:16px}
+.lock-pill{font-size:.82rem;font-weight:600;padding:6px 14px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border)}
+.lock-pill.ok{background:var(--secondary-light);border-color:#6ee7b7;color:#065f46}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.filter-row button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;color:var(--dark2)}
+.filter-row button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+.score-table td:last-child{font-family:var(--mono);font-weight:700}
+.link-card{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f8fafc;border:1px dashed #93c5fd;border-radius:12px;padding:16px 18px;margin-top:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+@media print{.tabs-wrap,.actions-row,.nav-bottom{display:none}.panel{display:block!important}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <span class="badge">🤖 NoCode AI / Vibe Coding — Séance 3 · Support théorique</span>
+    <h1>Travailler avec un coding agent</h1>
+    <p class="subtitle">Initialiser le projet Next.js, sécuriser chaque étape avec Git et piloter un agent de code pour générer une première fonctionnalité vérifiée.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 3 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : Projet Next.js sur GitHub + 1re fonctionnalité + AI-LOG.md</span></div>
+    <div class="global-progress">
+      <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🤖 Anatomie d&#x27;un agent <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🚀 Démarrer le projet <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🛟 Git, le filet <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">🧭 Piloter l&#x27;agent <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🧠 Gérer le contexte <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">⚠️ Dérives de l&#x27;agent <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<main>
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
+    <div class="key-box"><div class="big">Je sais travailler avec un agent.</div><p style="margin:8px 0 0">Un agent n&#x27;est pas plus fiable qu&#x27;un chat : il est plus puissant. Votre travail devient de cadrer chaque tâche, de lire chaque diff et de committer chaque étape validée.</p></div>
+    <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step past"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step past"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step here"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step "><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step "><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step "><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
+    <h3>Le fil pédagogique</h3>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td><strong>Séance 3</strong> — aujourd&#39;hui</td><td><strong>Je sais travailler avec un agent.</strong></td></tr><tr><td>Séance 4</td><td>Je sais construire une vraie application.</td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l&#x27;IA produit.</td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Expliquer comment fonctionne un coding agent (boucle, outils, permissions, fichiers d&#x27;instructions) ;</li><li>Initialiser un projet Next.js / TypeScript / Tailwind et y placer les fichiers de contexte ;</li><li>Utiliser Git comme filet de sécurité : commit, diff, branche, retour arrière, push sur GitHub ;</li><li>Piloter l&#x27;agent selon le cycle explorer → planifier → coder → vérifier ;</li><li>Gérer le contexte d&#x27;une session agent et tenir un AI-LOG.md ;</li><li>Repérer les dérives d&#x27;un agent et appliquer les contre-mesures adaptées.</li></ul></div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>PROJECT.md, DESIGN.md et AGENTS.md produits en séance 2</li><li>Un coding agent installé et connecté (Claude Code, Codex, Cursor, Copilot, OpenCode…)</li><li>Node.js (version LTS) et Git installés sur votre machine</li><li>Un compte GitHub opérationnel</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Agent</span><span class="famille-tag f2">Environnement projet</span><span class="famille-tag f3">Git</span><span class="famille-tag f4">Pilotage</span><span class="famille-tag f5">Contrôle &amp; dérives</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
+    <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-3-travailler-avec-un-coding-agent-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🤖 Anatomie d&#x27;un agent ▸</button></div>
+  </div>
+</section>
+<section class="panel" data-panel="c0">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🤖</span>Qu'est-ce qu'un coding agent ?</div>
+  <p class="lead">En séance 1, vous avez distingué le chat (l'IA répond, vous copiez-collez) de l'agent (l'IA agit dans votre projet). Un <span class="term-item">coding agent</span> est un modèle de langage équipé d'outils : il lit vos fichiers, les modifie, lance des commandes dans le terminal et observe le résultat, jusqu'à atteindre l'objectif demandé.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre ce que fait réellement un agent quand vous lui confiez une tâche, pour savoir quoi lui autoriser, quoi lui fournir et quoi vérifier.</div>
+  <h3>La boucle agentique</h3>
+  <p>Un agent ne répond pas en une fois : il enchaîne des tours d'une même boucle, et chaque tour s'appuie sur le résultat du précédent.</p>
+  <div class="chain"><span class="term-item">Observer</span><span class="chain-arrow">→</span><span class="term-item">Planifier</span><span class="chain-arrow">→</span><span class="term-item">Agir</span><span class="chain-arrow">→</span><span class="term-item">Vérifier</span><span class="chain-arrow">→</span><span class="term-item">Observer…</span></div>
+  <ul class="clean">
+    <li><strong>Observer</strong> : lire la demande, les fichiers d'instructions, l'arborescence, le code existant.</li>
+    <li><strong>Planifier</strong> : découper l'objectif en étapes (quels fichiers créer ou modifier, dans quel ordre).</li>
+    <li><strong>Agir</strong> : écrire du code, créer un fichier, lancer une commande (<code>npm install</code>, <code>npm run lint</code>).</li>
+    <li><strong>Vérifier</strong> : lire la sortie de la commande, l'erreur de compilation, le résultat d'un test, puis décider de continuer, corriger ou s'arrêter.</li>
+  </ul>
+  <p>Cette boucle est la force de l'agent (il corrige seul une erreur de typage) et sa faiblesse (il peut tourner longtemps dans la mauvaise direction si l'objectif est flou).</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧰</span>Les outils de l'agent</div>
+  <p>Ce qui distingue un agent d'un chat, ce sont ses <span class="term-item">outils</span> : des actions qu'il peut déclencher lui-même.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>📂 Fichiers</h4><p class="muted">Lire, créer, modifier, parfois supprimer des fichiers du projet. Exemple : créer <code>app/ma-liste/page.tsx</code> pour CinéList.</p></div>
+    <div class="mini-card"><h4>💻 Terminal</h4><p class="muted">Exécuter des commandes : installer une dépendance, lancer <code>npm run build</code>, faire un <code>git status</code>.</p></div>
+    <div class="mini-card"><h4>🔎 Recherche</h4><p class="muted">Chercher dans le code (où est utilisé ce composant ?), parfois sur le web ou dans une documentation.</p></div>
+  </div>
+  <h3>Les modes de permission</h3>
+  <p>Chaque outil comporte un risque : une commande peut supprimer un dossier, une modification peut écraser votre travail. Les agents proposent donc des <span class="term-item">modes de permission</span> qui fixent ce que l'agent peut faire sans vous demander.</p>
+  <div class="levels">
+    <div class="level"><span class="lv">A</span><span><strong>Lecture seule / plan</strong> — l'agent explore et propose, il ne modifie rien.</span><span class="risk f2">Sûr</span></div>
+    <div class="level"><span class="lv">B</span><span><strong>Approbation à chaque action</strong> — chaque modification et chaque commande attend votre accord.</span><span class="risk f2">Recommandé au début</span></div>
+    <div class="level"><span class="lv">C</span><span><strong>Éditions automatiques</strong> — les fichiers sont modifiés sans confirmation, les commandes restent soumises à accord.</span><span class="risk f3">Avec Git propre</span></div>
+    <div class="level"><span class="lv">D</span><span><strong>Accès total</strong> — tout est exécuté sans confirmation.</span><span class="risk f5">Risqué</span></div>
+  </div>
+  <p>Les noms varient selon l'outil (Claude Code, Codex, Cursor, Copilot…), mais la logique est la même. Règle simple : plus vous montez en autonomie, plus votre dépôt Git doit être propre avant de lancer l'agent.</p>
+  <div class="warn-box"><strong>⛔ Piège</strong> Accepter toutes les actions « pour aller plus vite » sans lire. C'est exactement ainsi qu'un agent installe une dépendance inutile ou réécrit un fichier que vous aviez corrigé à la main.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📜</span>Fichiers d'instructions et types d'agents</div>
+  <p>À chaque nouvelle session, l'agent repart de zéro. Il lit donc automatiquement un <span class="term-item">fichier d'instructions</span> placé à la racine du projet : c'est votre <code>AGENTS.md</code> de la séance 2.</p>
+  <ul class="clean">
+    <li><code>AGENTS.md</code> : format ouvert lu par de nombreux agents (Codex, Cursor, Copilot, OpenCode…).</li>
+    <li><code>CLAUDE.md</code> : fichier lu par Claude Code. Pour éviter de maintenir deux fichiers, il peut simplement contenir la ligne <code>@AGENTS.md</code>, qui importe son contenu.</li>
+    <li>Contenu attendu : stack, commandes utiles, conventions de code, règles (« ne jamais committer de secret »), renvoi vers <code>PROJECT.md</code> et <code>DESIGN.md</code>.</li>
+  </ul>
+  <h3>CLI, IDE ou cloud ?</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Type</th><th>Où il tourne</th><th>Points forts</th><th>Vigilance</th></tr>
+    <tr><td><strong>CLI</strong> (Claude Code, Codex CLI, OpenCode)</td><td>Dans votre terminal, sur votre machine</td><td>Accès direct au projet et aux commandes, très scriptable</td><td>Les diffs se lisent dans le terminal ou via Git</td></tr>
+    <tr><td><strong>IDE</strong> (Cursor, Copilot en mode agent, Antigravity)</td><td>Dans l'éditeur de code</td><td>Diffs visuels, acceptation fichier par fichier</td><td>Tentation d'accepter en bloc</td></tr>
+    <tr><td><strong>Cloud</strong> (agents asynchrones)</td><td>Sur un serveur distant, à partir de votre dépôt GitHub</td><td>Travaille en parallèle, livre une branche ou une pull request</td><td>Relire la pull request avant fusion, ne pas lui confier de secrets</td></tr>
+  </table></div>
+  <div class="key-box"><div class="big">L'outil change, la méthode reste.</div><p style="margin:8px 0 0">Boucle, outils, permissions, fichier d'instructions : ces quatre notions existent dans tous les agents. Si vous les maîtrisez, vous changerez d'outil sans changer de méthode.</p></div>
+</div>
+<div class="card" data-explorer="x0">
+  <div class="section-title"><span class="icon-bg purple">🧩</span>Explorer l&#x27;anatomie d&#x27;un agent</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm0"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt0">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill0"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="0">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="0">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres0"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🚀 Démarrer le projet ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c1">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🚀</span>Créer le projet Next.js</div>
+  <p class="lead">Avant de confier quoi que ce soit à l'agent, vous posez vous-même une base saine : un projet Next.js généré par l'outil officiel, avec la stack décidée dans votre PROJECT.md.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Obtenir un projet Next.js qui démarre, comprendre sa structure et y déposer vos fichiers de contexte pour que l'agent travaille dans le bon cadre.</div>
+  <h3>La commande</h3>
+  <pre class="prompt"><span class="hl3">npx create-next-app@latest cinelist</span>
+
+<span class="hl2">Réponses recommandées aux questions :</span>
+TypeScript ............ Yes
+ESLint ................ Yes
+Tailwind CSS .......... Yes
+App Router ............ Yes
+Alias d'import (@/*) .. Yes (valeur par défaut)</pre>
+  <p>Vous pouvez aussi passer les options directement : <code>npx create-next-app@latest cinelist --typescript --tailwind --eslint --app</code>. L'outil installe les dépendances et, en général, initialise un dépôt Git avec un premier commit.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Lancer la commande dans le dossier où vous rangez vos projets.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Entrer dans le dossier : <code>cd cinelist</code>.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Démarrer le <span class="term-item">serveur de développement</span> : <code>npm run dev</code>, puis ouvrir <code>http://localhost:3000</code>.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Vérifier que la compilation de production passe aussi : <code>npm run build</code>.</span></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Pourquoi ne pas laisser l'agent tout créer ?</strong>Vous pouvez demander à l'agent de lancer la commande, mais c'est l'étape la plus simple et la plus standard du projet. La faire vous-même garantit une base officielle, sans configuration « inventée », et vous apprend ce que contient le projet.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🗂️</span>La structure du projet</div>
+  <p>Avec l'<span class="term-item">App Router</span>, l'arborescence du dossier <code>app/</code> définit les routes : chaque dossier contenant un <code>page.tsx</code> devient une URL.</p>
+  <pre class="prompt">cinelist/
+├── <span class="hl3">app/</span>
+│   ├── layout.tsx        <span class="hl">mise en page commune (header, polices)</span>
+│   ├── page.tsx          <span class="hl">route /</span>
+│   ├── globals.css       <span class="hl">import de Tailwind + variables</span>
+│   └── ma-liste/
+│       └── page.tsx      <span class="hl">route /ma-liste</span>
+├── <span class="hl3">components/</span>          <span class="hl2">à créer : composants réutilisables</span>
+├── <span class="hl3">lib/</span>                 <span class="hl2">à créer : fonctions utilitaires, données, clients</span>
+├── public/               <span class="hl">images et fichiers statiques</span>
+├── package.json          <span class="hl">dépendances et scripts npm</span>
+├── .gitignore
+├── PROJECT.md  DESIGN.md  AGENTS.md
+└── AI-LOG.md</pre>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>📦 package.json</h4><p class="muted">Liste les dépendances et les scripts (<code>dev</code>, <code>build</code>, <code>start</code>, <code>lint</code>). C'est le premier fichier à relire quand un agent ajoute une bibliothèque.</p></div>
+    <div class="mini-card"><h4>🎨 Tailwind CSS</h4><p class="muted">Framework de classes utilitaires. Les couleurs, rayons et espacements de votre DESIGN.md doivent y être traduits, pas réinventés à chaque page.</p></div>
+    <div class="mini-card"><h4>🧱 components/</h4><p class="muted">Ce dossier n'est pas créé automatiquement. Exemple : <code>components/GameCard.tsx</code> pour GameBacklog, réutilisé sur plusieurs pages.</p></div>
+    <div class="mini-card"><h4>🔐 .env.local</h4><p class="muted">Fichier des variables d'environnement locales (clés Supabase en S4). Il ne doit jamais être versionné.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📎</span>Donner le contexte à l'agent</div>
+  <p>Copiez à la racine du projet vos trois fichiers de la séance 2 : <code>PROJECT.md</code>, <code>DESIGN.md</code>, <code>AGENTS.md</code>. Complétez AGENTS.md avec ce que vous savez maintenant : commandes réelles du projet et structure des dossiers.</p>
+  <p>Première interaction avec l'agent : <strong>aucune modification</strong>. Vous lui demandez de lire et de reformuler.</p>
+  <pre class="prompt"><span class="hl3">Contexte</span> : projet Next.js (App Router, TypeScript, Tailwind) fraîchement créé.
+<span class="hl3">Action</span> : lis PROJECT.md, DESIGN.md et AGENTS.md, puis parcours app/.
+<span class="hl2">Contraintes</span> : ne modifie aucun fichier, ne lance aucune installation.
+<span class="hl">Résultat attendu</span> : un résumé en 10 lignes maximum du projet, de la stack,
+des conventions et des incohérences ou manques que tu repères dans ces fichiers.</pre>
+  <p>Si le résumé est faux ou incomplet, le problème vient de vos fichiers : corrigez-les maintenant, avant toute génération de code. C'est beaucoup moins coûteux que de corriger dix fichiers générés sur une mauvaise compréhension.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">« Voilà mon projet, fais la page d'accueil de CampusHub. » L'agent n'a rien lu et invente un design.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">« Lis les fichiers de contexte et résume-les. » Puis, une fois le résumé validé, une première tâche cadrée.</p></div>
+  </div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 2</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm1"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt1">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill1"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="1">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="1">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres1"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🛟 Git, le filet ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c2">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🛟</span>Pourquoi Git est indispensable avec un agent</div>
+  <p class="lead">Un agent peut modifier dix fichiers en une seule réponse. Sans Git, vous ne savez ni ce qui a changé, ni comment revenir à l'état qui marchait. Git est votre filet de sécurité : chaque étape validée devient un point de sauvegarde.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Maîtriser les commandes Git utiles au travail avec un agent : voir, enregistrer, isoler, annuler, publier.</div>
+  <h3>Les commandes du quotidien</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Commande</th><th>Rôle</th><th>Quand l'utiliser</th></tr>
+    <tr><td><code>git init</code></td><td>Crée un dépôt Git dans le dossier</td><td>Une fois, si create-next-app ne l'a pas fait</td></tr>
+    <tr><td><code>git status</code></td><td>Liste les fichiers modifiés, ajoutés, non suivis</td><td>Avant et après chaque tâche de l'agent</td></tr>
+    <tr><td><code>git diff</code></td><td>Affiche ligne par ligne les modifications non indexées</td><td>Pour relire ce que l'agent a changé</td></tr>
+    <tr><td><code>git add .</code></td><td>Indexe les modifications pour le prochain commit</td><td>Après relecture du diff</td></tr>
+    <tr><td><code>git commit -m "..."</code></td><td>Enregistre un point de sauvegarde avec un message</td><td>Après chaque étape validée</td></tr>
+    <tr><td><code>git log --oneline</code></td><td>Affiche l'historique des commits</td><td>Pour retrouver un état antérieur</td></tr>
+  </table></div>
+  <div class="key-box"><div class="big">Une étape validée = un commit.</div><p style="margin:8px 0 0">Tâche terminée, diff relu, page vérifiée : vous committez. Vous repartez ainsi toujours d'un état propre et connu avant la tâche suivante.</p></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🌿</span>Branches et retour arrière</div>
+  <p>Une <span class="term-item">branche</span> isole un travail en cours : si l'agent part dans une mauvaise direction, la branche principale reste intacte.</p>
+  <pre class="prompt"><span class="hl3">git switch -c feature/ma-liste</span>   <span class="hl">crée la branche et s'y place</span>
+<span class="hl">... travail de l'agent, relecture, commits ...</span>
+<span class="hl3">git switch main</span>                   <span class="hl">revient sur la branche principale</span>
+<span class="hl3">git merge feature/ma-liste</span>        <span class="hl">intègre le travail validé</span></pre>
+  <h3>Revenir en arrière : restore ou revert ?</h3>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>↩️ git restore</h4><p class="muted">Annule des modifications <strong>non committées</strong> d'un fichier : <code>git restore app/page.tsx</code>. Pour désindexer sans perdre le travail : <code>git restore --staged app/page.tsx</code>. Idéal quand l'agent vient de casser un fichier.</p></div>
+    <div class="mini-card"><h4>🔁 git revert</h4><p class="muted">Crée un <strong>nouveau commit</strong> qui annule un commit existant : <code>git revert &lt;hash&gt;</code>. L'historique est conservé : c'est la méthode sûre pour un commit déjà poussé sur GitHub.</p></div>
+  </div>
+  <div class="warn-box"><strong>⛔ Attention</strong> <code>git restore</code> efface définitivement les modifications non committées du fichier. Vérifiez avec <code>git diff</code> que vous ne jetez pas aussi votre propre travail.</div>
+  <details class="acc"><summary>Et git reset --hard ?</summary><div>Cette commande remet tout le dépôt à un état antérieur et supprime les modifications en cours, sans retour possible. Elle existe, mais un agent ne devrait jamais la lancer sans votre accord explicite : interdisez-la dans AGENTS.md.</div></details>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">☁️</span>Publier sur GitHub et protéger les secrets</div>
+  <p>Créez un dépôt vide sur GitHub (sans README, votre projet en a déjà un), puis reliez votre dépôt local au <span class="term-item">dépôt distant</span> :</p>
+  <pre class="prompt"><span class="hl3">git remote add origin https://github.com/&lt;votre-compte&gt;/cinelist.git</span>
+<span class="hl3">git branch -M main</span>
+<span class="hl3">git push -u origin main</span></pre>
+  <p>Si vous utilisez la CLI GitHub, <code>gh repo create</code> fait la même chose en une commande interactive. Ensuite, un simple <code>git push</code> publie vos nouveaux commits.</p>
+  <h3>.gitignore et .env</h3>
+  <p>Le fichier <code>.gitignore</code> liste ce que Git ne doit jamais suivre : <code>node_modules/</code>, <code>.next/</code> et surtout les fichiers <code>.env*</code>. En S4, votre <code>.env.local</code> contiendra <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> et éventuellement <code>SUPABASE_SERVICE_ROLE_KEY</code>, clé qui contourne toute la sécurité de la base.</p>
+  <ul class="clean">
+    <li>Ouvrez <code>.gitignore</code> et vérifiez la présence d'une ligne couvrant les <code>.env</code>.</li>
+    <li>Avant chaque commit, <code>git status</code> ne doit jamais afficher de fichier <code>.env</code>.</li>
+    <li>Une clé poussée sur GitHub est compromise, même si vous supprimez le commit ensuite : il faut la régénérer.</li>
+  </ul>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm2"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt2">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill2"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="2">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="2">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres2"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : 🧭 Piloter l&#x27;agent ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c3">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🧭</span>Le cycle explorer → planifier → coder → vérifier</div>
+  <p class="lead">Piloter un agent, c'est découper le travail et contrôler chaque passage de relais. Vous ne demandez pas « fais l'application » : vous enchaînez des cycles courts, chacun avec un objectif unique.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Savoir formuler une tâche agent structurée, obtenir un plan avant le code et valider le résultat sur des critères de fin explicites.</div>
+  <div class="pillars">
+    <div class="pillar"><div class="n">1</div><h4>Explorer</h4><p>L'agent lit les fichiers concernés et vous dit ce qu'il a compris.</p><div class="q">« Quels fichiers sont concernés ? »</div></div>
+    <div class="pillar"><div class="n">2</div><h4>Planifier</h4><p>L'agent propose un plan numéroté, vous le corrigez ou le validez.</p><div class="q">« Quelles étapes, dans quel ordre ? »</div></div>
+    <div class="pillar"><div class="n">3</div><h4>Coder</h4><p>L'agent exécute le plan validé, et seulement lui.</p><div class="q">« Qu'est-ce qui change ? »</div></div>
+    <div class="pillar"><div class="n">4</div><h4>Vérifier</h4><p>Build, lint, affichage, relecture du diff, puis commit.</p><div class="q">« Comment je sais que c'est fini ? »</div></div>
+  </div>
+  <h3>Le mode plan</h3>
+  <p>La plupart des agents proposent un <span class="term-item">mode plan</span> : l'agent peut lire et raisonner, mais pas modifier. Dans Claude Code, on y accède avec Maj+Tab, qui fait défiler les modes jusqu'au mode plan ; Cursor, Codex ou Copilot proposent un équivalent. Sans ce mode, écrivez simplement : « Propose un plan, n'écris aucun code tant que je n'ai pas validé. »</p>
+  <div class="instruction-box"><strong class="title">Relire un plan, c'est vérifier</strong>Les fichiers cités existent-ils ? Le plan respecte-t-il DESIGN.md ? Ajoute-t-il une dépendance ? Touche-t-il à des fichiers hors du périmètre ? Un plan corrigé coûte une phrase ; un code corrigé coûte une session.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🎯</span>Une tâche = un objectif</div>
+  <p>Une <span class="term-item">petite itération</span> produit un résultat vérifiable et committable. Plus la tâche est large, plus l'agent prend de décisions à votre place.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ Trop large</h4><p class="muted">« Fais GameBacklog avec l'authentification, les jeux, les notes et le dashboard. »</p></div>
+    <div class="mini-card good"><h4>✅ Une itération</h4><p class="muted">« Crée la page statique /mes-jeux qui affiche 6 jeux fictifs en cartes, selon DESIGN.md. »</p></div>
+  </div>
+  <h3>Les critères de fin</h3>
+  <p>Un <span class="term-item">critère de fin</span> est une condition observable qui permet de dire « terminé » sans discussion. Il se rédige <strong>avant</strong> de lancer l'agent.</p>
+  <ul class="clean">
+    <li><code>npm run build</code> et <code>npm run lint</code> passent sans erreur.</li>
+    <li>La page <code>/evenements</code> de CampusHub affiche au moins 4 événements fictifs.</li>
+    <li>Les couleurs et rayons utilisés sont ceux de DESIGN.md.</li>
+    <li>Aucune nouvelle dépendance dans <code>package.json</code>.</li>
+    <li>L'affichage reste lisible en largeur mobile.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📝</span>Le prompt de tâche agent</div>
+  <p>Les 5 Piliers de la séance 1 s'adaptent au travail agentique. Un <span class="term-item">prompt de tâche</span> structuré, idéalement enregistré dans un fichier <code>tache.md</code>, contient six rubriques :</p>
+  <pre class="prompt"><span class="hl3"># Objectif</span>
+Créer la page statique /ma-liste de CinéList.
+<span class="hl3"># Contexte (fichiers à lire)</span>
+PROJECT.md, DESIGN.md, AGENTS.md, app/layout.tsx
+<span class="hl3"># Contraintes</span>
+TypeScript strict, Tailwind uniquement, composants dans components/
+<span class="hl3"># Étapes attendues</span>
+1. Proposer un plan  2. Attendre validation  3. Coder  4. Lancer build et lint
+<span class="hl2"># Critères de fin</span>
+Build et lint OK, 6 films affichés, conforme DESIGN.md, responsive
+<span class="hl2"># Interdits</span>
+Aucune dépendance ajoutée, aucun fichier supprimé, pas de Supabase</pre>
+  <h3>Relire le diff avant de committer</h3>
+  <p>La vérification finale, c'est vous. Lisez <code>git diff</code> ou le diff de votre IDE fichier par fichier : chaque modification doit s'expliquer par la tâche. Une ligne inattendue dans <code>package.json</code> ou un fichier modifié hors périmètre est un signal d'alerte, même si la page s'affiche correctement.</p>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm3"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt3">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill3"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="3">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="3">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres3"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🧠 Gérer le contexte ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c4">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🧠</span>La fenêtre de contexte se remplit</div>
+  <p class="lead">Tout ce que l'agent lit ou produit pendant une session s'accumule dans sa <span class="term-item">fenêtre de contexte</span> : vos messages, les fichiers ouverts, les sorties de commandes, ses propres réponses. Cette mémoire de travail est limitée.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Reconnaître une session saturée, savoir la compacter ou la relancer, et capitaliser ce que vous apprenez dans AGENTS.md et AI-LOG.md.</div>
+  <h3>Symptômes d'une session saturée</h3>
+  <ul class="clean">
+    <li>L'agent oublie une consigne donnée au début (il réutilise une couleur interdite par DESIGN.md).</li>
+    <li>Il repropose une solution déjà rejetée.</li>
+    <li>Il mélange deux tâches (la page « Mes jeux » et le formulaire de note de GameBacklog).</li>
+    <li>L'outil signale que le contexte est presque plein ou qu'il a été compacté automatiquement.</li>
+  </ul>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🗜️ Compacter</h4><p class="muted">La <span class="term-item">compaction</span> remplace l'historique par un résumé. Dans Claude Code : <code>/compact</code>, avec éventuellement une consigne sur ce qu'il faut garder. D'autres agents proposent un équivalent ou le font automatiquement.</p></div>
+    <div class="mini-card"><h4>🆕 Nouvelle session</h4><p class="muted">Une tâche terminée et committée ? Repartez d'une session vierge (<code>/clear</code> dans Claude Code, nouvelle conversation ailleurs). AGENTS.md sera relu, sans le bruit de la tâche précédente.</p></div>
+  </div>
+  <div class="key-box"><div class="big">Une nouvelle tâche, une nouvelle session.</div><p style="margin:8px 0 0">Le contexte utile doit vivre dans vos fichiers (PROJECT.md, DESIGN.md, AGENTS.md, tache.md), pas dans l'historique d'une conversation.</p></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🔧</span>Faire évoluer AGENTS.md</div>
+  <p>Quand vous corrigez deux fois la même erreur, ce n'est plus un accident : c'est une règle manquante. Ajoutez-la à <code>AGENTS.md</code> pour que toutes les sessions futures en profitent.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Erreur répétée</th><th>Règle ajoutée dans AGENTS.md</th></tr>
+    <tr><td>L'agent écrit des couleurs en dur (<code>#3b82f6</code>) au lieu des tokens</td><td>« Utiliser uniquement les couleurs définies dans DESIGN.md, jamais de valeur hexadécimale en dur. »</td></tr>
+    <tr><td>Il crée des composants dans <code>app/</code></td><td>« Les composants réutilisables vont dans components/. »</td></tr>
+    <tr><td>Il conclut sans vérifier</td><td>« Avant de conclure, lancer npm run lint et npm run build et montrer la sortie. »</td></tr>
+    <tr><td>Il installe des paquets sans demander</td><td>« Ne jamais ajouter de dépendance sans validation explicite. »</td></tr>
+  </table></div>
+  <p>Gardez AGENTS.md court et concret : une règle par ligne, formulée comme une consigne vérifiable. Committez chaque modification de ce fichier comme n'importe quel code.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📓</span>AI-LOG.md, le journal des décisions</div>
+  <p><span class="term-item">AI-LOG.md</span> garde la trace de votre travail avec l'IA. Il est évalué dans la note « méthodologie IA » et vous servira en S5 pour expliquer vos choix.</p>
+  <pre class="prompt"><span class="hl3">## 2026-10-06 — Page statique « Ma liste »</span>
+<span class="hl2">Outil</span> : Claude Code (mode plan puis approbation manuelle)
+<span class="hl2">Prompt</span> : voir tache.md (objectif, contexte, contraintes, critères, interdits)
+<span class="hl2">Résultat</span> : app/ma-liste/page.tsx + components/FilmCard.tsx + lib/films.ts
+<span class="hl2">Vérification</span> : build OK, lint OK, test en largeur mobile, diff relu
+<span class="hl2">Décision</span> : accepté ; couleur du badge corrigée à la main ; règle ajoutée
+dans AGENTS.md ; commit « feat: page statique Ma liste »</pre>
+  <ul class="clean">
+    <li><strong>Une entrée par tâche</strong>, datée, rédigée juste après la vérification.</li>
+    <li><strong>La décision</strong> est la rubrique la plus importante : accepté, modifié, rejeté, et pourquoi.</li>
+    <li><strong>Pas de copie intégrale</strong> des conversations : un résumé du prompt ou un renvoi vers tache.md suffit.</li>
+  </ul>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 5</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm4"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt4">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill4"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="4">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="4">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="4">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres4"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c3">◂ Précédent</button><button class="btn btn-primary" data-goto="c5">Suite : ⚠️ Dérives de l&#x27;agent ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c5">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">⚠️</span>Six dérives fréquentes</div>
+  <p class="lead">Un agent est optimisé pour avancer. Sans cadre, il en fait trop, insiste quand il se trompe ou déclare victoire trop tôt. Connaître ces dérives permet de les repérer dans un diff ou dans une réponse.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Identifier les dérives typiques d'un coding agent et appliquer pour chacune une contre-mesure concrète.</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>📈 Scope creep</h4><p class="muted">Vous demandez une page « Ma liste » ; l'agent ajoute aussi un système de notes, refait le header et renomme des fichiers. Chaque ajout non demandé est du code à relire et un risque de régression.</p></div>
+    <div class="mini-card"><h4>🔄 Boucle de corrections</h4><p class="muted">L'agent corrige une erreur, en crée une autre, revient à la première… Sur GameBacklog, il alterne entre deux façons de typer un statut sans jamais converger.</p></div>
+    <div class="mini-card"><h4>📦 Dépendances inventées ou inutiles</h4><p class="muted">Installation d'une bibliothèque pour une tâche que Tailwind ou React font déjà, voire d'un paquet au nom plausible mais inexistant ou malveillant.</p></div>
+    <div class="mini-card"><h4>🗑️ Suppression ou réécriture</h4><p class="muted">L'agent réécrit entièrement un fichier que vous aviez corrigé à la main, ou supprime un fichier qu'il juge inutile.</p></div>
+    <div class="mini-card"><h4>🎭 « Ça marche » sans preuve</h4><p class="muted">L'agent annonce « tout fonctionne » sans avoir lancé le build, ni ouvert la page. L'affirmation n'est pas une vérification.</p></div>
+    <div class="mini-card"><h4>🔑 Secrets dans le code</h4><p class="muted">Une clé écrite en dur dans un composant, ou un <code>.env</code> ajouté au commit. Sur CampusHub, une clé de service exposée donne accès à toutes les inscriptions.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🛡️</span>Les contre-mesures</div>
+  <div class="table-wrap"><table>
+    <tr><th>Dérive</th><th>Contre-mesure</th></tr>
+    <tr><td><span class="famille-tag f5">Scope creep</span></td><td>Une tâche = un objectif ; rubrique « Interdits » ; refuser dans le diff ce qui n'était pas demandé.</td></tr>
+    <tr><td><span class="famille-tag f5">Boucle de corrections</span></td><td>Arrêter l'agent après deux échecs sur le même problème, revenir au dernier commit (<code>git restore</code>), reformuler la tâche plus petite, ouvrir une nouvelle session.</td></tr>
+    <tr><td><span class="famille-tag f5">Dépendance inventée</span></td><td>Interdire l'ajout de dépendance sans accord ; vérifier chaque paquet sur npmjs.com (existence, auteur, activité) ; relire <code>package.json</code> dans le diff.</td></tr>
+    <tr><td><span class="famille-tag f5">Suppression / réécriture</span></td><td>Committer avant chaque tâche ; approbation manuelle des actions ; consigne « modifications minimales, pas de réécriture complète ».</td></tr>
+    <tr><td><span class="famille-tag f5">« Ça marche » sans preuve</span></td><td>Exiger la sortie de <code>npm run build</code> et <code>npm run lint</code> ; ouvrir soi-même la page ; tester le cas limite (liste vide).</td></tr>
+    <tr><td><span class="famille-tag f5">Secrets dans le code</span></td><td>Variables dans <code>.env.local</code> uniquement ; <code>.gitignore</code> vérifié ; <code>git status</code> avant chaque commit ; régénérer toute clé exposée.</td></tr>
+  </table></div>
+  <div class="warn-box"><strong>⛔ Règle absolue</strong> Seules les variables préfixées <code>NEXT_PUBLIC_</code> sont exposées au navigateur. <code>SUPABASE_SERVICE_ROLE_KEY</code> ne doit jamais porter ce préfixe ni apparaître dans un composant client.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">✅</span>La routine de contrôle après chaque tâche</div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span><code>git status</code> : quels fichiers ont bougé ? Tous étaient-ils prévus ?</span></div>
+    <div class="step"><span class="s-num">2</span><span><code>git diff</code> : chaque modification s'explique-t-elle par la tâche ?</span></div>
+    <div class="step"><span class="s-num">3</span><span><code>npm run lint</code> et <code>npm run build</code> : aucune erreur.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Vérification visuelle dans le navigateur, y compris en largeur mobile.</span></div>
+    <div class="step"><span class="s-num">5</span><span>Entrée dans AI-LOG.md, puis <code>git commit</code> avec un message explicite.</span></div>
+  </div>
+  <div class="key-box"><div class="big">Pas de preuve, pas de commit.</div><p style="margin:8px 0 0">L'agent propose, vous disposez. Votre valeur dans ce module n'est pas de taper du code, mais de décider ce qui entre dans le projet.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm5"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt5">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill5"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="5">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="5">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres5"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="syn">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🤖 Anatomie d&#x27;un agent</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🚀 Démarrer le projet</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🛟 Git, le filet</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>🧭 Piloter l&#x27;agent</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🧠 Gérer le contexte</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>⚠️ Dérives de l&#x27;agent</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
+    <div class="key-box"><div class="big">Un agent n&#x27;est pas plus fiable qu&#x27;un chat : il est plus puissant. Votre travail devient de cadrer chaque tâche, de lire chaque diff et de committer chaque étape validée.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Expliquer comment fonctionne un coding agent (boucle, outils, permissions, fichiers d&#x27;instructions) ;</li><li>Initialiser un projet Next.js / TypeScript / Tailwind et y placer les fichiers de contexte ;</li><li>Utiliser Git comme filet de sécurité : commit, diff, branche, retour arrière, push sur GitHub ;</li><li>Piloter l&#x27;agent selon le cycle explorer → planifier → coder → vérifier ;</li><li>Gérer le contexte d&#x27;une session agent et tenir un AI-LOG.md ;</li><li>Repérer les dérives d&#x27;un agent et appliquer les contre-mesures adaptées.</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un projet Next.js (TypeScript, App Router, Tailwind) qui démarre avec npm run dev</label><label><input type="checkbox"> PROJECT.md, DESIGN.md et AGENTS.md à la racine du dépôt</label><label><input type="checkbox"> Un dépôt GitHub avec plusieurs commits propres et un .gitignore qui exclut les .env</label><label><input type="checkbox"> Une première fonctionnalité générée par l&#x27;agent, relue et validée</label><label><input type="checkbox"> Un fichier tache.md et un AI-LOG.md démarré avec au moins une entrée complète</label></div>
+    <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-3-travailler-avec-un-coding-agent-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Construire une vraie application</strong>Vous brancherez Supabase pour ajouter la base de données, l&#x27;authentification et le CRUD de vos entités métier. Vous réutiliserez la méthode de pilotage de l&#x27;agent vue aujourd&#x27;hui, tâche par tâche, commit par commit.</div>
+  </div>
+</section>
+</main>
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 3 — Travailler avec un coding agent — Théorie<br>Mode formateur : ajoutez <code>?formateur</code> à l'adresse de la page.</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const FAMILIES={"f1": "Agent", "f2": "Environnement projet", "f3": "Git", "f4": "Pilotage", "f5": "Contrôle & dérives"};
+const EXPLORERS={"x0": {"title": "Explorer l'anatomie d'un agent", "icon": "🧩", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "Observer", "fam": "f1", "rows": [["Définition", "Phase où l'agent lit la demande, AGENTS.md, l'arborescence et le code concerné avant d'agir."], ["Exemple", "Pour GameBacklog, l'agent ouvre DESIGN.md et app/page.tsx avant de créer la page « Mes jeux »."], ["Piège", "Une demande floue ou un AGENTS.md absent : l'agent observe peu et devine le reste."], ["À retenir", "Demandez explicitement : « lis PROJECT.md, DESIGN.md et AGENTS.md avant toute action »."]]}, {"id": "Planifier", "fam": "f1", "rows": [["Définition", "Phase où l'agent découpe l'objectif en étapes et choisit les fichiers à toucher."], ["Exemple", "« 1. créer components/FilmCard.tsx 2. créer app/ma-liste/page.tsx 3. ajouter le lien dans le header »."], ["Piège", "Laisser l'agent planifier en silence : vous découvrez le plan une fois le code écrit."], ["À retenir", "Demandez le plan d'abord, validez-le, puis seulement autorisez l'exécution."]]}, {"id": "Agir", "fam": "f1", "rows": [["Définition", "Phase où l'agent utilise ses outils : écrire des fichiers, lancer des commandes."], ["Exemple", "Pour CampusHub, l'agent crée app/evenements/page.tsx et lance npm run lint."], ["Piège", "Une action destructrice (suppression, réécriture complète) validée sans lecture."], ["À retenir", "Le mode de permission fixe ce que l'agent peut faire sans vous demander."]]}, {"id": "Vérifier", "fam": "f1", "rows": [["Définition", "Phase où l'agent lit la sortie de ses actions (erreurs, build, tests) et décide de la suite."], ["Exemple", "npm run build échoue sur un type manquant : l'agent corrige puis relance."], ["Piège", "L'agent annonce « c'est fait » sans avoir lancé la moindre vérification."], ["À retenir", "Exigez une preuve : sortie de npm run build, npm run lint, capture de la page."]]}, {"id": "Permissions", "fam": "f1", "rows": [["Définition", "Réglage qui détermine quelles actions l'agent exécute seul et lesquelles attendent votre accord."], ["Exemple", "Éditions de fichiers automatiques, mais chaque commande terminal soumise à approbation."], ["Piège", "Passer en accès total sur un dépôt non commité : aucun retour arrière possible."], ["À retenir", "Autonomie élevée = dépôt Git propre et tâche très cadrée."]]}, {"id": "AGENTS.md", "fam": "f1", "rows": [["Définition", "Fichier d'instructions lu automatiquement par l'agent au démarrage de chaque session."], ["Exemple", "« Stack : Next.js App Router + TypeScript + Tailwind. Toujours lancer npm run lint avant de conclure. »"], ["Piège", "Un fichier trop long ou contradictoire, que l'agent applique mal."], ["À retenir", "Court, concret, mis à jour dès qu'une erreur se répète. CLAUDE.md peut l'importer avec @AGENTS.md."]]}]}};
+const QCMS=[[{"q": "Quelle séquence décrit la boucle d'un coding agent ?", "o": ["Générer → copier → coller → tester", "Observer → planifier → agir → vérifier", "Planifier → coder → déployer → livrer", "Demander → répondre → valider → archiver"], "a": 1, "e": "L'agent observe le contexte, planifie, agit avec ses outils puis vérifie le résultat, et recommence si besoin."}, {"q": "Qu'est-ce qui distingue fondamentalement un agent d'un chat ?", "o": ["Il utilise un modèle plus récent", "Il répond plus vite", "Il dispose d'outils pour lire, écrire des fichiers et lancer des commandes", "Il ne fait jamais d'erreur de code"], "a": 2, "e": "Ce sont les outils (fichiers, terminal, recherche) qui permettent à l'agent d'agir directement dans le projet."}, {"q": "Vous débutez avec un agent sur CinéList. Quel mode de permission est le plus adapté ?", "o": ["Approbation à chaque action", "Accès total sans confirmation", "Éditions automatiques et commandes automatiques", "Aucun réglage, l'agent choisit"], "a": 0, "e": "Au début, valider chaque action permet de comprendre ce que fait l'agent et d'éviter les actions destructrices."}, {"q": "Vous utilisez Claude Code et votre projet contient déjà AGENTS.md. Quelle solution évite de dupliquer les instructions ?", "o": ["Renommer AGENTS.md en README.md", "Coller les instructions dans chaque prompt", "Supprimer AGENTS.md", "Créer un CLAUDE.md qui contient la ligne @AGENTS.md"], "a": 3, "e": "Claude Code lit CLAUDE.md et la syntaxe @fichier importe le contenu d'AGENTS.md : une seule source de vérité."}, {"q": "Un agent cloud travaille sur votre dépôt GitHub et livre une pull request. Que devez-vous faire ?", "o": ["La fusionner immédiatement, l'agent a testé", "Relire les modifications avant de fusionner", "Supprimer la branche sans la regarder", "Lui transmettre votre fichier .env pour qu'il teste"], "a": 1, "e": "Un agent cloud produit une proposition : la relecture de la pull request reste votre responsabilité, et les secrets ne doivent pas lui être confiés."}], [{"q": "Quelle commande crée un projet Next.js avec l'outil officiel ?", "o": ["npm install next-app", "npx create-next-app@latest", "next new project", "npm create react-app"], "a": 1, "e": "npx create-next-app@latest lance la dernière version du générateur officiel de Next.js."}, {"q": "Avec l'App Router, comment créer la route /ma-liste ?", "o": ["Ajouter une ligne dans package.json", "Créer un fichier routes.ts à la racine", "Modifier next.config.ts", "Créer le fichier app/ma-liste/page.tsx"], "a": 3, "e": "Dans l'App Router, chaque dossier de app/ contenant un page.tsx devient une route."}, {"q": "Quel est le rôle de npm run dev ?", "o": ["Démarrer le serveur de développement local", "Publier le site sur Vercel", "Committer le projet", "Installer Tailwind"], "a": 0, "e": "npm run dev lance le serveur local (par défaut sur localhost:3000) avec rechargement à chaud."}, {"q": "Quelle est la meilleure première demande à faire à l'agent sur le projet neuf ?", "o": ["Générer toutes les pages du MVP", "Installer une bibliothèque de composants", "Lire les fichiers de contexte et les résumer sans rien modifier", "Configurer Supabase"], "a": 2, "e": "Faire reformuler le contexte vérifie que l'agent a bien compris le projet avant qu'il n'écrive la moindre ligne."}, {"q": "Où placer PROJECT.md, DESIGN.md et AGENTS.md ?", "o": ["Dans public/", "À la racine du dépôt", "Dans node_modules/", "Dans un dossier hors du projet"], "a": 1, "e": "À la racine, ils sont versionnés avec le code et facilement trouvés par l'agent (AGENTS.md y est lu automatiquement)."}], [{"q": "L'agent vient de modifier plusieurs fichiers. Quelle commande affiche le détail des lignes changées ?", "o": ["git log", "git push", "git diff", "git init"], "a": 2, "e": "git diff montre ligne par ligne les modifications non indexées : c'est l'outil de relecture du travail de l'agent."}, {"q": "L'agent a cassé app/page.tsx et vous n'avez pas encore committé. Comment retrouver la version du dernier commit ?", "o": ["git restore app/page.tsx", "git revert app/page.tsx", "git push --force", "git switch -c app/page.tsx"], "a": 0, "e": "git restore rétablit le fichier dans son état du dernier commit en abandonnant les modifications non committées."}, {"q": "Un commit défectueux est déjà poussé sur GitHub. Quelle est la méthode sûre pour l'annuler ?", "o": ["Supprimer le dépôt GitHub", "git restore sur tous les fichiers", "Modifier l'historique puis forcer le push", "git revert suivi du hash du commit"], "a": 3, "e": "git revert crée un commit inverse sans réécrire l'historique partagé."}, {"q": "Que fait git switch -c feature/ma-liste ?", "o": ["Supprime la branche feature/ma-liste", "Crée la branche feature/ma-liste et bascule dessus", "Fusionne feature/ma-liste dans main", "Pousse la branche sur GitHub"], "a": 1, "e": "L'option -c crée la branche puis s'y place, pour isoler le travail de l'agent."}, {"q": "Pourquoi les fichiers .env doivent-ils figurer dans .gitignore ?", "o": ["Pour accélérer npm run dev", "Parce que Next.js ne sait pas les lire", "Pour que les secrets ne soient jamais versionnés ni publiés", "Pour que l'agent ne les voie pas"], "a": 2, "e": "Les .env contiennent des clés : versionnées puis poussées, elles deviennent publiques et doivent être régénérées."}], [{"q": "Quel est l'intérêt principal du mode plan ?", "o": ["Faire coder l'agent plus vite", "Obtenir et valider un plan avant toute modification de fichier", "Déployer automatiquement le projet", "Désactiver la lecture des fichiers"], "a": 1, "e": "En mode plan, l'agent lit et propose sans modifier : vous corrigez le plan avant qu'il ne devienne du code."}, {"q": "Laquelle de ces demandes respecte le principe « une tâche = un objectif » ?", "o": ["Crée la page statique /evenements de CampusHub avec 4 événements fictifs", "Fais tout le MVP de CampusHub", "Ajoute l'auth, la BDD et le dashboard", "Améliore l'application"], "a": 0, "e": "Une tâche unique, précise et vérifiable permet un résultat contrôlable et un commit propre."}, {"q": "Lequel de ces éléments est un critère de fin valable ?", "o": ["La page est jolie", "L'agent dit que c'est terminé", "npm run build passe sans erreur", "Le code a l'air correct"], "a": 2, "e": "Un critère de fin doit être observable et objectif, comme le succès d'une commande de build."}, {"q": "Quelle rubrique d'un prompt de tâche agent sert à empêcher l'ajout d'une bibliothèque non prévue ?", "o": ["Objectif", "Contexte", "Étapes attendues", "Interdits"], "a": 3, "e": "Les interdits posent explicitement les limites : pas de dépendance ajoutée, pas de suppression de fichier, etc."}, {"q": "La page générée s'affiche bien, mais git diff montre une modification inattendue de package.json. Que faites-vous ?", "o": ["Vous committez, la page marche", "Vous analysez la modification et l'annulez si elle n'est pas justifiée", "Vous supprimez package.json", "Vous poussez directement sur GitHub"], "a": 1, "e": "Chaque modification doit s'expliquer par la tâche ; une dépendance inattendue doit être comprise ou retirée avant le commit."}], [{"q": "Après une longue session, l'agent réutilise une couleur interdite par DESIGN.md alors qu'il la respectait au début. Quelle est l'explication la plus probable ?", "o": ["DESIGN.md a été supprimé", "Tailwind est mal installé", "Le modèle a changé de version", "La fenêtre de contexte est saturée et la consigne initiale se perd"], "a": 3, "e": "Une session trop chargée fait perdre de vue les consignes anciennes : il faut compacter ou repartir d'une session neuve."}, {"q": "Que fait la compaction d'une session ?", "o": ["Elle remplace l'historique par un résumé pour libérer du contexte", "Elle compresse les images du projet", "Elle supprime AGENTS.md", "Elle annule le dernier commit"], "a": 0, "e": "Compacter (par exemple /compact dans Claude Code) résume la conversation pour continuer avec un contexte allégé."}, {"q": "Vous venez de terminer et committer une tâche. Que faire pour la suivante ?", "o": ["Continuer dans la même session pour garder l'historique", "Désinstaller puis réinstaller l'agent", "Ouvrir une nouvelle session, l'agent relira AGENTS.md", "Copier toute la conversation dans le nouveau prompt"], "a": 2, "e": "Une nouvelle session par tâche évite le bruit de la précédente ; le contexte durable est dans vos fichiers."}, {"q": "Vous corrigez pour la deuxième fois des composants placés dans app/. Quelle est la bonne réaction ?", "o": ["Changer d'agent", "Ajouter la règle « composants dans components/ » à AGENTS.md", "Supprimer le dossier components/", "Ne plus rien demander à l'agent"], "a": 1, "e": "Une erreur répétée révèle une règle manquante : l'inscrire dans AGENTS.md la rend durable pour toutes les sessions."}, {"q": "Quelle rubrique d'une entrée AI-LOG.md est la plus importante pour justifier votre méthode ?", "o": ["La décision (accepté, modifié, rejeté, et pourquoi)", "Le nom du modèle", "La copie intégrale de la conversation", "Le nombre de fichiers générés"], "a": 0, "e": "La décision montre votre esprit critique : ce que vous avez gardé, corrigé ou refusé, et la raison."}], [{"q": "Vous demandez la page « Ma liste » et l'agent refait aussi le header et ajoute un système de notes. De quelle dérive s'agit-il ?", "o": ["Boucle de corrections", "Dépendance inventée", "Scope creep", "Compaction"], "a": 2, "e": "Le scope creep est l'élargissement non demandé du périmètre de la tâche."}, {"q": "L'agent alterne depuis plusieurs tours entre deux corrections qui se cassent mutuellement. Quelle est la meilleure réaction ?", "o": ["Le laisser continuer jusqu'à ce qu'il trouve", "L'arrêter, revenir au dernier état propre et reformuler une tâche plus petite dans une nouvelle session", "Passer en accès total pour qu'il aille plus vite", "Supprimer le fichier concerné"], "a": 1, "e": "Une boucle de corrections ne se résout pas en insistant : on revient à un état connu et on recadre."}, {"q": "Comment vérifier qu'un paquet proposé par l'agent n'est pas inventé ?", "o": ["Le rechercher sur npmjs.com et contrôler son existence, son auteur et son activité", "Faire confiance au nom s'il semble plausible", "Lancer npm install et voir si ça passe", "Demander à l'agent s'il existe"], "a": 0, "e": "Un nom plausible ne prouve rien : on vérifie sur le registre npm avant toute installation."}, {"q": "L'agent affirme « tout fonctionne ». Quelle preuve exiger en priorité ?", "o": ["Son niveau de confiance en pourcentage", "Une explication détaillée de son code", "Un résumé de la conversation", "La sortie de npm run build et npm run lint, puis votre propre vérification de la page"], "a": 3, "e": "Une preuve est observable : commandes de vérification réussies et contrôle visuel par vous-même."}, {"q": "Quelle variable ne doit jamais être exposée côté navigateur ?", "o": ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY", "NODE_ENV"], "a": 2, "e": "La clé service role contourne les règles de sécurité de la base : elle reste côté serveur, sans préfixe NEXT_PUBLIC_."}]];
+const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function download(name, txt){ const blob=new Blob([txt],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez le chapitre puis recommencez.'; return 'Reprenez le chapitre, puis recommencez l\'activité.'; }
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return false;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Toutes les activités sont validées !' : 'Activité validée ✅');
+  if(typeof onDone==='function') onDone(act);
+  return true;
+}
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* Explorateurs */
+$$('[data-explorer]').forEach(box=>{
+  const E = EXPLORERS[box.dataset.explorer]; const seen=new Set();
+  const chain=$('.chain',box), detail=$('.concept-detail',box);
+  E.items.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>show(i)); chain.appendChild(b);
+  });
+  function show(i){
+    const k=E.items[i]; seen.add(i);
+    $$('.chain-node',box).forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+    detail.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(FAMILIES[k.fam]||'')+'</span></div>'+
+      k.rows.map(r=>'<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>').join('');
+    const f=$('.progress-fill',box), t=$('.progress-label span:last-child',box);
+    f.style.width=Math.round(seen.size/E.items.length*100)+'%'; t.textContent=seen.size+' / '+E.items.length;
+  }
+  show(0);
+});
+const qState = {};
+const L = ['A','B','C','D','E'];
+function renderQCM(ci){
+  const box=$('#qcm'+ci); box.innerHTML='';
+  const qs = shuffle(QCMS[ci]).map(q=>{ const opts=shuffle(q.o.map((t,i)=>({t,good:i===q.a}))); return {q:q.q,e:q.e,opts}; });
+  qState[ci]={qs};
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div'); d.className='qcm-q';
+    d.innerHTML='<div class="qt"><span class="q-num">Q'+(qi+1)+'</span>'+esc(q.q)+'</div><div class="qcm-opts" role="radiogroup">'+
+      q.opts.map((o,oi)=>'<button type="button" class="qcm-opt" role="radio" aria-checked="false" data-oi="'+oi+'"><span class="l">'+L[oi]+'</span><span>'+esc(o.t)+'</span></button>').join('')+
+      '</div><div class="expl"></div>';
+    $$('.qcm-opt',d).forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('checked')) return;
+      $$('.qcm-opt',d).forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});
+      b.classList.add('sel'); b.setAttribute('aria-checked','true'); d.dataset.ans=b.dataset.oi; updQ(ci);
+    }));
+    box.appendChild(d);
+  });
+  $('#qres'+ci).classList.remove('show'); updQ(ci);
+}
+function updQ(ci){ const rows=$$('#qcm'+ci+' .qcm-q'); setProgress('qfill'+ci,'qtxt'+ci,rows.filter(r=>r.dataset.ans!==undefined).length,rows.length); }
+const scores = {};
+function checkQCM(ci, silent){
+  const rows=$$('#qcm'+ci+' .qcm-q');
+  if(!silent && rows.some(r=>r.dataset.ans===undefined)){ toast('Répondez à toutes les questions avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,qi)=>{
+    const q=qState[ci].qs[qi]; const ans=r.dataset.ans===undefined?-1:+r.dataset.ans;
+    const gi=q.opts.findIndex(o=>o.good); const good=ans===gi; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    $$('.qcm-opt',r).forEach((b,oi)=>{ b.classList.toggle('good',oi===gi); b.classList.toggle('bad',oi===ans&&!good); });
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ Bonne réponse : <strong>'+L[gi]+'</strong>. ')+esc(q.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#qres'+ci).innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#qres'+ci).classList.add('show');
+  if(!silent){ scores[ci]=Math.max(scores[ci]||0,ok); updScores(); markDone('ch'+ci); }
+}
+function revealQCM(ci){
+  $$('#qcm'+ci+' .qcm-q').forEach((r,qi)=>{ const gi=qState[ci].qs[qi].opts.findIndex(o=>o.good); r.dataset.ans=gi; $$('.qcm-opt',r).forEach((b,oi)=>b.classList.toggle('sel',oi===gi)); });
+  updQ(ci); checkQCM(ci,true);
+}
+function updScores(){
+  let tot=0,max=0;
+  QCMS.forEach((q,ci)=>{ const c=$('#score'+ci); if(scores[ci]!==undefined){ c.textContent=scores[ci]+' / '+q.length; tot+=scores[ci]; } max+=q.length; });
+  $('#scoreTotal').textContent=tot+' / '+max;
+}
+QCMS.forEach((_,ci)=>renderQCM(ci));
+$$('[data-qcheck]').forEach(b=>b.addEventListener('click',()=>checkQCM(+b.dataset.qcheck)));
+$$('[data-qreveal]').forEach(b=>b.addEventListener('click',()=>revealQCM(+b.dataset.qreveal)));
+$$('[data-qreset]').forEach(b=>b.addEventListener('click',()=>renderQCM(+b.dataset.qreset)));
+$$('#finCheck input').forEach(c=>c.addEventListener('change',()=>{}));
+
+})();
+</script>
+</body>
+</html>

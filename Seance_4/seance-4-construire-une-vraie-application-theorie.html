@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 4 — Construire une vraie application · Théorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.84em}
+pre code,.key-box code,.nest.n4 code{background:transparent;border:none;padding:0;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header.practice{background:linear-gradient(135deg,#0f172a 0%,#064e3b 60%,#047857 100%)}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+header.practice::after{background:radial-gradient(circle,rgba(52,211,153,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+.tab .lock-mark{font-size:.8rem}
+
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+@media(max-width:600px){.card{padding:20px 16px}}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+ol{padding-left:22px}ol li{padding:3px 0}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-card.bad{border-color:#fecaca;background:#fef2f2}
+.mini-card.good{border-color:#a7f3d0;background:#f0fdf4}
+.mini-card pre.prompt{margin-top:8px}
+
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+.chain .term-item,.objectif-box .term-item{padding:6px 12px}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative;margin:12px 0}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* QCM */
+.qcm-q{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.qcm-q .qt{font-weight:600;margin-bottom:10px}
+.qcm-opts{display:grid;gap:8px}
+.qcm-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:.9rem;background:#fff;text-align:left;width:100%;color:var(--text)}
+.qcm-opt:hover{background:#f8fafc;border-color:#93c5fd}
+.qcm-opt .l{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:18px}
+.qcm-opt.sel{border-color:var(--primary);background:#eff6ff}
+.qcm-q.checked .qcm-opt{cursor:default}
+.qcm-opt.good{border-color:#6ee7b7;background:#ecfdf5}
+.qcm-opt.bad{border-color:#fca5a5;background:#fef2f2}
+.qcm-q.correct{border-color:#6ee7b7}
+.qcm-q.wrong{border-color:#fca5a5}
+.qcm-q .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:8px;border-top:1px dashed var(--border)}
+.qcm-q.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem;color:var(--text)}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* Cas 1 matching */
+.match-grid{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:16px;margin-top:10px}
+@media(max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.m-term{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:10px 12px;border-radius:8px;border:2px solid var(--dark);text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m-term:hover{border-color:#60a5fa}
+.m-term.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+.m-def{background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.86rem;text-align:left;display:flex;gap:10px;align-items:flex-start;color:var(--text)}
+.m-def:hover{border-color:#93c5fd}
+.pair-badge{font-family:var(--mono);font-size:.72rem;font-weight:700;min-width:24px;height:24px;border-radius:6px;display:inline-grid;place-items:center;background:#e2e8f0;color:var(--muted);flex-shrink:0}
+.paired .pair-badge{background:var(--primary);color:#fff}
+.m-def.paired{border-color:#93c5fd;background:#eff6ff}
+.m-term.good,.m-def.good{border-color:#10b981}
+.m-def.good{background:#ecfdf5}
+.m-term.bad,.m-def.bad{border-color:#ef4444}
+.m-def.bad{background:#fef2f2}
+.round-pills{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.round-pill{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.round-pill.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.round-pill.ok{background:var(--secondary-light);color:#065f46;border-color:#6ee7b7}
+
+/* Cas 2 */
+.group{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;background:#fff}
+.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.group-head strong{font-size:1rem}
+.g-label{font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:600;color:var(--dark2)}
+.choice.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.choice.good{background:#10b981;color:#fff;border-color:#10b981}
+.choice.bad{background:#ef4444;color:#fff;border-color:#ef4444}
+.sit{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f8fafc;font-size:.88rem;margin-bottom:8px;color:var(--text)}
+.sit:hover{border-color:#fbbf24}
+.sit .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2e8f0;color:var(--muted);white-space:nowrap}
+.sit.sel{border-color:var(--accent);background:#fffbeb}
+.sit.sel .tag{background:var(--accent);color:#fff}
+.sit.good{border-color:#10b981;background:#ecfdf5}
+.sit.good .tag{background:#10b981;color:#fff}
+.sit.bad{border-color:#ef4444;background:#fef2f2}
+.sit.bad .tag{background:#ef4444;color:#fff}
+.group .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:10px;border-top:1px dashed var(--border)}
+.group.checked .expl{display:block}
+.group.correct{border-color:#6ee7b7}
+.group.wrong{border-color:#fca5a5}
+.group.half{border-color:#fcd34d}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+
+.steps{margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.past{background:#ecfdf5;border-color:#a7f3d0}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+@media(max-width:600px){.level{grid-template-columns:40px 1fr}.level .risk{grid-column:2;justify-self:start}}
+
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(5n+2){border-top-color:var(--purple)}
+.pillar:nth-child(5n+3){border-top-color:var(--secondary)}
+.pillar:nth-child(5n+4){border-top-color:var(--accent)}
+.pillar:nth-child(5n+5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+details.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-family:var(--mono);color:var(--primary);font-weight:700}
+details.acc[open] summary::after{content:"−"}
+details.acc[open] summary{border-bottom:1px dashed var(--border)}
+details.acc > div{padding:12px 16px;font-size:.9rem}
+
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+.lock-wrap{text-align:center;padding:30px 10px}
+.lock-wrap .big-lock{font-size:3rem}
+.lock-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:16px}
+.lock-pill{font-size:.82rem;font-weight:600;padding:6px 14px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border)}
+.lock-pill.ok{background:var(--secondary-light);border-color:#6ee7b7;color:#065f46}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.filter-row button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;color:var(--dark2)}
+.filter-row button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+.score-table td:last-child{font-family:var(--mono);font-weight:700}
+.link-card{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f8fafc;border:1px dashed #93c5fd;border-radius:12px;padding:16px 18px;margin-top:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+@media print{.tabs-wrap,.actions-row,.nav-bottom{display:none}.panel{display:block!important}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <span class="badge">🏗️ NoCode AI / Vibe Coding — Séance 4 · Support théorique</span>
+    <h1>Construire une vraie application</h1>
+    <p class="subtitle">Passer du prototype au MVP : une base de données modélisée, une authentification, un CRUD sécurisé par RLS, de la recherche et un dashboard, construits ticket par ticket avec votre agent.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 4 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : MVP avec Auth + BDD + CRUD fonctionnels</span></div>
+    <div class="global-progress">
+      <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🧱 Architecture Next.js + Supabase <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🗂️ Modéliser les données <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🔐 Authentification <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">✏️ CRUD &amp; formulaires <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🛡️ RLS &amp; secrets <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">🔎 Recherche, dashboard &amp; tickets <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<main>
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
+    <div class="key-box"><div class="big">Je sais construire une vraie application.</div><p style="margin:8px 0 0">Une vraie application, ce n&#x27;est pas plus d&#x27;écrans : c&#x27;est un modèle de données solide, des utilisateurs authentifiés et des règles de sécurité appliquées par la base, construits en petits tickets vérifiés un par un.</p></div>
+    <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step past"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step past"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step past"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step here"><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step "><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step "><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
+    <h3>Le fil pédagogique</h3>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td><strong>Séance 4</strong> — aujourd&#39;hui</td><td><strong>Je sais construire une vraie application.</strong></td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l&#x27;IA produit.</td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Comprendre l&#x27;architecture d&#x27;une application Next.js + Supabase et savoir où placer chaque morceau de logique ;</li><li>Modéliser les données de votre projet (entités, clés, relations 1-N et N-N) et les créer par migrations SQL ;</li><li>Mettre en place l&#x27;authentification Supabase, protéger les pages et lier un profil à chaque utilisateur ;</li><li>Construire un CRUD complet avec validation client et serveur et des états d&#x27;interface soignés ;</li><li>Sécuriser les données avec Row Level Security et une gestion rigoureuse des clés et secrets ;</li><li>Ajouter recherche, filtres, pagination et un dashboard personnel ;</li><li>Découper le socle en tickets ordonnés confiés à l&#x27;agent, avec un commit par ticket.</li></ul></div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Le repo Next.js (App Router, TypeScript) créé en S3, avec PROJECT.md, DESIGN.md, AGENTS.md et AI-LOG.md à jour</li><li>Un compte Supabase et un projet créé (URL et clés accessibles dans les paramètres API)</li><li>Votre coding agent configuré sur le repo (Claude Code, Codex, Cursor, Copilot…)</li><li>Un second compte e-mail pour tester l&#x27;isolation des données entre utilisateurs</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Architecture</span><span class="famille-tag f2">Données</span><span class="famille-tag f3">Authentification</span><span class="famille-tag f4">CRUD &amp; UX</span><span class="famille-tag f5">Sécurité</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
+    <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-4-construire-une-vraie-application-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🧱 Architecture Next.js + Supabase ▸</button></div>
+  </div>
+</section>
+<section class="panel" data-panel="c0">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🧱</span>Deux mondes : le serveur et le navigateur</div>
+  <p class="lead">Une application Next.js (App Router) s'exécute à deux endroits : sur le serveur (chez Vercel) et dans le navigateur de l'utilisateur. Savoir ce qui tourne où, c'est savoir ce qui est sûr, ce qui est rapide et ce que l'agent doit générer.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre la répartition client / serveur dans Next.js, choisir entre Server Component, Client Component, Server Action et route handler, et brancher Supabase proprement avec <code>@supabase/ssr</code> et les variables d'environnement.</div>
+  <h3>Server Components et Client Components</h3>
+  <p>Dans l'App Router, <strong>tout composant est un Server Component par défaut</strong>. Il s'exécute sur le serveur, peut lire la base directement, n'envoie aucun JavaScript au navigateur pour lui-même, mais ne peut pas utiliser <code>useState</code>, <code>useEffect</code> ni d'événements comme <code>onClick</code>. Dès qu'un fichier commence par la directive <code>'use client'</code>, il devient un <strong>Client Component</strong> : il est hydraté dans le navigateur et devient interactif.</p>
+  <div class="table-wrap"><table>
+    <tr><th></th><th>Server Component <span class="famille-tag f1">Architecture</span></th><th>Client Component</th></tr>
+    <tr><td>Où il s'exécute</td><td>Serveur uniquement</td><td>Rendu serveur puis navigateur (hydratation)</td></tr>
+    <tr><td>Accès aux données</td><td>Direct : client Supabase serveur, cookies, variables secrètes</td><td>Via le client Supabase navigateur (clé publique) ou via une Server Action</td></tr>
+    <tr><td>Interactivité</td><td>Aucune (pas de state, pas d'événements)</td><td>useState, onClick, formulaires contrôlés, animations</td></tr>
+    <tr><td>Exemple CinéList</td><td>La page « Ma watchlist » qui charge les films de l'utilisateur</td><td>Le composant de notation par étoiles cliquables</td></tr>
+  </table></div>
+  <div class="instruction-box"><strong class="title">Règle pratique</strong>Gardez les pages et les listes en Server Components, et descendez <code>'use client'</code> le plus bas possible dans l'arbre : seulement sur les petits composants qui ont besoin d'interactivité (bouton favori, modale de confirmation, champ de recherche en direct).</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">⚙️</span>Où vit la logique métier ?</div>
+  <p class="lead">Créer un avis, inscrire un étudiant à un événement, changer le statut d'un jeu : ces actions modifient la base. Elles doivent s'exécuter sur le serveur, jamais uniquement dans le navigateur.</p>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>📝 Server Action</h4><p class="muted">Fonction asynchrone marquée <code>'use server'</code>, appelée directement depuis un formulaire (<code>&lt;form action={addReview}&gt;</code>). Idéale pour les mutations de vos propres écrans : ajouter à la watchlist, supprimer une inscription CampusHub.</p></div>
+    <div class="mini-card"><h4>🔌 Route handler</h4><p class="muted">Fichier <code>app/api/.../route.ts</code> qui exporte <code>GET</code>, <code>POST</code>… Utile pour une vraie API HTTP : webhook, callback d'authentification (<code>app/auth/callback/route.ts</code>), appel depuis un service externe.</p></div>
+    <div class="mini-card"><h4>📄 Server Component</h4><p class="muted">Lecture des données pour l'affichage : la page <code>/backlog</code> de GameBacklog lit les entrées de l'utilisateur au moment du rendu, sans appel fetch côté navigateur.</p></div>
+    <div class="mini-card"><h4>🖱️ Client Component</h4><p class="muted">Interaction et retour visuel immédiat : état « en cours d'envoi », ouverture d'une modale, tri visuel. Il délègue les écritures à une Server Action.</p></div>
+  </div>
+  <h3>Brancher Supabase avec @supabase/ssr</h3>
+  <p>Le paquet <code>@supabase/ssr</code> fournit deux fabriques : <code>createBrowserClient</code> pour les Client Components et <code>createServerClient</code> pour le serveur (Server Components, Server Actions, route handlers, middleware). Le client serveur lit et écrit la session dans les <strong>cookies</strong>, ce qui permet au serveur de savoir qui est connecté. On range ces deux clients dans <code>lib/supabase/client.ts</code> et <code>lib/supabase/server.ts</code>.</p>
+<pre class="prompt"><span class="hl3">// lib/supabase/server.ts</span>
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient() {
+  const cookieStore = await cookies()
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =&gt;
+              cookieStore.set(name, value, options))
+          } catch {
+            <span class="hl2">// appelé depuis un Server Component : le middleware rafraîchit la session</span>
+          }
+        },
+      },
+    }
+  )
+}</pre>
+  <div class="warn-box"><strong>⛔ Piège fréquent</strong> L'ancien paquet <code>@supabase/auth-helpers-nextjs</code> est déprécié. Si l'agent le propose, refusez et demandez explicitement <code>@supabase/ssr</code> : notez-le dans AGENTS.md pour que la consigne soit permanente.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🔑</span>Variables d'environnement et structure du repo</div>
+  <p class="lead">Les adresses et clés de Supabase ne s'écrivent jamais en dur dans le code : elles vivent dans des variables d'environnement, différentes en local et en production.</p>
+  <ul class="clean">
+    <li><code>NEXT_PUBLIC_SUPABASE_URL</code> et <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> : le préfixe <code>NEXT_PUBLIC_</code> les rend lisibles dans le navigateur. C'est voulu : elles sont publiques par conception, la sécurité repose sur RLS.</li>
+    <li><code>SUPABASE_SERVICE_ROLE_KEY</code> : sans préfixe, donc accessible uniquement côté serveur. Elle contourne RLS : à n'utiliser que pour des tâches d'administration, jamais dans un Client Component.</li>
+    <li>En local, elles vont dans <code>.env.local</code> (ignoré par Git) ; en production, dans les paramètres Environment Variables du projet Vercel.</li>
+  </ul>
+<pre class="prompt">app/
+  (auth)/login/page.tsx        <span class="hl">// formulaire de connexion</span>
+  auth/callback/route.ts       <span class="hl">// route handler : retour du magic link</span>
+  dashboard/page.tsx           <span class="hl">// Server Component protégé</span>
+  films/[id]/page.tsx
+  films/actions.ts             <span class="hl">// Server Actions ('use server')</span>
+lib/supabase/client.ts         <span class="hl3">// createBrowserClient</span>
+lib/supabase/server.ts         <span class="hl3">// createServerClient</span>
+supabase/migrations/           <span class="hl2">// fichiers SQL versionnés</span>
+middleware.ts                  <span class="hl2">// rafraîchit la session (proxy.ts depuis Next.js 16)</span>
+.env.local                     <span class="hl2">// jamais commité</span></pre>
+  <div class="key-box"><div class="big">Lire côté serveur, interagir côté client, écrire via une Server Action.</div><p style="margin:8px 0 0">Donnez cette règle à votre agent dans AGENTS.md : elle suffit à éviter la plupart des architectures bancales générées par l'IA.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm0"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt0">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill0"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="0">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="0">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres0"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🗂️ Modéliser les données ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c1">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🗂️</span>Entités, attributs et types</div>
+  <p class="lead">Avant la moindre ligne de code, il faut savoir quelles « choses » votre application manipule et comment elles sont reliées. Un schéma de données bancal se paie à chaque écran : c'est le ticket le plus important de la séance.</p>
+  <ul class="clean">
+    <li><strong>Entité</strong> : un type d'objet métier qui devient une table (un film, un jeu, un événement, une inscription).</li>
+    <li><strong>Attribut</strong> : une propriété de l'entité, qui devient une colonne (<code>title</code>, <code>status</code>, <code>rating</code>).</li>
+    <li><strong>Type</strong> : la nature de la valeur en Postgres : <code>text</code>, <code>integer</code>, <code>boolean</code>, <code>timestamptz</code>, <code>uuid</code>, <code>date</code>.</li>
+    <li><strong>Contraintes</strong> : <code>not null</code>, <code>unique</code>, <code>check (rating between 1 and 5)</code>, <code>default now()</code>. Elles protègent la cohérence même si le front se trompe.</li>
+  </ul>
+  <h3>Clé primaire et clé étrangère</h3>
+  <p>Chaque ligne a un identifiant unique : la <strong>clé primaire</strong>. Avec Supabase, on utilise un <code>uuid</code> généré par <code>gen_random_uuid()</code> : impossible à deviner, contrairement à un entier auto-incrémenté (<code>/films/3</code> laisse imaginer <code>/films/4</code>). Une <strong>clé étrangère</strong> est une colonne qui référence la clé primaire d'une autre table (<code>references public.films(id)</code>) : Postgres refuse alors une valeur qui n'existe pas.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🔗</span>Relations 1-N et N-N</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>1️⃣ Relation 1-N</h4><p class="muted">Un élément est lié à plusieurs autres, chacun d'eux ne pointant que vers un seul. Un organisateur CampusHub crée plusieurs événements : <code>events.organizer_id</code> référence <code>profiles.id</code>. La clé étrangère se place toujours du côté « plusieurs ».</p></div>
+    <div class="mini-card"><h4>🔀 Relation N-N</h4><p class="muted">Un étudiant s'inscrit à plusieurs événements et un événement accueille plusieurs étudiants. On crée une <strong>table de jointure</strong> <code>registrations(user_id, event_id)</code> avec une contrainte <code>unique (user_id, event_id)</code> pour interdire les doublons.</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th>Projet</th><th>Entités</th><th>Relations clés</th></tr>
+    <tr><td>🎬 CinéList</td><td>profiles, films, watchlist_items, reviews</td><td>watchlist_items = jointure N-N profils ↔ films (statut, favori) ; reviews = un avis par utilisateur et par film</td></tr>
+    <tr><td>🎮 GameBacklog</td><td>profiles, games, backlog_entries</td><td>backlog_entries relie profil et jeu avec <code>status</code> (a_jouer, en_cours, termine) et <code>rating</code></td></tr>
+    <tr><td>🎓 CampusHub</td><td>profiles, events, registrations</td><td>events 1-N depuis l'organisateur ; registrations = jointure N-N étudiants ↔ événements</td></tr>
+  </table></div>
+  <p>Remarquez que la table de jointure porte souvent de l'information utile : le statut dans GameBacklog, la date d'inscription dans CampusHub, le favori dans CinéList. Ce n'est pas un simple lien, c'est souvent l'entité centrale de l'espace personnel.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📜</span>Migrations SQL</div>
+  <p class="lead">Une migration est un fichier SQL daté et versionné dans Git qui fait évoluer le schéma. On ne clique pas dans l'interface pour créer ses tables : on écrit (ou fait écrire) une migration, relue, commitée, rejouable.</p>
+<pre class="prompt"><span class="hl3">-- supabase/migrations/..._create_watchlist.sql</span>
+create table public.films (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  year integer,
+  kind text not null check (kind in ('film', 'serie')),
+  created_at timestamptz not null default now()
+);
+
+create table public.watchlist_items (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  film_id uuid not null references public.films(id) on delete cascade,
+  status text not null default 'a_voir' check (status in ('a_voir', 'vu')),
+  is_favorite boolean not null default false,
+  created_at timestamptz not null default now(),
+  <span class="hl">unique (user_id, film_id)</span>
+);
+
+alter table public.films enable row level security;
+alter table public.watchlist_items enable row level security;</pre>
+  <p>Avec la CLI Supabase : <code>supabase migration new create_watchlist</code> crée le fichier, <code>supabase db push</code> l'applique au projet distant. Sans CLI, vous pouvez coller le SQL dans le SQL Editor du dashboard, mais gardez quand même le fichier dans <code>supabase/migrations/</code> pour l'historique.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🤖</span>Faire proposer, puis critiquer le schéma par l'IA</div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Donnez PROJECT.md à l'IA et demandez une proposition de schéma : entités, colonnes typées, clés, relations, contraintes.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Dans un second message, demandez-lui de <strong>critiquer</strong> sa propre proposition : doublons possibles, colonnes nullables à tort, relation N-N manquante, données dérivées stockées inutilement.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Confrontez le schéma à vos user stories : chaque écran du MVP doit pouvoir être alimenté par une requête simple.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Figez le résultat dans <code>data-model.md</code>, puis seulement après, faites générer la migration SQL.</span></div>
+  </div>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Une colonne <code>favorite_films text</code> dans <code>profiles</code> contenant « Dune, Alien, Heat » : impossible à filtrer, à compter ou à relier proprement.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Une table <code>watchlist_items</code> avec <code>is_favorite boolean</code> : une ligne par couple utilisateur / film, filtrable et comptable dans le dashboard.</p></div>
+  </div>
+</div>
+<div class="card" data-explorer="x1">
+  <div class="section-title"><span class="icon-bg purple">🧩</span>Explorer les notions de modélisation</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 2</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm1"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt1">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill1"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="1">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="1">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres1"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🔐 Authentification ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c2">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🔐</span>Supabase Auth : qui est connecté ?</div>
+  <p class="lead">Sans authentification, pas d'espace personnel, pas de watchlist à soi, pas de RLS. Supabase Auth gère les comptes dans le schéma <code>auth</code> ; votre application n'a qu'à appeler les bonnes méthodes.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Méthode</th><th>Appel supabase-js</th><th>Usage</th></tr>
+    <tr><td>Inscription e-mail / mot de passe</td><td><code>supabase.auth.signUp({ email, password })</code></td><td>Crée le compte ; un e-mail de confirmation est envoyé si l'option est active.</td></tr>
+    <tr><td>Connexion e-mail / mot de passe</td><td><code>supabase.auth.signInWithPassword({ email, password })</code></td><td>Ouvre une session.</td></tr>
+    <tr><td>Magic link</td><td><code>supabase.auth.signInWithOtp({ email })</code></td><td>Envoie un lien de connexion sans mot de passe.</td></tr>
+    <tr><td>Déconnexion</td><td><code>supabase.auth.signOut()</code></td><td>Supprime la session et les cookies.</td></tr>
+    <tr><td>Utilisateur courant</td><td><code>supabase.auth.getUser()</code></td><td>Côté serveur, vérifie le jeton auprès de Supabase.</td></tr>
+  </table></div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🔑 E-mail / mot de passe</h4><p class="muted">Simple et attendu par les utilisateurs. Pensez aux messages d'erreur clairs (identifiants invalides, e-mail non confirmé) et au lien « mot de passe oublié ».</p></div>
+    <div class="mini-card"><h4>✉️ Magic link</h4><p class="muted">Aucun mot de passe à retenir, pratique pour CampusHub. Le lien renvoie vers une URL de retour (<code>/auth/callback</code>) qui doit figurer dans Authentication &gt; URL Configuration de Supabase.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🍪</span>Session, cookies et middleware</div>
+  <p>Une <strong>session</strong> est composée d'un jeton d'accès (JWT) de courte validité et d'un jeton de rafraîchissement. Avec <code>@supabase/ssr</code>, elle est stockée dans des <strong>cookies</strong> : le serveur peut donc savoir qui fait la requête, dès le rendu de la page.</p>
+  <p>Le <strong>middleware</strong> (<code>middleware.ts</code>, renommé <code>proxy.ts</code> à partir de Next.js 16) s'exécute avant chaque requête : il crée un client serveur, appelle <code>supabase.auth.getUser()</code> pour rafraîchir la session si besoin et réécrit les cookies. Il peut aussi rediriger vers <code>/login</code> un visiteur non connecté qui tente d'ouvrir <code>/dashboard</code>.</p>
+  <div class="warn-box"><strong>⛔ Ne faites pas confiance à getSession() côté serveur</strong> Elle lit le cookie sans vérifier le jeton. Pour décider d'un accès côté serveur, utilisez <code>getUser()</code> (ou <code>getClaims()</code>), qui valide réellement l'utilisateur.</div>
+  <h3>Protéger une page</h3>
+<pre class="prompt"><span class="hl3">// app/dashboard/page.tsx (Server Component)</span>
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+
+export default async function DashboardPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login?next=/dashboard')
+  <span class="hl">// ici, user.id est fiable : on peut charger ses données</span>
+}</pre>
+  <p>Le middleware fait une première barrière, la vérification dans la page (ou dans la Server Action) fait la seconde, et RLS dans la base fait la dernière. Trois couches, car chacune peut être contournée ou oubliée seule.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">👤</span>Profil lié à auth.users et redirection</div>
+  <p class="lead">La table <code>auth.users</code> appartient à Supabase : on n'y ajoute pas de colonnes métier. On crée une table <code>public.profiles</code> dont la clé primaire est aussi une clé étrangère vers <code>auth.users(id)</code>.</p>
+<pre class="prompt">create table public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  username text unique,
+  avatar_url text,
+  created_at timestamptz not null default now()
+);
+
+create function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, username)
+  values (new.id, new.raw_user_meta_data -&gt;&gt; 'username');
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();</pre>
+  <p>Grâce au trigger, chaque inscription crée automatiquement son profil. Toutes vos tables métier (<code>watchlist_items</code>, <code>backlog_entries</code>, <code>registrations</code>) référencent ensuite <code>profiles.id</code>.</p>
+  <h3>Redirection après connexion</h3>
+  <ul class="clean">
+    <li>Transmettez la page d'origine dans l'URL : <code>/login?next=/events/b3f1…</code>, puis redirigez vers <code>next</code> après succès (en vérifiant que c'est un chemin interne commençant par <code>/</code>).</li>
+    <li>Après un magic link, le route handler <code>/auth/callback</code> appelle <code>exchangeCodeForSession(code)</code> puis redirige vers <code>/dashboard</code>.</li>
+    <li>Un utilisateur déjà connecté qui ouvre <code>/login</code> est renvoyé directement vers son dashboard.</li>
+  </ul>
+  <div class="key-box"><div class="big">Auth = savoir qui ; RLS = décider ce qu'il peut faire.</div><p style="margin:8px 0 0">L'authentification ne protège rien toute seule : elle fournit l'identité que les policies utiliseront au chapitre sécurité.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm2"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt2">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill2"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="2">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="2">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres2"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : ✏️ CRUD &amp; formulaires ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c3">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">✏️</span>Les quatre opérations du CRUD</div>
+  <p class="lead">CRUD signifie Create, Read, Update, Delete : créer, lire, modifier, supprimer. C'est le cœur fonctionnel du socle : au moins une entité doit supporter les quatre, proprement.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Opération</th><th>supabase-js</th><th>Exemple fil rouge</th></tr>
+    <tr><td>Create</td><td><code>.from('reviews').insert({ ... })</code></td><td>CinéList : publier un avis noté sur un film</td></tr>
+    <tr><td>Read</td><td><code>.from('backlog_entries').select('*, games(title)')</code></td><td>GameBacklog : afficher mon backlog avec le titre de chaque jeu</td></tr>
+    <tr><td>Update</td><td><code>.from('backlog_entries').update({ status: 'termine' }).eq('id', id)</code></td><td>GameBacklog : passer un jeu en « terminé »</td></tr>
+    <tr><td>Delete</td><td><code>.from('registrations').delete().eq('id', id)</code></td><td>CampusHub : annuler une inscription</td></tr>
+  </table></div>
+  <div class="warn-box"><strong>⛔ Un update ou un delete sans filtre</strong> Oublier <code>.eq('id', id)</code> ou filtrer sur une colonne trop large vise toutes les lignes autorisées. L'API Supabase refuse un update ou un delete sans aucun filtre, mais un filtre trop large passe : relisez toujours la requête générée par l'agent.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🛡️</span>Valider côté client ET côté serveur</div>
+  <p>La validation côté client (attributs <code>required</code>, <code>min</code>, <code>max</code>, messages sous les champs) sert le <strong>confort</strong> de l'utilisateur. La validation côté serveur sert la <strong>sécurité</strong> : n'importe qui peut envoyer une requête sans passer par votre formulaire. Un même schéma <strong>Zod</strong> peut décrire la forme attendue des données et être réutilisé des deux côtés.</p>
+<pre class="prompt"><span class="hl3">// app/films/actions.ts</span>
+'use server'
+import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
+
+const ReviewSchema = z.object({
+  filmId: z.uuid(),
+  rating: z.coerce.number().int().min(1).max(5),
+  content: z.string().trim().max(1000).optional(),
+})
+
+export async function addReview(prevState: unknown, formData: FormData) {
+  const parsed = ReviewSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) return { error: "La note doit être comprise entre 1 et 5." }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: "Connexion requise." }
+
+  const { error } = await supabase.from('reviews').insert({
+    user_id: user.id,
+    film_id: parsed.data.filmId,
+    rating: parsed.data.rating,
+    content: parsed.data.content,
+  })
+  if (error) return { error: "Impossible d'enregistrer votre avis." }
+
+  <span class="hl">revalidatePath(`/films/${parsed.data.filmId}`)</span>
+  return { success: true }
+}</pre>
+  <p>Remarquez que <code>user_id</code> vient de la session, jamais d'un champ du formulaire : un utilisateur ne doit pas pouvoir publier au nom d'un autre.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🎛️</span>Les états d'interface</div>
+  <p class="lead">Une interface générée par l'IA montre souvent seulement le cas où tout va bien. Une vraie application gère quatre états pour chaque liste et chaque formulaire.</p>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>⏳ Chargement</h4><p class="muted">Squelette de liste via <code>loading.tsx</code>, bouton désactivé et libellé « Enregistrement… » pendant l'envoi (<code>useActionState</code> fournit un indicateur <code>pending</code>).</p></div>
+    <div class="mini-card"><h4>📭 Vide</h4><p class="muted">« Votre backlog est vide. Ajoutez votre premier jeu » avec un bouton d'action, plutôt qu'une page blanche.</p></div>
+    <div class="mini-card"><h4>⚠️ Erreur</h4><p class="muted">Message compréhensible près du champ ou du formulaire, sans afficher l'erreur SQL brute. <code>error.tsx</code> capture les erreurs de rendu d'une route.</p></div>
+    <div class="mini-card"><h4>✅ Succès</h4><p class="muted">Confirmation visible (toast, message, redirection vers la fiche) et liste à jour.</p></div>
+  </div>
+  <h3>Confirmer une suppression</h3>
+  <p>Une suppression est irréversible : demandez confirmation dans une modale qui nomme l'élément (« Supprimer votre avis sur Dune ? »), avec un bouton destructif clairement identifié et un bouton d'annulation. La modale est un Client Component ; la suppression elle-même reste une Server Action qui revérifie l'utilisateur.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🔄</span>Revalidation : afficher des données à jour</div>
+  <p>Next.js met en cache le rendu des pages. Après une mutation, il faut invalider ce cache pour que la liste reflète la modification : <code>revalidatePath('/watchlist')</code> dans la Server Action, ou <code>revalidateTag</code> si vous étiquetez vos requêtes. Sans cela, l'utilisateur ajoute un film et… ne le voit pas apparaître.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Forcer un <code>window.location.reload()</code> après chaque ajout, ou dupliquer la liste dans un state client qui finit par diverger de la base.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Server Action → écriture → <code>revalidatePath</code> des pages concernées (liste et dashboard) → retour d'un état succès affiché par le formulaire.</p></div>
+  </div>
+  <div class="key-box"><div class="big">Un CRUD fini = 4 opérations × 4 états, validés deux fois.</div><p style="margin:8px 0 0">Faites de cette phrase un critère d'acceptation dans chaque ticket CRUD confié à l'agent.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm3"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt3">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill3"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="3">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="3">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres3"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🛡️ RLS &amp; secrets ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c4">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🛡️</span>Row Level Security : la base décide</div>
+  <p class="lead">Avec Supabase, le navigateur peut interroger la base directement grâce à la clé anon. Ce qui empêche un étudiant de lire la watchlist d'un autre, ce n'est pas votre interface : ce sont les règles RLS dans Postgres.</p>
+  <ul class="clean">
+    <li><strong>RLS activé</strong> (<code>alter table ... enable row level security</code>) et aucune policy : plus personne ne peut lire ni écrire via l'API. C'est l'état sûr par défaut.</li>
+    <li><strong>Policy</strong> : une règle qui autorise une opération (<code>select</code>, <code>insert</code>, <code>update</code>, <code>delete</code>) pour un rôle, sous condition.</li>
+    <li><strong><code>auth.uid()</code></strong> : fonction qui renvoie l'id de l'utilisateur authentifié à l'origine de la requête ; c'est la brique de presque toutes vos conditions.</li>
+    <li><code>using (...)</code> filtre les lignes existantes visibles ou modifiables ; <code>with check (...)</code> vérifie les lignes écrites (insert, update).</li>
+  </ul>
+<pre class="prompt">create policy "Lire ses entrées de watchlist"
+on public.watchlist_items for select
+to authenticated
+using ( (select auth.uid()) = user_id );
+
+create policy "Ajouter dans sa propre watchlist"
+on public.watchlist_items for insert
+to authenticated
+with check ( (select auth.uid()) = user_id );
+
+create policy "Modifier ses entrées"
+on public.watchlist_items for update
+to authenticated
+using ( (select auth.uid()) = user_id )
+with check ( (select auth.uid()) = user_id );
+
+create policy "Supprimer ses entrées"
+on public.watchlist_items for delete
+to authenticated
+using ( (select auth.uid()) = user_id );</pre>
+  <p>Écrire <code>(select auth.uid())</code> plutôt que <code>auth.uid()</code> seul est la forme recommandée par Supabase : la valeur est calculée une fois par requête au lieu d'une fois par ligne.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📋</span>Adapter les règles à chaque table</div>
+  <div class="table-wrap"><table>
+    <tr><th>Table</th><th>select</th><th>insert / update / delete</th></tr>
+    <tr><td>films (CinéList)</td><td>Tout utilisateur connecté (catalogue partagé)</td><td>Aucune policy : alimentée par une migration de seed ou par un script d'administration</td></tr>
+    <tr><td>reviews (CinéList)</td><td>Tout utilisateur connecté (avis publics)</td><td>Seulement l'auteur : <code>(select auth.uid()) = user_id</code></td></tr>
+    <tr><td>backlog_entries (GameBacklog)</td><td>Seulement le propriétaire</td><td>Seulement le propriétaire</td></tr>
+    <tr><td>events (CampusHub)</td><td>Tout utilisateur connecté</td><td>Seulement l'organisateur : <code>(select auth.uid()) = organizer_id</code></td></tr>
+    <tr><td>registrations (CampusHub)</td><td>L'étudiant inscrit (et l'organisateur de l'événement, via une sous-requête)</td><td>insert et delete par l'étudiant lui-même</td></tr>
+  </table></div>
+  <div class="instruction-box"><strong class="title">Consigne pour l'agent</strong>Demandez les policies <strong>opération par opération</strong>, avec un nom explicite, et exigez une justification pour chaque règle permissive. Une policy <code>using (true)</code> sur une table personnelle est un signal d'alerte immédiat.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🔑</span>Clés et secrets</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🟢 Clé anon</h4><p class="muted">Publique, présente dans le navigateur via <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>. Elle agit avec les rôles <code>anon</code> ou <code>authenticated</code> : soumise à RLS.</p></div>
+    <div class="mini-card"><h4>🔴 Clé service_role</h4><p class="muted">Secrète (<code>SUPABASE_SERVICE_ROLE_KEY</code>), <strong>contourne RLS</strong>. Uniquement côté serveur, pour des scripts d'administration. Jamais préfixée <code>NEXT_PUBLIC_</code>, jamais dans un Client Component.</p></div>
+  </div>
+  <ul class="clean">
+    <li><code>.env.local</code> est listé dans <code>.gitignore</code> (c'est le cas par défaut avec <code>npx create-next-app@latest</code>) : vérifiez-le avant le premier <code>git add</code>.</li>
+    <li>Fournissez un <code>.env.example</code> avec les noms des variables et des valeurs vides, pour documenter sans exposer.</li>
+    <li>Si une clé secrète a été commitée, la supprimer du fichier ne suffit pas : elle reste dans l'historique. Il faut la <strong>régénérer</strong> dans Supabase.</li>
+  </ul>
+  <details class="acc"><summary>Et les nouvelles clés « publishable » et « secret » de Supabase ?</summary><div>Supabase propose désormais des clés au format <code>sb_publishable_...</code> et <code>sb_secret_...</code> en complément des clés anon et service_role historiques. La logique est identique : la clé publishable est publique et soumise à RLS, la clé secret contourne RLS et reste côté serveur. Utilisez les noms de variables que votre projet et AGENTS.md ont fixés, et restez cohérent.</div></details>
+  <div class="warn-box"><strong>⛔ Interdit</strong> Utiliser la clé service_role « pour que ça marche » quand une requête est bloquée par RLS. Le blocage signale une policy manquante : c'est la policy qu'il faut écrire.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧪</span>Tester avec un second compte</div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Avec le compte A, créez quelques données (ajouts à la watchlist, entrées de backlog, inscriptions).</span></div>
+    <div class="step"><span class="s-num">2</span><span>Connectez-vous avec le compte B dans une fenêtre de navigation privée.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Vérifiez que B ne voit pas les données personnelles de A, et qu'ouvrir l'URL d'un élément de A ne l'affiche pas.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Tentez une modification ou suppression d'un élément de A depuis B : elle doit échouer ou n'affecter aucune ligne.</span></div>
+    <div class="step"><span class="s-num">5</span><span>Consultez le Security Advisor du dashboard Supabase et corrigez chaque table signalée sans RLS.</span></div>
+  </div>
+  <div class="key-box"><div class="big">Pas de RLS vérifié avec deux comptes = pas de MVP.</div><p style="margin:8px 0 0">Notez le résultat de ce test dans AI-LOG.md : il fait partie des critères « qualité &amp; sécurité » de l'évaluation.</p></div>
+</div>
+<div class="card" data-explorer="x4">
+  <div class="section-title"><span class="icon-bg purple">🛡️</span>Explorer les briques de sécurité</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 5</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm4"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt4">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill4"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="4">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="4">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="4">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres4"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c3">◂ Précédent</button><button class="btn btn-primary" data-goto="c5">Suite : 🔎 Recherche, dashboard &amp; tickets ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c5">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🔎</span>Requêtes filtrées, recherche et tri</div>
+  <p class="lead">Le socle exige une recherche ou un filtrage. Avec supabase-js, on enchaîne des filtres sur la requête, et on garde les critères dans l'URL pour qu'une recherche soit partageable et survive au rechargement.</p>
+<pre class="prompt"><span class="hl3">// app/films/page.tsx (Server Component)</span>
+export default async function FilmsPage({ searchParams }: {
+  searchParams: Promise&lt;{ q?: string; kind?: string; page?: string }&gt;
+}) {
+  const { q = '', kind, page = '1' } = await searchParams
+  const pageSize = 10
+  const from = (Number(page) - 1) * pageSize
+  const to = from + pageSize - 1
+
+  const supabase = await createClient()
+  let query = supabase
+    .from('films')
+    .select('id, title, year, kind', { count: 'exact' })
+    <span class="hl">.ilike('title', `%${q}%`)</span>
+    .order('title', { ascending: true })
+    <span class="hl2">.range(from, to)</span>
+  if (kind) query = query.eq('kind', kind)
+
+  const { data: films, count, error } = await query
+  <span class="hl3">// afficher la liste, l'état vide, et la pagination à partir de count</span>
+}</pre>
+  <ul class="clean">
+    <li><code>.eq('status', 'en_cours')</code> : égalité stricte, pour les filtres à valeurs fixes (statut GameBacklog, type film / série).</li>
+    <li><code>.ilike('title', '%dune%')</code> : recherche partielle insensible à la casse ; les <code>%</code> signifient « n'importe quels caractères ».</li>
+    <li><code>.order('created_at', { ascending: false })</code> : tri, ici les plus récents d'abord.</li>
+    <li><code>.range(0, 9)</code> : pagination, bornes incluses, donc 10 résultats ; <code>{ count: 'exact' }</code> renvoie le total pour calculer le nombre de pages.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">📊</span>Le dashboard personnel</div>
+  <p>Le dashboard est l'espace personnel exigé par le socle : il résume l'activité de l'utilisateur connecté. Des compteurs simples suffisent, obtenus sans charger les lignes grâce à <code>head: true</code>.</p>
+<pre class="prompt">const [toWatch, seen, favorites] = await Promise.all([
+  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id).eq('status', 'a_voir'),
+  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id).eq('status', 'vu'),
+  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id).eq('is_favorite', true),
+])
+<span class="hl">// toWatch.count, seen.count, favorites.count</span></pre>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🎬 CinéList</h4><p class="muted">À voir, vus, favoris, derniers avis publiés.</p></div>
+    <div class="mini-card"><h4>🎮 GameBacklog</h4><p class="muted">À jouer, en cours, terminés, note moyenne.</p></div>
+    <div class="mini-card"><h4>🎓 CampusHub</h4><p class="muted">Mes prochaines inscriptions, événements que j'organise, nombre d'inscrits.</p></div>
+  </div>
+  <p>Même si RLS filtre déjà par utilisateur, ajouter <code>.eq('user_id', user.id)</code> rend l'intention explicite et évite les surprises sur les tables dont la lecture est publique (comme <code>reviews</code>).</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🎫</span>Découper le socle en tickets pour l'agent</div>
+  <p class="lead">Demander « construis-moi l'application » produit un gros bloc impossible à relire. Un agent travaille bien sur des tâches petites, ordonnées, avec un critère de fin vérifiable.</p>
+  <div class="chain"><span class="term-item">Schéma</span><span class="chain-arrow">→</span><span class="term-item">Auth</span><span class="chain-arrow">→</span><span class="term-item">CRUD entité 1</span><span class="chain-arrow">→</span><span class="term-item">Relation</span><span class="chain-arrow">→</span><span class="term-item">Recherche</span><span class="chain-arrow">→</span><span class="term-item">Dashboard</span></div>
+  <p>Cet ordre respecte les dépendances : pas de CRUD sans tables, pas de données personnelles sans utilisateur, pas de dashboard sans données. Chaque ticket s'appuie sur le précédent, déjà testé et commité.</p>
+  <div class="table-wrap"><table>
+    <tr><th>#</th><th>Ticket (CinéList)</th><th>Terminé quand…</th></tr>
+    <tr><td>T1</td><td>Migrations profiles, films, watchlist_items, reviews + RLS</td><td>Tables visibles dans Supabase, RLS actif partout</td></tr>
+    <tr><td>T2</td><td>Inscription, connexion, déconnexion, middleware, trigger profil</td><td>Un nouveau compte crée son profil ; /dashboard redirige si déconnecté</td></tr>
+    <tr><td>T3</td><td>CRUD watchlist (ajout, liste, statut, retrait)</td><td>4 opérations et 4 états d'interface OK</td></tr>
+    <tr><td>T4</td><td>Avis liés à un film (relation reviews ↔ films)</td><td>Un avis par utilisateur et par film, visible sur la fiche</td></tr>
+    <tr><td>T5</td><td>Recherche par titre + filtre film / série + pagination</td><td>Critères dans l'URL, état vide géré</td></tr>
+    <tr><td>T6</td><td>Dashboard avec compteurs</td><td>Compteurs justes, testés avec deux comptes</td></tr>
+  </table></div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🌿 Un commit par ticket</h4><p class="muted">Branche dédiée (<code>git switch -c feat/watchlist-crud</code>), relecture du diff, <code>npm run lint</code> et <code>npm run build</code>, puis <code>git add</code> et <code>git commit -m "feat: CRUD watchlist"</code>. Un historique lisible permet de revenir en arrière proprement.</p></div>
+    <div class="mini-card"><h4>📓 AI-LOG.md</h4><p class="muted">Pour chaque ticket : ce qui a été demandé à l'agent, ce qu'il a proposé, ce que vous avez corrigé ou refusé, et pourquoi. C'est votre mémoire pendant la phase d'autonomie.</p></div>
+  </div>
+  <div class="key-box"><div class="big">Petit ticket, critère clair, diff relu, commit.</div><p style="margin:8px 0 0">C'est la boucle qui transforme un agent rapide en application fiable, et que vous répéterez seul pendant la phase d'autonomie.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm5"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt5">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill5"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="5">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="5">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres5"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="syn">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🧱 Architecture Next.js + Supabase</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🗂️ Modéliser les données</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🔐 Authentification</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>✏️ CRUD &amp; formulaires</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🛡️ RLS &amp; secrets</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>🔎 Recherche, dashboard &amp; tickets</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
+    <div class="key-box"><div class="big">Une vraie application, ce n&#x27;est pas plus d&#x27;écrans : c&#x27;est un modèle de données solide, des utilisateurs authentifiés et des règles de sécurité appliquées par la base, construits en petits tickets vérifiés un par un.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Comprendre l&#x27;architecture d&#x27;une application Next.js + Supabase et savoir où placer chaque morceau de logique ;</li><li>Modéliser les données de votre projet (entités, clés, relations 1-N et N-N) et les créer par migrations SQL ;</li><li>Mettre en place l&#x27;authentification Supabase, protéger les pages et lier un profil à chaque utilisateur ;</li><li>Construire un CRUD complet avec validation client et serveur et des états d&#x27;interface soignés ;</li><li>Sécuriser les données avec Row Level Security et une gestion rigoureuse des clés et secrets ;</li><li>Ajouter recherche, filtres, pagination et un dashboard personnel ;</li><li>Découper le socle en tickets ordonnés confiés à l&#x27;agent, avec un commit par ticket.</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un fichier data-model.md validé (entités, champs, relations, règles RLS) dans le repo</label><label><input type="checkbox"> Les tables créées dans Supabase via des migrations SQL versionnées, avec RLS activé partout</label><label><input type="checkbox"> Une inscription / connexion fonctionnelle, des pages protégées et un profil lié à auth.users</label><label><input type="checkbox"> Au moins une entité avec un CRUD complet, validé côté client et côté serveur</label><label><input type="checkbox"> Une recherche ou un filtre et un premier dashboard personnel</label><label><input type="checkbox"> Un historique Git lisible : un commit par ticket, et les décisions notées dans AI-LOG.md</label></div>
+    <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-4-construire-une-vraie-application-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Phase d&#x27;autonomie, puis « Je sais contrôler ce que l&#x27;IA produit »</strong>Avant la séance 5, vous entrez en phase d&#x27;autonomie : vous avancez seul (ou en binôme) sur le socle fonctionnel, ticket après ticket, en vous appuyant sur PROJECT.md, DESIGN.md, AGENTS.md, data-model.md et votre AI-LOG.md. En séance 5, vous apprendrez à contrôler ce que l&#x27;IA a produit : relecture de code, tests, sécurité et qualité.</div>
+  </div>
+</section>
+</main>
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 4 — Construire une vraie application — Théorie<br>Mode formateur : ajoutez <code>?formateur</code> à l'adresse de la page.</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const FAMILIES={"f1": "Architecture", "f2": "Données", "f3": "Authentification", "f4": "CRUD & UX", "f5": "Sécurité"};
+const EXPLORERS={"x1": {"title": "Explorer les notions de modélisation", "icon": "🧩", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "Entité", "fam": "f2", "rows": [["Définition", "Type d'objet métier stocké en base, qui devient une table."], ["Exemple", "GameBacklog : games (le catalogue) et backlog_entries (la ligne personnelle de chaque joueur)."], ["Piège", "Confondre entité et écran : la page « Dashboard » n'est pas une table."], ["À retenir", "Le socle exige au moins deux entités métier reliées entre elles."]]}, {"id": "Clé primaire uuid", "fam": "f2", "rows": [["Définition", "Identifiant unique de chaque ligne, généré par gen_random_uuid()."], ["Exemple", "events.id = 'b3f1…' dans CampusHub, utilisé dans l'URL /events/b3f1…"], ["Piège", "Utiliser le titre comme identifiant : deux films peuvent avoir le même titre."], ["À retenir", "id uuid primary key default gen_random_uuid() sur toutes vos tables."]]}, {"id": "Clé étrangère", "fam": "f2", "rows": [["Définition", "Colonne qui référence la clé primaire d'une autre table."], ["Exemple", "reviews.film_id references public.films(id) on delete cascade."], ["Piège", "Oublier on delete cascade : supprimer un film échoue tant que des avis le référencent."], ["À retenir", "Dans une relation 1-N, elle se place du côté « plusieurs »."]]}, {"id": "Relation 1-N", "fam": "f2", "rows": [["Définition", "Un élément parent possède plusieurs enfants, chaque enfant a un seul parent."], ["Exemple", "Un organisateur CampusHub crée plusieurs événements (events.organizer_id)."], ["Piège", "Stocker une liste d'identifiants dans une colonne texte du parent."], ["À retenir", "Une clé étrangère dans la table enfant suffit."]]}, {"id": "Relation N-N", "fam": "f2", "rows": [["Définition", "Chaque élément d'un côté peut être lié à plusieurs éléments de l'autre, et inversement."], ["Exemple", "CinéList : un utilisateur suit plusieurs films, un film est suivi par plusieurs utilisateurs."], ["Piège", "Oublier la contrainte unique (user_id, film_id) : un film ajouté deux fois."], ["À retenir", "Elle impose une table de jointure, qui porte souvent des attributs utiles (statut, date)."]]}, {"id": "Migration", "fam": "f2", "rows": [["Définition", "Fichier SQL versionné qui fait évoluer le schéma de la base."], ["Exemple", "supabase migration new add_rating_to_backlog puis supabase db push."], ["Piège", "Modifier les tables à la main en production sans laisser de trace dans le repo."], ["À retenir", "Une migration par changement de schéma, commitée avec le ticket correspondant."]]}]}, "x4": {"title": "Explorer les briques de sécurité", "icon": "🛡️", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "RLS", "fam": "f5", "rows": [["Définition", "Filtrage des lignes appliqué par Postgres à chaque requête, selon des règles."], ["Exemple", "backlog_entries : chaque joueur ne voit que ses propres lignes."], ["Piège", "Créer une table par SQL et oublier enable row level security."], ["À retenir", "Activé sur toutes les tables du schéma public, sans exception."]]}, {"id": "Policy select", "fam": "f5", "rows": [["Définition", "Règle qui détermine les lignes lisibles, via une clause using."], ["Exemple", "using ( (select auth.uid()) = user_id ) sur watchlist_items."], ["Piège", "using (true) sur une table personnelle : tout le monde lit tout."], ["À retenir", "Une policy par opération, nommée explicitement."]]}, {"id": "with check", "fam": "f5", "rows": [["Définition", "Condition vérifiée sur les lignes insérées ou modifiées."], ["Exemple", "Insert dans registrations seulement si user_id = auth.uid()."], ["Piège", "Une policy update avec using mais sans with check : l'utilisateur peut réattribuer la ligne à quelqu'un d'autre."], ["À retenir", "insert : with check ; update : using + with check."]]}, {"id": "auth.uid()", "fam": "f5", "rows": [["Définition", "Fonction Supabase qui renvoie l'id de l'utilisateur authentifié de la requête."], ["Exemple", "(select auth.uid()) = organizer_id pour modifier un événement CampusHub."], ["Piège", "Elle renvoie null pour un visiteur anonyme : la condition est alors fausse."], ["À retenir", "L'écrire (select auth.uid()) pour de meilleures performances."]]}, {"id": "Clé service_role", "fam": "f5", "rows": [["Définition", "Clé secrète qui contourne toutes les règles RLS."], ["Exemple", "Script serveur d'import du catalogue de jeux dans games."], ["Piège", "La préfixer NEXT_PUBLIC_ : elle devient visible dans le navigateur."], ["À retenir", "Serveur uniquement, jamais commitée, régénérée si elle a fuité."]]}, {"id": ".env.local", "fam": "f5", "rows": [["Définition", "Fichier local des variables d'environnement, lu par Next.js en développement."], ["Exemple", "NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."], ["Piège", "Le commiter parce qu'il n'est pas dans .gitignore."], ["À retenir", "Jamais commité ; documenté via un .env.example sans valeurs."]]}]}};
+const QCMS=[[{"q": "Dans l'App Router de Next.js, quel est le type d'un composant sans directive particulière ?", "o": ["Client Component", "Server Component", "Route handler", "Server Action"], "a": 1, "e": "Par défaut, tout composant de l'App Router est un Server Component ; il faut 'use client' pour le rendre interactif dans le navigateur."}, {"q": "Le composant de notation par étoiles de CinéList utilise useState et onClick. Que faut-il ?", "o": ["Le placer dans un route handler", "Le déclarer avec 'use server'", "Ajouter 'use client' en tête du fichier", "Le transformer en migration SQL"], "a": 2, "e": "Les hooks d'état et les événements ne fonctionnent que dans un Client Component, activé par la directive 'use client'."}, {"q": "Quel outil convient le mieux pour recevoir le retour d'un lien magique envoyé par e-mail ?", "o": ["Un route handler comme app/auth/callback/route.ts", "Un Client Component avec useEffect", "Un fichier .env.local", "Une policy RLS"], "a": 0, "e": "Le lien de connexion arrive sur une URL HTTP : un route handler côté serveur échange le code contre une session et pose les cookies."}, {"q": "Pourquoi NEXT_PUBLIC_SUPABASE_ANON_KEY peut-elle être exposée au navigateur ?", "o": ["Parce qu'elle est chiffrée par Next.js", "Parce qu'elle expire après chaque requête", "Parce que Vercel la masque automatiquement", "Parce qu'elle est publique par conception et que la sécurité repose sur RLS"], "a": 3, "e": "La clé anon n'accorde que ce que les policies RLS autorisent ; c'est la base qui protège les données, pas le secret de cette clé."}, {"q": "Quel paquet faut-il utiliser en 2026 pour intégrer Supabase à Next.js avec les cookies ?", "o": ["@supabase/auth-helpers-nextjs", "@supabase/ssr", "next-auth-supabase", "@supabase/cookies"], "a": 1, "e": "@supabase/ssr fournit createServerClient et createBrowserClient ; les auth-helpers sont dépréciés."}], [{"q": "Dans CampusHub, comment modéliser le fait qu'un étudiant s'inscrit à plusieurs événements et qu'un événement a plusieurs inscrits ?", "o": ["Une colonne events_ids de type text dans profiles", "Une table de jointure registrations(user_id, event_id)", "Une clé étrangère event_id dans profiles", "Une seule table events contenant les noms des inscrits"], "a": 1, "e": "Une relation N-N se modélise par une table de jointure, ici registrations, avec une contrainte d'unicité sur le couple."}, {"q": "Où se place la clé étrangère dans une relation 1-N entre organisateur et événements ?", "o": ["Dans la table profiles", "Dans une table de jointure obligatoire", "Dans la table events (côté plusieurs)", "Dans le fichier .env.local"], "a": 2, "e": "La clé étrangère se place côté « plusieurs » : chaque événement pointe vers son organisateur via organizer_id."}, {"q": "Pourquoi préférer un uuid à un entier auto-incrémenté comme clé primaire ?", "o": ["Il n'est pas devinable et reste unique même entre environnements", "Il prend moins de place en base", "Il est trié par ordre alphabétique", "Il remplace RLS"], "a": 0, "e": "Un uuid ne permet pas d'énumérer les ressources et évite les collisions ; il ne remplace en rien les règles RLS."}, {"q": "À quoi sert la contrainte unique (user_id, film_id) dans watchlist_items ?", "o": ["À accélérer l'authentification", "À chiffrer les données", "À rendre film_id obligatoire", "À empêcher d'ajouter deux fois le même film à la même watchlist"], "a": 3, "e": "Elle garantit au niveau de la base qu'un couple utilisateur / film n'existe qu'une fois, même si le front envoie deux requêtes."}, {"q": "Quelle démarche est la plus fiable pour obtenir un bon schéma avec l'IA ?", "o": ["Laisser l'agent créer les tables directement en production", "Faire proposer le schéma, le faire critiquer, le confronter aux user stories, puis générer la migration", "Copier le schéma d'un autre projet", "Créer les tables au fil des écrans, sans document"], "a": 1, "e": "Proposer puis critiquer fait ressortir les erreurs ; figer le résultat dans data-model.md avant la migration garde une trace validée."}], [{"q": "Quelle méthode envoie un lien de connexion sans mot de passe ?", "o": ["supabase.auth.signUp()", "supabase.auth.signInWithPassword()", "supabase.auth.signOut()", "supabase.auth.signInWithOtp()"], "a": 3, "e": "signInWithOtp({ email }) envoie un magic link (ou un code) par e-mail."}, {"q": "Où @supabase/ssr stocke-t-il la session pour que le serveur y ait accès ?", "o": ["Dans des cookies", "Dans localStorage uniquement", "Dans la table profiles", "Dans .env.local"], "a": 0, "e": "Les cookies sont envoyés avec chaque requête : le serveur (pages, actions, middleware) peut ainsi lire et rafraîchir la session."}, {"q": "Pourquoi créer une table public.profiles plutôt qu'ajouter des colonnes à auth.users ?", "o": ["Parce que auth.users est limitée à 10 lignes", "Parce que auth.users est gérée par Supabase ; les données métier vont dans une table publique liée par son id", "Parce que profiles est plus rapide", "Parce que RLS est interdit sur les tables publiques"], "a": 1, "e": "Le schéma auth appartient à Supabase ; profiles.id référence auth.users(id) et porte les données métier (pseudo, avatar)."}, {"q": "Côté serveur, quelle méthode faut-il utiliser pour décider si l'utilisateur peut accéder au dashboard ?", "o": ["getSession(), car elle lit le cookie", "Lire l'e-mail dans l'URL", "getUser(), qui vérifie réellement le jeton", "Aucune, le middleware suffit toujours"], "a": 2, "e": "getSession() lit le cookie sans le valider ; getUser() (ou getClaims()) vérifie l'identité avant d'accorder l'accès."}, {"q": "Un visiteur non connecté ouvre /dashboard. Quel comportement est attendu ?", "o": ["Afficher un dashboard vide", "Rediriger vers /login?next=/dashboard puis revenir au dashboard après connexion", "Afficher une erreur 500", "Créer un compte automatiquement"], "a": 1, "e": "La page protégée redirige vers la connexion en conservant la destination, pour y renvoyer l'utilisateur après succès."}], [{"q": "Pourquoi valider les données côté serveur si le formulaire les valide déjà ?", "o": ["Pour afficher les erreurs plus vite", "Parce que Zod ne fonctionne que sur le serveur", "Parce que n'importe qui peut envoyer une requête sans passer par le formulaire", "Pour éviter d'écrire des migrations"], "a": 2, "e": "La validation client est contournable ; seule la validation serveur protège réellement la base."}, {"q": "Dans la Server Action addReview, d'où doit venir user_id ?", "o": ["De la session, via supabase.auth.getUser()", "D'un champ caché du formulaire", "Du localStorage", "D'un paramètre d'URL"], "a": 0, "e": "L'identité doit provenir de la session vérifiée côté serveur ; un champ envoyé par le client peut être falsifié."}, {"q": "Après l'ajout d'un film, la liste de la watchlist ne se met pas à jour. Quelle est la cause la plus probable ?", "o": ["RLS est désactivé", "La clé anon est expirée", "La migration n'a pas été commitée", "La Server Action n'appelle pas revalidatePath('/watchlist')"], "a": 3, "e": "Sans revalidation, Next.js sert le rendu mis en cache ; revalidatePath force le rafraîchissement de la page."}, {"q": "Quel message illustre correctement un état vide ?", "o": ["« Erreur 404 »", "« Votre backlog est vide. Ajoutez votre premier jeu » avec un bouton d'ajout", "Une page blanche", "« Chargement… » affiché en permanence"], "a": 1, "e": "Un état vide explique la situation et propose l'action suivante, au lieu de laisser l'utilisateur face à rien."}, {"q": "Comment gérer la suppression d'un avis ?", "o": ["Supprimer dès le clic, sans retour", "Supprimer toutes les lignes de reviews de l'utilisateur", "Confirmer dans une modale nommant l'élément, puis appeler une Server Action filtrée par id", "Masquer l'avis en CSS"], "a": 2, "e": "Une action irréversible se confirme explicitement, et la requête delete doit cibler précisément l'élément par son id."}], [{"q": "Une table a RLS activé mais aucune policy. Que se passe-t-il pour une requête faite avec la clé anon ?", "o": ["Toutes les lignes sont lisibles", "Aucune ligne n'est accessible", "Seules les lignes récentes sont lisibles", "La requête contourne RLS automatiquement"], "a": 1, "e": "RLS activé sans policy bloque tout accès via l'API : c'est l'état sûr par défaut, on ouvre ensuite opération par opération."}, {"q": "Quelle clause vérifie les données écrites lors d'un insert ?", "o": ["using", "order by", "with check", "on delete cascade"], "a": 2, "e": "with check contrôle les nouvelles lignes ; using filtre les lignes existantes visibles ou ciblées."}, {"q": "Une requête de l'app est bloquée par RLS. Quelle est la bonne réaction ?", "o": ["Écrire la policy manquante pour l'opération concernée", "Passer la clé service_role dans le client navigateur", "Désactiver RLS sur la table", "Supprimer la table et la recréer"], "a": 0, "e": "Le blocage indique qu'aucune règle n'autorise l'opération ; contourner RLS supprimerait toute protection."}, {"q": "Une clé secrète a été commitée puis retirée du fichier au commit suivant. Que faut-il faire ?", "o": ["Rien, elle n'est plus dans le code", "Renommer la variable", "Rendre le repo privé suffit", "La régénérer dans Supabase, car elle reste dans l'historique Git"], "a": 3, "e": "L'historique Git conserve la valeur ; seule la rotation de la clé la rend inutilisable."}, {"q": "Quel test prouve que l'isolation des données fonctionne ?", "o": ["Vérifier que la page s'affiche sans erreur", "Se connecter avec un second compte et tenter de lire et modifier les données du premier", "Lancer npm run lint", "Relire le README"], "a": 1, "e": "Seul un second compte réel permet de constater que RLS empêche l'accès aux données d'autrui."}], [{"q": "Quel filtre supabase-js permet une recherche partielle, insensible à la casse, sur le titre d'un jeu ?", "o": [".eq('title', q)", ".order('title')", ".range(0, 9)", ".ilike('title', `%${q}%`)"], "a": 3, "e": "ilike fait une correspondance de motif insensible à la casse ; les % encadrent le texte recherché."}, {"q": "Que renvoie .range(0, 9) ?", "o": ["Les 10 premières lignes (bornes incluses)", "Les 9 premières lignes", "Les lignes dont l'id est entre 0 et 9", "Le nombre total de lignes"], "a": 0, "e": "range utilise des bornes incluses : de l'index 0 à l'index 9, soit 10 résultats."}, {"q": "Comment obtenir le nombre de jeux « terminés » pour le dashboard sans charger les lignes ?", "o": ["Charger toutes les lignes et utiliser .length", "select('*', { count: 'exact', head: true }) avec .eq('status', 'termine')", "Stocker un compteur dans .env.local", "Utiliser la clé service_role"], "a": 1, "e": "head: true ne renvoie aucune ligne, seulement le total calculé par la base : c'est léger et exact."}, {"q": "Quel ordre de tickets est le plus logique pour construire le socle ?", "o": ["Dashboard → recherche → auth → schéma", "Auth → dashboard → schéma → CRUD", "Schéma → auth → CRUD entité 1 → relation → recherche → dashboard", "CRUD → schéma → dashboard → auth"], "a": 2, "e": "Chaque étape dépend de la précédente : les tables d'abord, puis les utilisateurs, puis les données qu'ils manipulent."}, {"q": "Pourquoi garder les critères de recherche dans l'URL (searchParams) ?", "o": ["Pour que la recherche soit partageable, survive au rechargement et soit lue par le Server Component", "Pour contourner RLS", "Parce que Supabase l'exige", "Pour éviter la pagination"], "a": 0, "e": "L'URL devient la source de vérité des filtres : le serveur les lit et l'utilisateur peut revenir ou partager le lien."}]];
+const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function download(name, txt){ const blob=new Blob([txt],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez le chapitre puis recommencez.'; return 'Reprenez le chapitre, puis recommencez l\'activité.'; }
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return false;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Toutes les activités sont validées !' : 'Activité validée ✅');
+  if(typeof onDone==='function') onDone(act);
+  return true;
+}
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* Explorateurs */
+$$('[data-explorer]').forEach(box=>{
+  const E = EXPLORERS[box.dataset.explorer]; const seen=new Set();
+  const chain=$('.chain',box), detail=$('.concept-detail',box);
+  E.items.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>show(i)); chain.appendChild(b);
+  });
+  function show(i){
+    const k=E.items[i]; seen.add(i);
+    $$('.chain-node',box).forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+    detail.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(FAMILIES[k.fam]||'')+'</span></div>'+
+      k.rows.map(r=>'<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>').join('');
+    const f=$('.progress-fill',box), t=$('.progress-label span:last-child',box);
+    f.style.width=Math.round(seen.size/E.items.length*100)+'%'; t.textContent=seen.size+' / '+E.items.length;
+  }
+  show(0);
+});
+const qState = {};
+const L = ['A','B','C','D','E'];
+function renderQCM(ci){
+  const box=$('#qcm'+ci); box.innerHTML='';
+  const qs = shuffle(QCMS[ci]).map(q=>{ const opts=shuffle(q.o.map((t,i)=>({t,good:i===q.a}))); return {q:q.q,e:q.e,opts}; });
+  qState[ci]={qs};
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div'); d.className='qcm-q';
+    d.innerHTML='<div class="qt"><span class="q-num">Q'+(qi+1)+'</span>'+esc(q.q)+'</div><div class="qcm-opts" role="radiogroup">'+
+      q.opts.map((o,oi)=>'<button type="button" class="qcm-opt" role="radio" aria-checked="false" data-oi="'+oi+'"><span class="l">'+L[oi]+'</span><span>'+esc(o.t)+'</span></button>').join('')+
+      '</div><div class="expl"></div>';
+    $$('.qcm-opt',d).forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('checked')) return;
+      $$('.qcm-opt',d).forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});
+      b.classList.add('sel'); b.setAttribute('aria-checked','true'); d.dataset.ans=b.dataset.oi; updQ(ci);
+    }));
+    box.appendChild(d);
+  });
+  $('#qres'+ci).classList.remove('show'); updQ(ci);
+}
+function updQ(ci){ const rows=$$('#qcm'+ci+' .qcm-q'); setProgress('qfill'+ci,'qtxt'+ci,rows.filter(r=>r.dataset.ans!==undefined).length,rows.length); }
+const scores = {};
+function checkQCM(ci, silent){
+  const rows=$$('#qcm'+ci+' .qcm-q');
+  if(!silent && rows.some(r=>r.dataset.ans===undefined)){ toast('Répondez à toutes les questions avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,qi)=>{
+    const q=qState[ci].qs[qi]; const ans=r.dataset.ans===undefined?-1:+r.dataset.ans;
+    const gi=q.opts.findIndex(o=>o.good); const good=ans===gi; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    $$('.qcm-opt',r).forEach((b,oi)=>{ b.classList.toggle('good',oi===gi); b.classList.toggle('bad',oi===ans&&!good); });
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ Bonne réponse : <strong>'+L[gi]+'</strong>. ')+esc(q.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#qres'+ci).innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#qres'+ci).classList.add('show');
+  if(!silent){ scores[ci]=Math.max(scores[ci]||0,ok); updScores(); markDone('ch'+ci); }
+}
+function revealQCM(ci){
+  $$('#qcm'+ci+' .qcm-q').forEach((r,qi)=>{ const gi=qState[ci].qs[qi].opts.findIndex(o=>o.good); r.dataset.ans=gi; $$('.qcm-opt',r).forEach((b,oi)=>b.classList.toggle('sel',oi===gi)); });
+  updQ(ci); checkQCM(ci,true);
+}
+function updScores(){
+  let tot=0,max=0;
+  QCMS.forEach((q,ci)=>{ const c=$('#score'+ci); if(scores[ci]!==undefined){ c.textContent=scores[ci]+' / '+q.length; tot+=scores[ci]; } max+=q.length; });
+  $('#scoreTotal').textContent=tot+' / '+max;
+}
+QCMS.forEach((_,ci)=>renderQCM(ci));
+$$('[data-qcheck]').forEach(b=>b.addEventListener('click',()=>checkQCM(+b.dataset.qcheck)));
+$$('[data-qreveal]').forEach(b=>b.addEventListener('click',()=>revealQCM(+b.dataset.qreveal)));
+$$('[data-qreset]').forEach(b=>b.addEventListener('click',()=>renderQCM(+b.dataset.qreset)));
+$$('#finCheck input').forEach(c=>c.addEventListener('change',()=>{}));
+
+})();
+</script>
+</body>
+</html>

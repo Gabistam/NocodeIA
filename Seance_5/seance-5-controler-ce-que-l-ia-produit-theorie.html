@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 5 — Contrôler ce que l&#x27;IA produit · Théorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.84em}
+pre code,.key-box code,.nest.n4 code{background:transparent;border:none;padding:0;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header.practice{background:linear-gradient(135deg,#0f172a 0%,#064e3b 60%,#047857 100%)}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+header.practice::after{background:radial-gradient(circle,rgba(52,211,153,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+.tab .lock-mark{font-size:.8rem}
+
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+@media(max-width:600px){.card{padding:20px 16px}}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+ol{padding-left:22px}ol li{padding:3px 0}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-card.bad{border-color:#fecaca;background:#fef2f2}
+.mini-card.good{border-color:#a7f3d0;background:#f0fdf4}
+.mini-card pre.prompt{margin-top:8px}
+
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+.chain .term-item,.objectif-box .term-item{padding:6px 12px}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative;margin:12px 0}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* QCM */
+.qcm-q{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.qcm-q .qt{font-weight:600;margin-bottom:10px}
+.qcm-opts{display:grid;gap:8px}
+.qcm-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:.9rem;background:#fff;text-align:left;width:100%;color:var(--text)}
+.qcm-opt:hover{background:#f8fafc;border-color:#93c5fd}
+.qcm-opt .l{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:18px}
+.qcm-opt.sel{border-color:var(--primary);background:#eff6ff}
+.qcm-q.checked .qcm-opt{cursor:default}
+.qcm-opt.good{border-color:#6ee7b7;background:#ecfdf5}
+.qcm-opt.bad{border-color:#fca5a5;background:#fef2f2}
+.qcm-q.correct{border-color:#6ee7b7}
+.qcm-q.wrong{border-color:#fca5a5}
+.qcm-q .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:8px;border-top:1px dashed var(--border)}
+.qcm-q.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem;color:var(--text)}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* Cas 1 matching */
+.match-grid{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:16px;margin-top:10px}
+@media(max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.m-term{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:10px 12px;border-radius:8px;border:2px solid var(--dark);text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m-term:hover{border-color:#60a5fa}
+.m-term.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+.m-def{background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.86rem;text-align:left;display:flex;gap:10px;align-items:flex-start;color:var(--text)}
+.m-def:hover{border-color:#93c5fd}
+.pair-badge{font-family:var(--mono);font-size:.72rem;font-weight:700;min-width:24px;height:24px;border-radius:6px;display:inline-grid;place-items:center;background:#e2e8f0;color:var(--muted);flex-shrink:0}
+.paired .pair-badge{background:var(--primary);color:#fff}
+.m-def.paired{border-color:#93c5fd;background:#eff6ff}
+.m-term.good,.m-def.good{border-color:#10b981}
+.m-def.good{background:#ecfdf5}
+.m-term.bad,.m-def.bad{border-color:#ef4444}
+.m-def.bad{background:#fef2f2}
+.round-pills{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.round-pill{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.round-pill.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.round-pill.ok{background:var(--secondary-light);color:#065f46;border-color:#6ee7b7}
+
+/* Cas 2 */
+.group{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;background:#fff}
+.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.group-head strong{font-size:1rem}
+.g-label{font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:600;color:var(--dark2)}
+.choice.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.choice.good{background:#10b981;color:#fff;border-color:#10b981}
+.choice.bad{background:#ef4444;color:#fff;border-color:#ef4444}
+.sit{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f8fafc;font-size:.88rem;margin-bottom:8px;color:var(--text)}
+.sit:hover{border-color:#fbbf24}
+.sit .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2e8f0;color:var(--muted);white-space:nowrap}
+.sit.sel{border-color:var(--accent);background:#fffbeb}
+.sit.sel .tag{background:var(--accent);color:#fff}
+.sit.good{border-color:#10b981;background:#ecfdf5}
+.sit.good .tag{background:#10b981;color:#fff}
+.sit.bad{border-color:#ef4444;background:#fef2f2}
+.sit.bad .tag{background:#ef4444;color:#fff}
+.group .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:10px;border-top:1px dashed var(--border)}
+.group.checked .expl{display:block}
+.group.correct{border-color:#6ee7b7}
+.group.wrong{border-color:#fca5a5}
+.group.half{border-color:#fcd34d}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+
+.steps{margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.past{background:#ecfdf5;border-color:#a7f3d0}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+@media(max-width:600px){.level{grid-template-columns:40px 1fr}.level .risk{grid-column:2;justify-self:start}}
+
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(5n+2){border-top-color:var(--purple)}
+.pillar:nth-child(5n+3){border-top-color:var(--secondary)}
+.pillar:nth-child(5n+4){border-top-color:var(--accent)}
+.pillar:nth-child(5n+5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+details.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-family:var(--mono);color:var(--primary);font-weight:700}
+details.acc[open] summary::after{content:"−"}
+details.acc[open] summary{border-bottom:1px dashed var(--border)}
+details.acc > div{padding:12px 16px;font-size:.9rem}
+
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+.lock-wrap{text-align:center;padding:30px 10px}
+.lock-wrap .big-lock{font-size:3rem}
+.lock-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:16px}
+.lock-pill{font-size:.82rem;font-weight:600;padding:6px 14px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border)}
+.lock-pill.ok{background:var(--secondary-light);border-color:#6ee7b7;color:#065f46}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.filter-row button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;color:var(--dark2)}
+.filter-row button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+.score-table td:last-child{font-family:var(--mono);font-weight:700}
+.link-card{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f8fafc;border:1px dashed #93c5fd;border-radius:12px;padding:16px 18px;margin-top:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+@media print{.tabs-wrap,.actions-row,.nav-bottom{display:none}.panel{display:block!important}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <span class="badge">🔍 NoCode AI / Vibe Coding — Séance 5 · Support théorique</span>
+    <h1>Contrôler ce que l&#x27;IA produit</h1>
+    <p class="subtitle">Lire, déboguer, tester, sécuriser et relire le code généré : vous restez responsable de chaque ligne qui part en production.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 5 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : Rapport de recette + corrections commitées + checklist sécurité</span></div>
+    <div class="global-progress">
+      <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">📖 Lire le code généré <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🐞 Déboguer avec l&#x27;IA <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🧪 Tester <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">🔐 Sécurité <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">✨ Qualité <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">👀 Revue de code IA <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<main>
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
+    <div class="key-box"><div class="big">Je sais contrôler ce que l&#x27;IA produit.</div><p style="margin:8px 0 0">L&#x27;IA écrit vite, vous signez : je ne commite pas ce que je ne comprends pas, et je ne livre pas ce que je n&#x27;ai pas testé.</p></div>
+    <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step past"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step past"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step past"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step past"><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step here"><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step "><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
+    <h3>Le fil pédagogique</h3>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td>Séance 4</td><td>Je sais construire une vraie application.</td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td><strong>Séance 5</strong> — aujourd&#39;hui</td><td><strong>Je sais contrôler ce que l&#x27;IA produit.</strong></td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Lire et comprendre un code généré en suivant le chemin des données ;</li><li>Déboguer méthodiquement avec l&#x27;IA à partir d&#x27;une erreur exacte et reproductible ;</li><li>Tester le MVP par une recette manuelle, des tests unitaires et des tests end-to-end ;</li><li>Vérifier la sécurité d&#x27;une application Next.js / Supabase générée (secrets, RLS, validation, XSS, dépendances) ;</li><li>Améliorer la qualité et la maintenabilité du code (TypeScript strict, lint, accessibilité, DESIGN.md) ;</li><li>Conduire une revue de code assistée par IA et tracer les décisions dans AI-LOG.md.</li></ul></div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Votre MVP avancé pendant la phase d&#x27;autonomie, poussé sur GitHub</li><li>Un AI-LOG.md à jour avec les décisions prises depuis la S4</li><li>Les critères d&#x27;acceptation de PROJECT.md (S2) pour construire la recette</li><li>Deux comptes utilisateurs de test sur votre application</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Lecture de code</span><span class="famille-tag f2">Débogage</span><span class="famille-tag f3">Tests</span><span class="famille-tag f4">Sécurité</span><span class="famille-tag f5">Qualité &amp; revue</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
+    <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-5-controler-ce-que-l-ia-produit-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 📖 Lire le code généré ▸</button></div>
+  </div>
+</section>
+<section class="panel" data-panel="c0">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">📖</span>Pourquoi lire ce que l'agent a écrit</div>
+  <p class="lead">Depuis la S3, un agent modifie plusieurs fichiers d'un coup. Pendant la phase d'autonomie, il a probablement produit des centaines de lignes. Ce code compile, l'écran s'affiche… mais « ça marche » ne veut pas dire « c'est correct », ni « c'est sûr », ni « je saurai le corriger ».</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Savoir lire un code que vous n'avez pas écrit, en suivant le chemin des données et le diff, pour être capable de l'expliquer, de le corriger et de le défendre à l'oral.</div>
+  <h3>Le code généré est du code non relu</h3>
+  <p>Un modèle produit du code plausible : il ressemble à ce qu'on trouve dans des milliers de projets. Mais il ne connaît pas vos contraintes réelles, il peut inventer une fonction, dupliquer une logique existante, laisser un reste d'essai précédent ou contourner un problème au lieu de le résoudre. Relire n'est pas de la méfiance : c'est votre travail de développeur quand vous déléguez en N3 ou N4.</p>
+  <div class="key-box"><div class="big">Je ne commite pas ce que je ne comprends pas.</div><p style="margin:8px 0 0">Si vous ne pouvez pas expliquer ce que fait une ligne, vous ne pouvez ni la corriger, ni la justifier devant le jury. Demandez une explication, simplifiez, ou rejetez.</p></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧭</span>Une stratégie de lecture : suivre les données</div>
+  <p class="lead">Ne lisez pas les fichiers dans l'ordre alphabétique. Partez de ce que fait l'utilisateur et suivez la donnée jusqu'à la base, puis jusqu'au retour à l'écran.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span><strong>Partir de l'entrée utilisateur</strong> : un formulaire, un bouton, une URL, un champ de recherche.</span></div>
+    <div class="step"><span class="s-num">2</span><span><strong>Suivre le flux de données</strong> : composant client, Server Action ou Route Handler, client Supabase, table, politique RLS.</span></div>
+    <div class="step"><span class="s-num">3</span><span><strong>Suivre le retour</strong> : réponse, gestion d'erreur, rafraîchissement de l'affichage (<code>revalidatePath</code>, état local).</span></div>
+    <div class="step"><span class="s-num">4</span><span><strong>Noter les zones floues</strong> et demander à l'IA de les expliquer ligne par ligne.</span></div>
+  </div>
+  <h3>Exemple CinéList : « Ajouter à ma watchlist »</h3>
+  <div class="chain"><span class="term-item">Bouton Ajouter</span><span class="chain-arrow">→</span><span class="term-item">Server Action addToWatchlist</span><span class="chain-arrow">→</span><span class="term-item">supabase.from('watchlist_items').insert()</span><span class="chain-arrow">→</span><span class="term-item">Politique RLS</span><span class="chain-arrow">→</span><span class="term-item">revalidatePath('/watchlist')</span></div>
+  <p>À chaque flèche, posez une question : d'où vient le <code>user_id</code> inséré ? Est-il lu côté serveur depuis la session ou envoyé par le navigateur ? Que se passe-t-il si l'insertion échoue ? Le film peut-il être ajouté deux fois ? Pour GameBacklog, même logique avec le changement de statut « à jouer → en cours » ; pour CampusHub, avec l'inscription à un événement complet.</p>
+  <h3>Lire le diff plutôt que tout le projet</h3>
+  <p>Après chaque tâche de l'agent, lisez ce qui a changé, pas tout le dépôt. <code>git diff</code> montre les modifications non indexées, <code>git diff --staged</code> celles déjà ajoutées, et <code>git add -p</code> vous fait valider chaque morceau un par un avant le commit. Les lignes préfixées par <code>+</code> sont ajoutées, celles par <code>-</code> supprimées.</p>
+  <details class="acc"><summary>Que regarder en priorité dans un diff ?</summary><div><ul class="clean"><li>Les fichiers modifiés qui n'ont rien à voir avec la tâche demandée (hors périmètre).</li><li>Les suppressions : l'agent a-t-il retiré une vérification, un test ou une gestion d'erreur ?</li><li>Le fichier <code>package.json</code> : une nouvelle dépendance est-elle apparue ?</li><li>Les fichiers de migration SQL : une politique RLS a-t-elle été modifiée ou désactivée ?</li><li>Les fichiers <code>.env*</code> : ils ne doivent jamais apparaître dans un diff commité.</li></ul></div></details>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🔎</span>Ce qu'il faut repérer</div>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🪦 Code mort</h4><p class="muted">Fonctions jamais appelées, imports inutilisés, composants d'un essai abandonné, blocs commentés. Ils brouillent la lecture et trompent l'agent aux tâches suivantes.</p></div>
+    <div class="mini-card"><h4>👯 Doublons</h4><p class="muted">Deux fonctions <code>formatDate</code>, deux clients Supabase créés différemment, la même requête copiée dans trois pages. Une correction faite à un endroit sera oubliée à l'autre.</p></div>
+    <div class="mini-card"><h4>📦 Dépendances inutiles</h4><p class="muted">Une bibliothèque installée pour une seule fonction que JavaScript ou Next.js fournit déjà (dates, requêtes HTTP, identifiants). Chaque paquet ajoute du poids et de la surface d'attaque.</p></div>
+    <div class="mini-card"><h4>🧷 Valeurs en dur</h4><p class="muted">Un identifiant utilisateur de test, une URL locale, une couleur hors DESIGN.md, une clé écrite directement dans le code.</p></div>
+    <div class="mini-card"><h4>🚧 Faux raccourcis</h4><p class="muted">Un <code>try/catch</code> qui avale l'erreur, un <code>// TODO</code>, un <code>as any</code>, une donnée simulée laissée à la place de la vraie requête.</p></div>
+    <div class="mini-card"><h4>🧩 Hors périmètre</h4><p class="muted">Des fichiers modifiés sans lien avec la tâche : l'agent a « amélioré » autre chose au passage, sans que vous l'ayez demandé.</p></div>
+  </div>
+  <h3>Faire expliquer le code par l'IA</h3>
+  <pre class="prompt"><span class="hl3">Contexte</span> : projet CinéList, Next.js App Router + Supabase.
+<span class="hl3">Rôle</span> : tu es un développeur senior qui explique à un étudiant.
+<span class="hl3">Action</span> : explique ligne par ligne le fichier app/watchlist/actions.ts.
+<span class="hl3">Contraintes</span> : pour chaque bloc, dis d'où viennent les données, où elles vont,
+et signale tout code mort, doublon ou dépendance inutile. Ne modifie rien.
+<span class="hl3">Format</span> : tableau Ligne(s) | Ce que ça fait | Question ou risque.</pre>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Accepter tous les changements de l'agent parce que la page s'affiche, puis faire un seul commit « update ».</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Lire le diff, faire expliquer les zones floues, supprimer le code mort, puis commiter par petites unités compréhensibles.</p></div>
+  </div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm0"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt0">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill0"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="0">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="0">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres0"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🐞 Déboguer avec l&#x27;IA ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c1">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🐞</span>Une méthode avant un prompt</div>
+  <p class="lead">Face à un bug, le réflexe du débutant est de coller « ça marche pas » dans le chat. Résultat : l'IA devine, modifie cinq fichiers, et le bug change de forme. Déboguer, c'est d'abord une méthode ; l'IA accélère chaque étape mais ne la remplace pas.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Reproduire, isoler et documenter un bug, puis donner à l'IA exactement ce dont elle a besoin pour proposer des hypothèses et une correction vérifiable.</div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span><strong>Reproduire</strong> : trouver les étapes exactes qui déclenchent le bug à chaque fois. Un bug non reproductible ne peut pas être vérifié comme corrigé.</span></div>
+    <div class="step"><span class="s-num">2</span><span><strong>Isoler</strong> : réduire au cas minimal. Le bug arrive-t-il avec un seul film ? Uniquement pour un utilisateur non connecté ? Uniquement sur mobile ? Uniquement en production ?</span></div>
+    <div class="step"><span class="s-num">3</span><span><strong>Lire l'erreur</strong> : le message exact et la stack trace, pas seulement « erreur 500 ».</span></div>
+    <div class="step"><span class="s-num">4</span><span><strong>Formuler des hypothèses</strong> classées de la plus probable à la moins probable.</span></div>
+    <div class="step"><span class="s-num">5</span><span><strong>Corriger une chose à la fois</strong>, puis revérifier avec les étapes de reproduction.</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🛠️</span>Où regarder : les bons outils</div>
+  <p class="lead">Dans une application Next.js / Supabase, l'erreur ne s'affiche pas toujours là où on la cherche. Le code serveur (Server Components, Server Actions, Route Handlers) écrit ses logs dans le terminal où tourne <code>npm run dev</code>, pas dans la console du navigateur.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Outil</th><th>Ce qu'il montre</th><th>Exemple fil rouge</th></tr>
+    <tr><td>Console du navigateur (DevTools)</td><td>Erreurs JavaScript côté client, avertissements React, erreurs d'hydratation</td><td>GameBacklog : « Cannot read properties of undefined (reading 'title') » quand la liste est vide</td></tr>
+    <tr><td>Terminal / logs serveur</td><td>Erreurs des Server Actions et Server Components, <code>console.log</code> côté serveur</td><td>CampusHub : l'inscription échoue, le terminal affiche l'erreur Supabase renvoyée</td></tr>
+    <tr><td>Onglet Réseau (Network)</td><td>Chaque requête : URL, méthode, code de statut (200, 401, 403, 404, 500), contenu envoyé et reçu</td><td>CinéList : la requête vers Supabase renvoie 200 mais un tableau vide</td></tr>
+    <tr><td>Dashboard Supabase</td><td>Logs de l'API et de la base, contenu réel des tables, politiques RLS</td><td>Vérifier que la ligne a bien été insérée avec le bon <code>user_id</code></td></tr>
+    <tr><td>Logs Vercel</td><td>Erreurs qui n'apparaissent qu'en production (variables d'environnement manquantes)</td><td>La page fonctionne en local mais plante une fois déployée</td></tr>
+  </table></div>
+  <h3>Lire une stack trace</h3>
+  <p>Une stack trace est la pile des appels au moment de l'erreur. Lisez d'abord le message (la première ligne), puis cherchez la première ligne qui pointe vers <strong>vos</strong> fichiers (<code>app/</code>, <code>components/</code>, <code>lib/</code>) plutôt que vers <code>node_modules</code>. C'est en général là que se trouve la cause, ou au moins le point d'entrée.</p>
+  <div class="warn-box"><strong>⛔ Piège Supabase classique</strong> Quand une politique RLS bloque une lecture, Supabase ne renvoie pas d'erreur : il renvoie un tableau vide. « Ma liste est vide » peut donc être un problème de droits, pas de données. En revanche, une insertion refusée renvoie un message du type <code>new row violates row-level security policy for table "watchlist_items"</code>.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">💬</span>Donner à l'IA ce dont elle a besoin</div>
+  <p class="lead">Un bon prompt de débogage contient quatre éléments : l'erreur exacte, le contexte, le comportement attendu et ce que vous avez déjà essayé. Et il demande des hypothèses avant la correction.</p>
+  <pre class="prompt"><span class="hl3">Contexte</span> : CinéList, Next.js App Router + Supabase. Page /watchlist.
+<span class="hl3">Étapes pour reproduire</span> : 1. je me connecte avec le compte A
+2. j'ajoute « Dune » 3. je recharge la page
+<span class="hl2">Attendu</span> : « Dune » apparaît dans ma watchlist.
+<span class="hl2">Obtenu</span> : la liste est vide, aucune erreur dans la console.
+<span class="hl">Erreur exacte</span> : aucune côté client ; onglet Réseau : 200 avec [].
+Dans la table watchlist_items, la ligne existe avec le bon user_id.
+<span class="hl3">Déjà essayé</span> : vider le cache, vérifier la requête.
+<span class="hl3">Action</span> : propose 3 hypothèses classées par probabilité,
+avec pour chacune comment la vérifier. Ne modifie aucun fichier pour l'instant.</pre>
+  <h3>Éviter la boucle de corrections</h3>
+  <p>La boucle de corrections, c'est quand chaque « corrige ça » de l'IA crée un nouveau problème, et que vous collez l'erreur suivante sans réfléchir. Le code s'alourdit de rustines et plus personne ne sait ce qui a changé.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ Boucle</h4><p class="muted">« Toujours pas », « encore une erreur », « corrige », sur dix messages, sans commit intermédiaire ni relecture du diff.</p></div>
+    <div class="mini-card good"><h4>✅ Sortie de boucle</h4><p class="muted">Après deux ou trois tentatives ratées : on s'arrête, on revient au dernier état stable (<code>git restore .</code> ou <code>git stash</code>), on résume ce qu'on sait dans une nouvelle session, et on repart des hypothèses.</p></div>
+  </div>
+  <details class="acc"><summary>Et si le bug est apparu « à un moment » sans qu'on sache quand ?</summary><div>Si vous avez commité régulièrement, <code>git bisect</code> retrouve le commit fautif par dichotomie : <code>git bisect start</code>, <code>git bisect bad</code> sur la version cassée, <code>git bisect good &lt;commit&gt;</code> sur une version saine, puis vous testez chaque version proposée. C'est une raison de plus de faire de petits commits.</div></details>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 2</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm1"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt1">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill1"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="1">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="1">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres1"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🧪 Tester ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c2">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧪</span>La recette manuelle : tester comme un utilisateur</div>
+  <p class="lead">La recette, c'est la vérification que l'application fait ce qui a été promis. Votre promesse est écrite depuis la S2 : ce sont les critères d'acceptation de vos user stories dans PROJECT.md. Chaque critère devient un scénario de test.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Construire une recette à partir des critères d'acceptation, couvrir les cas limites, et savoir faire écrire des tests automatiques par l'agent sans se faire piéger.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Critère d'acceptation (PROJECT.md)</th><th>Scénario de test</th><th>Résultat attendu</th></tr>
+    <tr><td>CinéList : je peux noter un film de 1 à 5</td><td>Se connecter, ouvrir « Dune », choisir 4 étoiles, recharger</td><td>La note 4 est conservée et affichée</td></tr>
+    <tr><td>GameBacklog : je peux filtrer par statut</td><td>Créer 3 jeux de statuts différents, filtrer sur « en cours »</td><td>Seul le jeu « en cours » est affiché</td></tr>
+    <tr><td>CampusHub : je ne peux pas m'inscrire deux fois</td><td>S'inscrire à un événement, cliquer à nouveau sur « S'inscrire »</td><td>Message clair, pas de deuxième inscription en base</td></tr>
+  </table></div>
+  <h3>Les cas limites : là où le code généré casse</h3>
+  <p>L'IA code très bien le « chemin heureux ». Les bugs se cachent aux bords :</p>
+  <div class="chips"><span class="chip">Champ vide</span><span class="chip">Texte très long</span><span class="chip">Accents, emoji, apostrophes</span><span class="chip">Double clic sur « Valider »</span><span class="chip">Utilisateur non connecté</span><span class="chip">Liste vide</span><span class="chip">Note hors bornes (0, 6, -1)</span><span class="chip">Doublon</span><span class="chip">Écran mobile</span><span class="chip">Retour arrière du navigateur</span><span class="chip">Événement complet</span></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg">⚙️</span>Les tests automatiques</div>
+  <p class="lead">Un test automatique rejoue une vérification à chaque modification. C'est ce qui vous protège contre la régression : un agent qui corrige une page et en casse une autre sans le dire.</p>
+  <div class="levels">
+    <div class="level"><span class="lv">T0</span><span><strong>npm run build</strong> : le test minimal. Il compile le projet et vérifie les types TypeScript. Si le build échoue, Vercel ne déploiera pas.</span><span class="risk f2">Obligatoire</span></div>
+    <div class="level"><span class="lv">T1</span><span><strong>Tests unitaires (Vitest)</strong> : vérifient une fonction isolée, rapides, nombreux (validation d'une note, calcul d'un score, formatage).</span><span class="risk f3">Recommandé</span></div>
+    <div class="level"><span class="lv">T2</span><span><strong>Tests end-to-end (Playwright)</strong> : pilotent un vrai navigateur et rejouent un parcours complet (connexion, ajout, affichage).</span><span class="risk f4">Parcours critiques</span></div>
+  </div>
+  <h3>Un test unitaire avec Vitest</h3>
+  <pre class="prompt"><span class="hl3">// lib/rating.test.ts</span>
+import { describe, it, expect } from 'vitest'
+import { isValidRating } from './rating'
+
+describe('isValidRating', () =&gt; {
+  it('accepte une note entière de 1 à 5', () =&gt; {
+    expect(isValidRating(4)).toBe(true)
+  })
+  it('refuse les notes hors bornes', () =&gt; {
+    expect(isValidRating(0)).toBe(false)
+    expect(isValidRating(6)).toBe(false)
+  })
+})</pre>
+  <p>Installation : <code>npm install -D vitest</code>, puis lancement avec <code>npx vitest</code> (ou un script <code>"test": "vitest"</code> dans <code>package.json</code>).</p>
+  <h3>Un test end-to-end avec Playwright</h3>
+  <pre class="prompt"><span class="hl3">// e2e/watchlist.spec.ts</span>
+import { test, expect } from '@playwright/test'
+
+test('ajouter un film à sa watchlist', async ({ page }) =&gt; {
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('test-a@example.com')
+  await page.getByLabel('Mot de passe').fill(process.env.TEST_PASSWORD!)
+  await page.getByRole('button', { name: 'Se connecter' }).click()
+  await page.goto('/films/dune')
+  await page.getByRole('button', { name: 'Ajouter à ma watchlist' }).click()
+  await page.goto('/watchlist')
+  await expect(page.getByText('Dune')).toBeVisible()
+})</pre>
+  <p>Installation : <code>npm init playwright@latest</code>, lancement avec <code>npx playwright test</code>. Les sélecteurs <code>getByLabel</code> et <code>getByRole</code> ont un bonus : ils ne fonctionnent que si vos champs ont de vrais labels, donc ils testent aussi l'accessibilité.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🤖</span>Faire écrire les tests par l'agent… et les vérifier</div>
+  <p class="lead">L'agent écrit des tests très vite. Mais un test qui passe toujours ne prouve rien. Votre travail : vérifier que chaque test échoue quand le code est faux.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🪞 Test tautologique</h4><p class="muted">Le test vérifie ce que le code fait, pas ce qu'il devrait faire. Si le code est faux, le test l'est aussi.</p></div>
+    <div class="mini-card"><h4>🎭 Tout est simulé</h4><p class="muted">Tout est remplacé par des mocks : le test ne touche plus rien de réel et passe quoi qu'il arrive.</p></div>
+    <div class="mini-card"><h4>✏️ Test modifié</h4><p class="muted">Pour « faire passer les tests », l'agent modifie l'assertion au lieu de corriger le code. Relisez le diff des fichiers de test.</p></div>
+  </div>
+  <h3>La vérification par la casse volontaire</h3>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Lancez les tests : ils passent.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Cassez volontairement le code (par exemple, <code>isValidRating</code> accepte 6).</span></div>
+    <div class="step"><span class="s-num">3</span><span>Relancez : le test concerné doit échouer, avec un message clair.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Restaurez le code et vérifiez que tout repasse.</span></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Règle de régression</strong>Chaque bug corrigé mérite un test qui l'aurait détecté. Ainsi, le même bug ne peut pas revenir sans que vous le sachiez.</div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm2"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt2">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill2"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="2">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="2">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres2"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : 🔐 Sécurité ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c3">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🔐</span>« Ça marche » n'est pas « c'est sûr »</div>
+  <p class="lead">Un agent optimise pour que la fonctionnalité fonctionne. Si une politique RLS bloque sa requête, il peut proposer de la désactiver ; si une clé manque côté client, il peut proposer d'exposer la clé secrète. Ces raccourcis produisent une application qui marche… pour tout le monde, y compris ceux qui ne devraient rien voir.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Passer une checklist de sécurité sur votre MVP : secrets, droits d'accès, validation des entrées, affichage, dépendances et données personnelles.</div>
+  <h3>Les secrets et variables d'environnement</h3>
+  <ul class="clean">
+    <li>Les valeurs sensibles vivent dans <code>.env.local</code>, qui doit figurer dans <code>.gitignore</code>. En production, elles sont saisies dans les paramètres du projet Vercel.</li>
+    <li>Toute variable préfixée <code>NEXT_PUBLIC_</code> est intégrée au JavaScript envoyé au navigateur : elle est publique. <code>NEXT_PUBLIC_SUPABASE_URL</code> et <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> peuvent l'être, car la clé anon est conçue pour être exposée <strong>à condition que RLS protège les tables</strong>.</li>
+    <li><code>SUPABASE_SERVICE_ROLE_KEY</code> contourne toutes les politiques RLS. Elle ne doit jamais être préfixée <code>NEXT_PUBLIC_</code>, jamais importée dans un composant client, et n'est utile que pour des tâches d'administration côté serveur.</li>
+  </ul>
+  <div class="warn-box"><strong>⛔ Un secret commité est compromis.</strong> Le supprimer dans un nouveau commit ne suffit pas : il reste dans l'historique Git. Il faut régénérer la clé dans le dashboard Supabase, puis mettre à jour <code>.env.local</code> et Vercel.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🛡️</span>Contrôle d'accès : RLS et IDOR</div>
+  <p class="lead">La Row Level Security (RLS) est la vraie barrière de votre application : c'est Postgres qui décide quelles lignes chaque utilisateur peut lire ou modifier, quel que soit le code du front.</p>
+  <pre class="prompt"><span class="hl3">-- Activer RLS sur la table</span>
+alter table watchlist_items enable row level security;
+
+<span class="hl3">-- Chaque utilisateur ne lit que ses propres lignes</span>
+create policy "Lecture de sa watchlist"
+on watchlist_items for select
+to authenticated
+using ((select auth.uid()) = user_id);
+
+<span class="hl3">-- Chaque utilisateur n'insère que pour lui-même</span>
+create policy "Ajout dans sa watchlist"
+on watchlist_items for insert
+to authenticated
+with check ((select auth.uid()) = user_id);</pre>
+  <p>Il faut une politique par opération nécessaire (<code>select</code>, <code>insert</code>, <code>update</code>, <code>delete</code>). Une table sans RLS activée est lisible par quiconque possède la clé anon, c'est-à-dire tout visiteur.</p>
+  <h3>Le test à deux comptes</h3>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Avec le compte A, créez des données (films notés, jeux, inscriptions).</span></div>
+    <div class="step"><span class="s-num">2</span><span>Connectez-vous avec le compte B dans une fenêtre de navigation privée.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Vérifiez que B ne voit rien de A, puis essayez d'ouvrir directement l'URL d'une ressource de A (<code>/watchlist/42</code>).</span></div>
+    <div class="step"><span class="s-num">4</span><span>Dans l'onglet Réseau, rejouez une requête de modification en changeant l'identifiant : elle doit être refusée.</span></div>
+  </div>
+  <p>L'étape 3 teste l'<span class="term-item">IDOR</span> (Insecure Direct Object Reference) : l'application accepte un identifiant venant de l'utilisateur sans vérifier qu'il lui appartient. C'est une forme de contrôle d'accès cassé, la catégorie de faille la plus fréquente du classement OWASP.</p>
+  <div class="instruction-box"><strong class="title">Server Actions = points d'entrée publics</strong>Une Server Action peut être appelée directement, sans passer par votre formulaire. Dans chaque action, récupérez l'utilisateur côté serveur (<code>supabase.auth.getUser()</code>) et ne faites jamais confiance à un <code>user_id</code> envoyé par le client.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🧱</span>Entrées, affichage et dépendances</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>✅ Validation serveur</h4><p class="muted">Les contrôles du formulaire (<code>required</code>, <code>maxLength</code>) se contournent facilement. Revalidez chaque donnée côté serveur, par exemple avec un schéma Zod : type, longueur, bornes (note entre 1 et 5), format.</p></div>
+    <div class="mini-card"><h4>💉 Injection</h4><p class="muted">Le client Supabase paramètre les requêtes. Le risque revient quand on construit une chaîne avec une saisie utilisateur : filtre <code>.or()</code> assemblé par concaténation, SQL dynamique dans une fonction Postgres.</p></div>
+    <div class="mini-card"><h4>🧨 XSS</h4><p class="muted">React échappe le texte affiché par défaut. La protection saute avec <code>dangerouslySetInnerHTML</code> : un avis CinéList contenant du HTML malveillant s'exécuterait chez chaque lecteur. À éviter, ou à assainir (DOMPurify).</p></div>
+    <div class="mini-card"><h4>📦 Dépendances</h4><p class="muted"><code>npm audit</code> liste les vulnérabilités connues des paquets installés. Avant d'installer un paquet suggéré par l'IA, vérifiez qu'il existe et qu'il est maintenu : <code>npm view nom-du-paquet</code>, page npm, dépôt GitHub.</p></div>
+  </div>
+  <h3>Le slopsquatting : les paquets hallucinés</h3>
+  <p>Les modèles inventent parfois des noms de paquets plausibles qui n'existent pas. Des attaquants publient ensuite des paquets malveillants sous ces noms, en attendant qu'un développeur lance l'installation suggérée sans vérifier. Un nom inconnu, très récent, avec peu de téléchargements et sans dépôt source est un signal d'alerte.</p>
+  <h3>Données personnelles : le minimum RGPD</h3>
+  <ul class="clean">
+    <li>Ne collectez que ce qui sert au MVP (minimisation) : CampusHub n'a pas besoin de la date de naissance pour une inscription.</li>
+    <li>Permettez à l'utilisateur de supprimer son compte et ses données.</li>
+    <li>N'écrivez pas d'emails ou de mots de passe dans les logs, et ne collez pas de vraies données personnelles dans un prompt : utilisez des données de test.</li>
+  </ul>
+</div>
+<div class="card" data-explorer="x3">
+  <div class="section-title"><span class="icon-bg purple">🛡️</span>Explorateur — les failles typiques d&#x27;une app générée</div>
+  <p class="muted">Inspiré des catégories OWASP. Cliquez sur chaque faille pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm3"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt3">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill3"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="3">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="3">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres3"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : ✨ Qualité ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c4">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">✨</span>Un code que vous pourrez encore modifier</div>
+  <p class="lead">Un MVP n'a pas besoin d'être parfait, mais il doit rester modifiable : par vous en S6, par votre binôme, et par l'agent lui-même. Un code incohérent fait produire à l'agent un code encore plus incohérent.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Utiliser les outils de qualité (TypeScript strict, ESLint), refactorer de façon ciblée, vérifier la cohérence avec DESIGN.md et l'accessibilité de base.</div>
+  <h3>TypeScript strict</h3>
+  <p>Avec <code>"strict": true</code> dans <code>tsconfig.json</code> (valeur par défaut de <code>create-next-app</code>), TypeScript refuse les valeurs potentiellement <code>undefined</code> non gérées et les types implicites. C'est un filet de sécurité gratuit. Le piège : l'agent qui « corrige » une erreur de type avec <code>as any</code> ou <code>// @ts-ignore</code>. Il ne corrige rien, il fait taire l'alerte.</p>
+  <p>Commandes utiles : <code>npx tsc --noEmit</code> vérifie les types sans compiler, <code>npm run build</code> le fait aussi avant de construire.</p>
+  <h3>ESLint : <code>npm run lint</code></h3>
+  <p>Le linter analyse le code sans l'exécuter : variables inutilisées, dépendances manquantes dans un <code>useEffect</code>, imports en trop, balises <code>img</code> sans <code>alt</code>. Lancez <code>npm run lint</code> avant chaque commit important, et demandez à l'agent de corriger les avertissements un par un en expliquant chaque correction.</p>
+  <h3>Conventions</h3>
+  <p>Les conventions de votre projet (nommage, structure de dossiers, un seul client Supabase dans <code>lib/</code>, Server Actions dans <code>actions.ts</code>) sont écrites dans AGENTS.md depuis la S3. Si l'agent ne les respecte pas, corrigez le code <strong>et</strong> précisez AGENTS.md pour que l'erreur ne se reproduise pas.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🔧</span>Refactoring ciblé et dette technique</div>
+  <p class="lead">Refactorer, c'est améliorer la structure du code sans changer son comportement. Avec un agent, le danger est le « grand nettoyage » qui touche trente fichiers et casse ce qui marchait.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ Refactoring global</h4><p class="muted">« Nettoie tout le projet et améliore le code. » Diff illisible, comportements modifiés, impossible à relire.</p></div>
+    <div class="mini-card good"><h4>✅ Refactoring ciblé</h4><p class="muted">« Les pages /watchlist et /favoris dupliquent la même requête. Extrais-la dans lib/queries.ts sans changer le comportement, puis lance npm run build. »</p></div>
+  </div>
+  <p>Un refactoring ciblé se fait sur une branche ou après un commit propre, avec les tests et la recette relancés ensuite pour prouver que rien n'a changé.</p>
+  <h3>La dette technique</h3>
+  <p>La dette technique, ce sont les raccourcis pris aujourd'hui qui coûteront du temps demain : doublons, contournements, absence de tests, données simulées. En accumuler un peu est normal pour un MVP ; l'important est de la connaître. Listez-la dans AI-LOG.md ou dans le README (« connu, non traité ») : c'est un signe de maturité, pas un aveu de faiblesse.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🎨</span>Cohérence visuelle, responsive et accessibilité</div>
+  <p class="lead">L'UX/UI fait partie de l'évaluation. Or l'agent a tendance à inventer une couleur, une marge ou un bouton à chaque nouvelle page.</p>
+  <h3>Cohérence avec DESIGN.md</h3>
+  <ul class="clean">
+    <li>Les couleurs, typographies et espacements utilisés sont-ils ceux de DESIGN.md, ou des valeurs en dur apparues au fil des générations ?</li>
+    <li>Les composants (boutons, cartes, champs) sont-ils réutilisés, ou recréés page par page ?</li>
+    <li>Le responsive tient-il sur un écran mobile ? Testez avec le mode appareil des DevTools, pas seulement en réduisant la fenêtre.</li>
+  </ul>
+  <h3>Accessibilité : le minimum à vérifier</h3>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🏷️ Labels</h4><p class="muted">Chaque champ de formulaire a un <code>&lt;label&gt;</code> associé. Un placeholder ne remplace pas un label.</p></div>
+    <div class="mini-card"><h4>🌓 Contraste</h4><p class="muted">Le texte courant doit atteindre un rapport de contraste d'au moins 4.5:1 avec son fond (WCAG niveau AA).</p></div>
+    <div class="mini-card"><h4>⌨️ Clavier</h4><p class="muted">Toute l'application se parcourt avec Tab, Entrée et Échap, avec un focus visible. Une <code>div</code> cliquable n'est pas un bouton.</p></div>
+    <div class="mini-card"><h4>🖼️ Texte alternatif</h4><p class="muted">Chaque affiche de film ou jaquette de jeu a un <code>alt</code> descriptif ; une image décorative a un <code>alt</code> vide.</p></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Outil rapide</strong>L'audit Lighthouse (onglet Lighthouse des DevTools de Chrome) donne un premier score d'accessibilité et de bonnes pratiques. Il ne remplace pas un test au clavier, mais il repère vite les oublis.</div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 5</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm4"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt4">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill4"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="4">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="4">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="4">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres4"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c3">◂ Précédent</button><button class="btn btn-primary" data-goto="c5">Suite : 👀 Revue de code IA ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c5">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">👀</span>Relire un diff comme un reviewer</div>
+  <p class="lead">En entreprise, aucun code n'entre dans la branche principale sans revue. En vibe coding, c'est encore plus vrai : l'auteur est une IA et le seul humain dans la boucle, c'est vous.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Relire un diff avec une checklist, obtenir un second avis critique d'une autre session d'IA, classer les problèmes par sévérité et tracer la décision dans AI-LOG.md.</div>
+  <p>La revue est plus efficace sur un petit diff : une fonctionnalité par branche (<code>git switch -c feat/notation</code>), une pull request sur GitHub, et un diff que l'on peut lire en entier.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Axe</th><th>Question de revue</th></tr>
+    <tr><td>Périmètre</td><td>Le diff fait-il ce qui était demandé, et seulement cela ?</td></tr>
+    <tr><td>Compréhension</td><td>Puis-je expliquer chaque ligne ajoutée ou supprimée ?</td></tr>
+    <tr><td>Données</td><td>D'où vient chaque donnée, est-elle validée côté serveur ?</td></tr>
+    <tr><td>Sécurité</td><td>Secrets, RLS, vérification de l'utilisateur, affichage de contenu utilisateur ?</td></tr>
+    <tr><td>Erreurs</td><td>Les cas d'échec sont-ils gérés et affichés clairement ?</td></tr>
+    <tr><td>Qualité</td><td>Build et lint passent-ils ? Doublons, code mort, nouvelles dépendances ?</td></tr>
+    <tr><td>UI</td><td>Conforme à DESIGN.md, responsive, accessible ?</td></tr>
+    <tr><td>Tests</td><td>La recette est-elle rejouée ? Un test couvre-t-il le changement ?</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🤝</span>Le second avis : une IA en reviewer critique</div>
+  <p class="lead">L'agent qui a écrit le code est mal placé pour le critiquer : il a le même contexte et les mêmes angles morts. Ouvrez une nouvelle session (ou un autre outil) et donnez-lui un rôle explicite de reviewer exigeant.</p>
+  <pre class="prompt"><span class="hl3">Contexte</span> : projet GameBacklog, Next.js App Router + Supabase (RLS).
+Voici le diff de la fonctionnalité « changer le statut d'un jeu » (git diff main).
+<span class="hl3">Rôle</span> : tu es un reviewer senior exigeant, spécialisé sécurité et qualité.
+Tu n'as pas écrit ce code et tu ne dois pas le défendre.
+<span class="hl3">Action</span> : liste les problèmes trouvés.
+<span class="hl3">Contraintes</span> : pour chaque problème, indique le fichier et la ligne,
+la sévérité (bloquant / majeur / mineur / suggestion), le risque concret
+et une correction proposée. Ne réécris pas tout le fichier.
+Si tu n'es pas sûr, dis-le au lieu d'inventer.
+<span class="hl3">Format</span> : tableau trié par sévérité décroissante.</pre>
+  <h3>Classer par sévérité</h3>
+  <div class="levels">
+    <div class="level"><span class="lv">S1</span><span><strong>Bloquant</strong> : faille de sécurité, perte ou fuite de données, build cassé. On ne fusionne pas.</span><span class="risk f5">Stop</span></div>
+    <div class="level"><span class="lv">S2</span><span><strong>Majeur</strong> : fonctionnalité incorrecte, critère d'acceptation non respecté, erreur non gérée.</span><span class="risk f3">À corriger</span></div>
+    <div class="level"><span class="lv">S3</span><span><strong>Mineur</strong> : doublon, nommage, incohérence visuelle, avertissement de lint.</span><span class="risk f1">Si possible</span></div>
+    <div class="level"><span class="lv">S4</span><span><strong>Suggestion</strong> : amélioration possible, hors périmètre du MVP.</span><span class="risk f2">Plus tard</span></div>
+  </div>
+  <div class="warn-box"><strong>⛔ Un reviewer IA se trompe aussi.</strong> Il peut signaler un faux problème ou en inventer. Chaque remarque se vérifie dans le code avant d'être corrigée.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">📝</span>Décider et tracer</div>
+  <p class="lead">Pour chaque remarque, trois décisions possibles, toujours justifiées.</p>
+  <div class="grid grid-3">
+    <div class="mini-card good"><h4>✅ Accepter</h4><p class="muted">Le code est correct et compris : on commite avec un message explicite.</p></div>
+    <div class="mini-card"><h4>🔧 Corriger</h4><p class="muted">Le problème est réel : on corrige (soi-même ou via l'agent), on revérifie, on commite séparément.</p></div>
+    <div class="mini-card bad"><h4>🗑️ Rejeter</h4><p class="muted">Le code est hors périmètre, trop complexe ou incompris : on annule et on reformule la demande.</p></div>
+  </div>
+  <h3>Tracer dans AI-LOG.md</h3>
+  <pre class="prompt"><span class="hl3">## Revue — changement de statut d'un jeu</span>
+- Outil : seconde session, rôle reviewer critique
+- <span class="hl2">[Bloquant]</span> updateStatus faisait confiance au user_id envoyé
+  par le client → corrigé : user lu via auth.getUser() côté serveur
+- <span class="hl2">[Mineur]</span> deux fonctions formatStatus → fusionnées dans lib/status.ts
+- <span class="hl">[Rejeté]</span> suggestion d'ajouter une librairie d'état global :
+  inutile pour le MVP
+- Vérification : test à 2 comptes OK, npm run build OK, npm run lint OK
+- Commits : fix(status): vérifier l'utilisateur côté serveur</pre>
+  <p>Ce journal est une preuve de méthode pour l'évaluation (« méthodologie IA ») : il montre que vous avez contrôlé l'IA au lieu de la suivre.</p>
+  <div class="key-box"><div class="big">L'IA propose, la revue dispose.</div><p style="margin:8px 0 0">Un second avis critique, une sévérité, une décision, une trace : c'est ce qui transforme du code généré en code livrable.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm5"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt5">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill5"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="5">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="5">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres5"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="syn">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>📖 Lire le code généré</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🐞 Déboguer avec l&#x27;IA</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🧪 Tester</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>🔐 Sécurité</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>✨ Qualité</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>👀 Revue de code IA</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
+    <div class="key-box"><div class="big">L&#x27;IA écrit vite, vous signez : je ne commite pas ce que je ne comprends pas, et je ne livre pas ce que je n&#x27;ai pas testé.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Lire et comprendre un code généré en suivant le chemin des données ;</li><li>Déboguer méthodiquement avec l&#x27;IA à partir d&#x27;une erreur exacte et reproductible ;</li><li>Tester le MVP par une recette manuelle, des tests unitaires et des tests end-to-end ;</li><li>Vérifier la sécurité d&#x27;une application Next.js / Supabase générée (secrets, RLS, validation, XSS, dépendances) ;</li><li>Améliorer la qualité et la maintenabilité du code (TypeScript strict, lint, accessibilité, DESIGN.md) ;</li><li>Conduire une revue de code assistée par IA et tracer les décisions dans AI-LOG.md.</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un rapport de recette (recette.md) avec les scénarios testés, les résultats et les anomalies</label><label><input type="checkbox"> Au moins un rapport de bug (bug-report.md) complet et sa correction commitée</label><label><input type="checkbox"> Une checklist sécurité passée : secrets, RLS testée avec 2 comptes, validation serveur, dépendances</label><label><input type="checkbox"> Un npm run build et un npm run lint qui passent sans erreur</label><label><input type="checkbox"> Une revue de code tracée dans AI-LOG.md (problèmes trouvés, décision prise)</label></div>
+    <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-5-controler-ce-que-l-ia-produit-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Livrer son MVP</strong>Votre application est contrôlée : il reste à la déployer proprement, finaliser le README et préparer la démonstration. La séance 6 transforme votre projet en MVP livrable et présentable.</div>
+  </div>
+</section>
+</main>
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 5 — Contrôler ce que l&#x27;IA produit — Théorie<br>Mode formateur : ajoutez <code>?formateur</code> à l'adresse de la page.</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const FAMILIES={"f1": "Lecture de code", "f2": "Débogage", "f3": "Tests", "f4": "Sécurité", "f5": "Qualité & revue"};
+const EXPLORERS={"x3": {"title": "Explorateur — les failles typiques d'une app générée", "icon": "🛡️", "intro": "Inspiré des catégories OWASP. Cliquez sur chaque faille pour afficher sa fiche.", "items": [{"id": "Secrets exposés", "fam": "f4", "rows": [["Définition", "Une clé ou un mot de passe accessible à qui ne devrait pas le voir : dans le dépôt Git, dans le JavaScript du navigateur, dans un log."], ["Exemple", "L'agent renomme la clé en NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY pour qu'un composant client fonctionne."], ["Comment vérifier", "Chercher « service_role » et « NEXT_PUBLIC_ » dans le projet, vérifier que .env.local est dans .gitignore, relire l'historique Git."], ["À retenir", "Seules l'URL et la clé anon sont publiques. Un secret commité se régénère, il ne se « supprime » pas."]]}, {"id": "Contrôle d'accès cassé", "fam": "f4", "rows": [["Définition", "Un utilisateur peut lire ou modifier des données qui ne lui appartiennent pas."], ["Exemple", "Table watchlist_items sans RLS : le compte B voit la watchlist du compte A."], ["Comment vérifier", "Test à deux comptes, dans le dashboard Supabase vérifier que RLS est activée sur chaque table et relire chaque politique."], ["À retenir", "La sécurité se décide dans la base (RLS) et côté serveur, jamais seulement en masquant un bouton."]]}, {"id": "IDOR", "fam": "f4", "rows": [["Définition", "Référence directe à un objet non contrôlée : l'app fait confiance à un identifiant fourni par le client."], ["Exemple", "GameBacklog : /games/17/edit permet de modifier le jeu d'un autre utilisateur en changeant 17 en 18."], ["Comment vérifier", "Changer les identifiants dans l'URL et dans les requêtes rejouées depuis l'onglet Réseau."], ["À retenir", "Chaque accès doit vérifier que la ressource appartient à l'utilisateur connecté."]]}, {"id": "Injection", "fam": "f4", "rows": [["Définition", "Une saisie utilisateur est interprétée comme une partie d'une requête ou d'une commande."], ["Exemple", "Une recherche CinéList construit un filtre .or() par concaténation avec le texte saisi, qui peut ajouter ses propres conditions."], ["Comment vérifier", "Repérer toute chaîne de requête assemblée avec une variable venant de l'utilisateur."], ["À retenir", "Utiliser les méthodes paramétrées du client (.eq(), .ilike()) et valider les entrées côté serveur."]]}, {"id": "XSS", "fam": "f4", "rows": [["Définition", "Du script fourni par un utilisateur s'exécute dans le navigateur d'un autre."], ["Exemple", "Les avis CinéList sont affichés avec dangerouslySetInnerHTML pour garder la mise en forme."], ["Comment vérifier", "Chercher dangerouslySetInnerHTML dans le projet, poster un avis contenant du HTML de test."], ["À retenir", "Laisser React échapper le texte ; si du HTML est indispensable, l'assainir avant affichage."]]}, {"id": "Paquets hallucinés", "fam": "f4", "rows": [["Définition", "Dépendance suggérée par l'IA qui n'existe pas, ou qui a été enregistrée par un attaquant sous ce nom inventé (slopsquatting)."], ["Exemple", "L'agent propose d'installer un paquet au nom très plausible pour gérer les étoiles de notation, publié récemment et sans dépôt."], ["Comment vérifier", "npm view, page npm, nombre de téléchargements, dépôt source, puis npm audit après installation."], ["À retenir", "Toute nouvelle ligne dans package.json se justifie et se vérifie."]]}]}};
+const QCMS=[[{"q": "Quelle est la stratégie de lecture la plus efficace pour comprendre une fonctionnalité générée ?", "o": ["Lire les fichiers dans l'ordre alphabétique du projet", "Partir de l'entrée utilisateur et suivre les données jusqu'à la base puis le retour à l'écran", "Lire uniquement le fichier package.json", "Demander à l'IA de réécrire tout le code pour qu'il soit plus lisible"], "a": 1, "e": "Suivre le flux de données depuis l'action de l'utilisateur permet de comprendre ce qui se passe réellement et de repérer où une donnée peut être mal contrôlée."}, {"q": "Quelle commande vous permet de valider morceau par morceau les modifications avant de les indexer ?", "o": ["git log", "git status", "git push -f", "git add -p"], "a": 3, "e": "git add -p affiche chaque morceau modifié et vous demande de l'accepter ou non : c'est un excellent moyen de relire un changement produit par l'agent."}, {"q": "Dans un diff, l'agent a supprimé une ligne qui vérifiait que l'utilisateur est connecté. Que faites-vous ?", "o": ["Vous demandez pourquoi et vous rétablissez la vérification si la suppression n'est pas justifiée", "Rien, l'agent sait ce qu'il fait", "Vous supprimez aussi les autres vérifications pour être cohérent", "Vous committez puis vous vérifierez plus tard"], "a": 0, "e": "Les suppressions sont souvent plus dangereuses que les ajouts : une vérification retirée ouvre une faille. On exige une justification avant d'accepter."}, {"q": "Qu'est-ce que du code mort ?", "o": ["Du code qui provoque une erreur fatale", "Du code écrit par une IA", "Du code jamais exécuté ni appelé, laissé dans le projet", "Du code qui fonctionne uniquement en local"], "a": 2, "e": "Le code mort (fonctions jamais appelées, imports inutilisés, essais abandonnés) brouille la lecture et peut induire l'agent en erreur lors des tâches suivantes."}, {"q": "Que signifie la règle « je ne commite pas ce que je ne comprends pas » ?", "o": ["Il faut tout réécrire soi-même sans IA", "Avant de commiter, vous devez pouvoir expliquer chaque changement, quitte à demander une explication ou à rejeter le code", "Il ne faut jamais commiter de code généré", "Il faut commiter une seule fois en fin de projet"], "a": 1, "e": "L'IA peut produire le code, mais vous en êtes responsable : si vous ne pouvez pas l'expliquer, vous ne pourrez ni le corriger ni le défendre."}], [{"q": "Quelle est la première étape pour traiter un bug ?", "o": ["Demander immédiatement à l'IA de corriger", "Supprimer le fichier concerné", "Trouver les étapes exactes qui reproduisent le bug", "Déployer pour voir si le bug existe en production"], "a": 2, "e": "Sans reproduction fiable, on ne peut ni isoler la cause ni vérifier que la correction fonctionne."}, {"q": "Une Server Action échoue mais la console du navigateur n'affiche rien d'utile. Où regardez-vous en priorité ?", "o": ["Dans le terminal où tourne npm run dev", "Dans le fichier README.md", "Dans l'historique Git", "Dans DESIGN.md"], "a": 0, "e": "Le code serveur écrit ses logs et ses erreurs dans le terminal (ou les logs Vercel en production), pas dans la console du navigateur."}, {"q": "La page watchlist de CinéList affiche une liste vide alors que les lignes existent en base. L'onglet Réseau montre un statut 200 et un tableau vide. Quelle hypothèse est la plus probable ?", "o": ["Le serveur Next.js est éteint", "Une politique RLS filtre les lignes pour l'utilisateur courant", "La clé API est invalide", "Le CSS masque la liste"], "a": 1, "e": "Une lecture bloquée par RLS ne produit pas d'erreur : Supabase renvoie simplement un tableau vide. Une clé invalide produirait une erreur, pas un 200."}, {"q": "Qu'est-ce qu'un bon prompt de débogage demande d'abord à l'IA ?", "o": ["De réécrire toute la page", "De désactiver les erreurs", "D'installer une nouvelle bibliothèque", "Des hypothèses classées par probabilité avec un moyen de vérifier chacune"], "a": 3, "e": "Demander des hypothèses avant la correction évite les modifications à l'aveugle et vous laisse comprendre la cause."}, {"q": "Après trois corrections successives de l'IA, le bug change de forme à chaque fois. Que faites-vous ?", "o": ["Vous continuez à coller chaque nouvelle erreur", "Vous revenez au dernier état stable, résumez ce que vous savez et repartez des hypothèses dans une nouvelle session", "Vous commitez tout pour ne rien perdre", "Vous supprimez les tests qui échouent"], "a": 1, "e": "C'est une boucle de corrections : il faut en sortir en revenant à un état connu et en reposant le problème proprement."}], [{"q": "D'où viennent les scénarios d'une recette manuelle ?", "o": ["Des critères d'acceptation des user stories", "Des messages d'erreur du terminal", "Du fichier package.json", "Des suggestions de l'agent uniquement"], "a": 0, "e": "La recette vérifie que l'application tient ses promesses : chaque critère d'acceptation écrit en S2 devient un ou plusieurs scénarios."}, {"q": "Lequel de ces tests est un cas limite pour la notation de CinéList ?", "o": ["Noter un film 3 sur 5 une fois connecté", "Ouvrir la page d'accueil", "Envoyer une note égale à 6 ou à 0", "Afficher la liste des films"], "a": 2, "e": "Un cas limite teste les bords du domaine autorisé : valeurs hors bornes, champ vide, doublon, utilisateur non connecté."}, {"q": "Quel outil pilote un vrai navigateur pour rejouer un parcours complet de l'utilisateur ?", "o": ["Vitest", "ESLint", "npm audit", "Playwright"], "a": 3, "e": "Playwright sert aux tests end-to-end ; Vitest aux tests unitaires, ESLint à l'analyse statique et npm audit aux vulnérabilités des dépendances."}, {"q": "Pourquoi npm run build est-il considéré comme un test minimal ?", "o": ["Parce qu'il déploie automatiquement sur Vercel", "Parce qu'il compile le projet et vérifie les types : s'il échoue, l'application ne peut pas être déployée", "Parce qu'il exécute tous les tests Playwright", "Parce qu'il corrige les erreurs automatiquement"], "a": 1, "e": "Le build compile l'application et effectue la vérification TypeScript ; c'est ce que Vercel exécute avant de publier."}, {"q": "L'agent a écrit des tests qui passent tous. Comment vérifiez-vous qu'ils sont utiles ?", "o": ["En les relançant plusieurs fois", "En comptant le nombre de tests", "En cassant volontairement le code pour vérifier qu'ils échouent", "En demandant à l'agent s'ils sont bons"], "a": 2, "e": "Un test utile doit échouer quand le code est faux. La casse volontaire prouve qu'il détecte réellement une erreur."}], [{"q": "Pourquoi la clé SUPABASE_SERVICE_ROLE_KEY ne doit-elle jamais être exposée au navigateur ?", "o": ["Parce qu'elle est trop longue", "Parce qu'elle ralentit l'application", "Parce qu'elle expire rapidement", "Parce qu'elle contourne toutes les politiques RLS et donne un accès total à la base"], "a": 3, "e": "La clé service_role ignore RLS : exposée, elle permet à n'importe qui de lire et modifier toutes les données."}, {"q": "Une variable nommée NEXT_PUBLIC_API_SECRET dans un projet Next.js est :", "o": ["Intégrée au JavaScript envoyé au navigateur, donc publique", "Chiffrée automatiquement par Next.js", "Accessible uniquement côté serveur", "Ignorée en production"], "a": 0, "e": "Le préfixe NEXT_PUBLIC_ signifie justement que la valeur est intégrée au bundle client : on n'y met jamais de secret."}, {"q": "Comment vérifier concrètement que la RLS protège votre watchlist ?", "o": ["En lisant la documentation Supabase", "En se connectant avec deux comptes et en vérifiant que B ne voit ni ne modifie les données de A", "En lançant npm run build", "En demandant à l'agent si c'est sécurisé"], "a": 1, "e": "Le test à deux comptes est la preuve pratique : on constate le comportement réel au lieu de le supposer."}, {"q": "Sur CampusHub, changer /events/12/edit en /events/13/edit permet de modifier l'événement d'un autre organisateur. De quelle faille s'agit-il ?", "o": ["XSS", "Slopsquatting", "IDOR (contrôle d'accès cassé)", "Injection SQL"], "a": 2, "e": "L'application fait confiance à un identifiant fourni par le client sans vérifier la propriété de la ressource : c'est un IDOR."}, {"q": "L'agent vous propose d'installer un paquet npm dont vous n'avez jamais entendu parler. Quelle est la bonne réaction ?", "o": ["L'installer, l'IA connaît tous les paquets", "Vérifier qu'il existe, qu'il est maintenu et utilisé (npm view, page npm, dépôt), et se demander s'il est vraiment nécessaire", "L'installer puis lancer npm audit fix --force", "Copier son code source dans le projet"], "a": 1, "e": "Les modèles peuvent halluciner des noms de paquets, que des attaquants enregistrent ensuite : c'est le slopsquatting."}], [{"q": "L'agent corrige une erreur TypeScript en ajoutant « as any ». Qu'en pensez-vous ?", "o": ["C'est la bonne pratique recommandée", "C'est indispensable pour que npm run build passe", "Cela ne corrige rien : l'erreur est masquée, pas résolue", "Cela améliore les performances"], "a": 2, "e": "as any désactive la vérification de type sur cette valeur : le bug potentiel reste, seule l'alerte disparaît."}, {"q": "À quoi sert npm run lint dans un projet Next.js ?", "o": ["À analyser le code sans l'exécuter pour détecter erreurs et mauvaises pratiques", "À déployer l'application", "À lancer les tests end-to-end", "À mettre à jour les dépendances"], "a": 0, "e": "ESLint fait une analyse statique : variables inutilisées, hooks mal utilisés, images sans alt, etc."}, {"q": "Quelle demande de refactoring est la mieux formulée ?", "o": ["« Améliore tout le code du projet. »", "« Réécris l'application en plus propre. »", "« Supprime ce qui ne sert à rien. »", "« Extrais la requête dupliquée des pages watchlist et favoris dans lib/queries.ts sans changer le comportement, puis lance npm run build. »"], "a": 3, "e": "Un refactoring ciblé a un périmètre précis, un objectif clair et une vérification : le diff reste relisible."}, {"q": "Quel est le rapport de contraste minimal recommandé (WCAG AA) pour le texte courant ?", "o": ["2:1", "4.5:1", "10:1", "Aucun, c'est une question de goût"], "a": 1, "e": "Le niveau AA des WCAG demande au moins 4.5:1 pour le texte de taille normale (3:1 pour le grand texte)."}, {"q": "Que faire de la dette technique identifiée dans votre MVP ?", "o": ["La cacher au jury", "Tout corriger avant de continuer, quoi qu'il arrive", "La lister (AI-LOG.md ou README) pour la connaître et prioriser", "Demander à l'agent de réécrire le projet"], "a": 2, "e": "Un peu de dette est normal pour un MVP ; la documenter montre que vous maîtrisez votre projet et permet de choisir quoi traiter."}], [{"q": "Pourquoi demander le second avis à une autre session plutôt qu'à l'agent qui a écrit le code ?", "o": ["Parce que l'agent auteur partage le même contexte et les mêmes angles morts", "Parce que l'agent auteur refuse toujours de relire", "Parce qu'une nouvelle session est plus rapide", "Parce que c'est obligatoire sur GitHub"], "a": 0, "e": "Une session neuve, avec un rôle explicite de reviewer critique, n'a pas d'intérêt à défendre le code et repère d'autres problèmes."}, {"q": "Le reviewer IA signale qu'une Server Action utilise un user_id envoyé par le navigateur. Quelle sévérité ?", "o": ["Suggestion", "Mineur", "Majeur, mais on fusionne quand même", "Bloquant : c'est une faille de contrôle d'accès"], "a": 3, "e": "Faire confiance à un identifiant fourni par le client permet d'agir au nom d'un autre utilisateur : c'est une faille de sécurité bloquante."}, {"q": "Que faites-vous d'une remarque du reviewer IA avant de la corriger ?", "o": ["Vous la corrigez immédiatement sans lire", "Vous vérifiez dans le code qu'elle est fondée", "Vous l'ignorez, les IA se trompent toujours", "Vous demandez au reviewer de corriger tout le projet"], "a": 1, "e": "Un reviewer IA peut signaler de faux problèmes : chaque remarque se vérifie avant d'agir."}, {"q": "Pourquoi une revue est-elle plus efficace avec une branche par fonctionnalité ?", "o": ["Parce que GitHub interdit les gros commits", "Parce que les branches accélèrent le build", "Parce que le diff reste petit et lisible en entier", "Parce que cela désactive la RLS en développement"], "a": 2, "e": "Un petit diff centré sur une fonctionnalité peut réellement être lu et compris ligne par ligne."}, {"q": "Que doit contenir l'entrée AI-LOG.md d'une revue ?", "o": ["Uniquement le prompt utilisé", "Les problèmes trouvés, leur sévérité, la décision (accepté, corrigé, rejeté) et la vérification", "La copie intégrale du code", "Rien, la revue n'a pas à être tracée"], "a": 1, "e": "La trace montre la méthode : ce qui a été trouvé, ce qui a été décidé et comment la correction a été vérifiée."}]];
+const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function download(name, txt){ const blob=new Blob([txt],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez le chapitre puis recommencez.'; return 'Reprenez le chapitre, puis recommencez l\'activité.'; }
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return false;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Toutes les activités sont validées !' : 'Activité validée ✅');
+  if(typeof onDone==='function') onDone(act);
+  return true;
+}
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* Explorateurs */
+$$('[data-explorer]').forEach(box=>{
+  const E = EXPLORERS[box.dataset.explorer]; const seen=new Set();
+  const chain=$('.chain',box), detail=$('.concept-detail',box);
+  E.items.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>show(i)); chain.appendChild(b);
+  });
+  function show(i){
+    const k=E.items[i]; seen.add(i);
+    $$('.chain-node',box).forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+    detail.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(FAMILIES[k.fam]||'')+'</span></div>'+
+      k.rows.map(r=>'<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>').join('');
+    const f=$('.progress-fill',box), t=$('.progress-label span:last-child',box);
+    f.style.width=Math.round(seen.size/E.items.length*100)+'%'; t.textContent=seen.size+' / '+E.items.length;
+  }
+  show(0);
+});
+const qState = {};
+const L = ['A','B','C','D','E'];
+function renderQCM(ci){
+  const box=$('#qcm'+ci); box.innerHTML='';
+  const qs = shuffle(QCMS[ci]).map(q=>{ const opts=shuffle(q.o.map((t,i)=>({t,good:i===q.a}))); return {q:q.q,e:q.e,opts}; });
+  qState[ci]={qs};
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div'); d.className='qcm-q';
+    d.innerHTML='<div class="qt"><span class="q-num">Q'+(qi+1)+'</span>'+esc(q.q)+'</div><div class="qcm-opts" role="radiogroup">'+
+      q.opts.map((o,oi)=>'<button type="button" class="qcm-opt" role="radio" aria-checked="false" data-oi="'+oi+'"><span class="l">'+L[oi]+'</span><span>'+esc(o.t)+'</span></button>').join('')+
+      '</div><div class="expl"></div>';
+    $$('.qcm-opt',d).forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('checked')) return;
+      $$('.qcm-opt',d).forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});
+      b.classList.add('sel'); b.setAttribute('aria-checked','true'); d.dataset.ans=b.dataset.oi; updQ(ci);
+    }));
+    box.appendChild(d);
+  });
+  $('#qres'+ci).classList.remove('show'); updQ(ci);
+}
+function updQ(ci){ const rows=$$('#qcm'+ci+' .qcm-q'); setProgress('qfill'+ci,'qtxt'+ci,rows.filter(r=>r.dataset.ans!==undefined).length,rows.length); }
+const scores = {};
+function checkQCM(ci, silent){
+  const rows=$$('#qcm'+ci+' .qcm-q');
+  if(!silent && rows.some(r=>r.dataset.ans===undefined)){ toast('Répondez à toutes les questions avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,qi)=>{
+    const q=qState[ci].qs[qi]; const ans=r.dataset.ans===undefined?-1:+r.dataset.ans;
+    const gi=q.opts.findIndex(o=>o.good); const good=ans===gi; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    $$('.qcm-opt',r).forEach((b,oi)=>{ b.classList.toggle('good',oi===gi); b.classList.toggle('bad',oi===ans&&!good); });
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ Bonne réponse : <strong>'+L[gi]+'</strong>. ')+esc(q.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#qres'+ci).innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#qres'+ci).classList.add('show');
+  if(!silent){ scores[ci]=Math.max(scores[ci]||0,ok); updScores(); markDone('ch'+ci); }
+}
+function revealQCM(ci){
+  $$('#qcm'+ci+' .qcm-q').forEach((r,qi)=>{ const gi=qState[ci].qs[qi].opts.findIndex(o=>o.good); r.dataset.ans=gi; $$('.qcm-opt',r).forEach((b,oi)=>b.classList.toggle('sel',oi===gi)); });
+  updQ(ci); checkQCM(ci,true);
+}
+function updScores(){
+  let tot=0,max=0;
+  QCMS.forEach((q,ci)=>{ const c=$('#score'+ci); if(scores[ci]!==undefined){ c.textContent=scores[ci]+' / '+q.length; tot+=scores[ci]; } max+=q.length; });
+  $('#scoreTotal').textContent=tot+' / '+max;
+}
+QCMS.forEach((_,ci)=>renderQCM(ci));
+$$('[data-qcheck]').forEach(b=>b.addEventListener('click',()=>checkQCM(+b.dataset.qcheck)));
+$$('[data-qreveal]').forEach(b=>b.addEventListener('click',()=>revealQCM(+b.dataset.qreveal)));
+$$('[data-qreset]').forEach(b=>b.addEventListener('click',()=>renderQCM(+b.dataset.qreset)));
+$$('#finCheck input').forEach(c=>c.addEventListener('change',()=>{}));
+
+})();
+</script>
+</body>
+</html>

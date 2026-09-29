@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 6 — Livrer son MVP · Théorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.84em}
+pre code,.key-box code,.nest.n4 code{background:transparent;border:none;padding:0;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header.practice{background:linear-gradient(135deg,#0f172a 0%,#064e3b 60%,#047857 100%)}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+header.practice::after{background:radial-gradient(circle,rgba(52,211,153,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+.tab .lock-mark{font-size:.8rem}
+
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+@media(max-width:600px){.card{padding:20px 16px}}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+ol{padding-left:22px}ol li{padding:3px 0}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-card.bad{border-color:#fecaca;background:#fef2f2}
+.mini-card.good{border-color:#a7f3d0;background:#f0fdf4}
+.mini-card pre.prompt{margin-top:8px}
+
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+.chain .term-item,.objectif-box .term-item{padding:6px 12px}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative;margin:12px 0}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* QCM */
+.qcm-q{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.qcm-q .qt{font-weight:600;margin-bottom:10px}
+.qcm-opts{display:grid;gap:8px}
+.qcm-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:.9rem;background:#fff;text-align:left;width:100%;color:var(--text)}
+.qcm-opt:hover{background:#f8fafc;border-color:#93c5fd}
+.qcm-opt .l{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:18px}
+.qcm-opt.sel{border-color:var(--primary);background:#eff6ff}
+.qcm-q.checked .qcm-opt{cursor:default}
+.qcm-opt.good{border-color:#6ee7b7;background:#ecfdf5}
+.qcm-opt.bad{border-color:#fca5a5;background:#fef2f2}
+.qcm-q.correct{border-color:#6ee7b7}
+.qcm-q.wrong{border-color:#fca5a5}
+.qcm-q .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:8px;border-top:1px dashed var(--border)}
+.qcm-q.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem;color:var(--text)}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* Cas 1 matching */
+.match-grid{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:16px;margin-top:10px}
+@media(max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.m-term{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:10px 12px;border-radius:8px;border:2px solid var(--dark);text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m-term:hover{border-color:#60a5fa}
+.m-term.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+.m-def{background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.86rem;text-align:left;display:flex;gap:10px;align-items:flex-start;color:var(--text)}
+.m-def:hover{border-color:#93c5fd}
+.pair-badge{font-family:var(--mono);font-size:.72rem;font-weight:700;min-width:24px;height:24px;border-radius:6px;display:inline-grid;place-items:center;background:#e2e8f0;color:var(--muted);flex-shrink:0}
+.paired .pair-badge{background:var(--primary);color:#fff}
+.m-def.paired{border-color:#93c5fd;background:#eff6ff}
+.m-term.good,.m-def.good{border-color:#10b981}
+.m-def.good{background:#ecfdf5}
+.m-term.bad,.m-def.bad{border-color:#ef4444}
+.m-def.bad{background:#fef2f2}
+.round-pills{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.round-pill{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.round-pill.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.round-pill.ok{background:var(--secondary-light);color:#065f46;border-color:#6ee7b7}
+
+/* Cas 2 */
+.group{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;background:#fff}
+.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.group-head strong{font-size:1rem}
+.g-label{font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:600;color:var(--dark2)}
+.choice.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.choice.good{background:#10b981;color:#fff;border-color:#10b981}
+.choice.bad{background:#ef4444;color:#fff;border-color:#ef4444}
+.sit{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f8fafc;font-size:.88rem;margin-bottom:8px;color:var(--text)}
+.sit:hover{border-color:#fbbf24}
+.sit .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2e8f0;color:var(--muted);white-space:nowrap}
+.sit.sel{border-color:var(--accent);background:#fffbeb}
+.sit.sel .tag{background:var(--accent);color:#fff}
+.sit.good{border-color:#10b981;background:#ecfdf5}
+.sit.good .tag{background:#10b981;color:#fff}
+.sit.bad{border-color:#ef4444;background:#fef2f2}
+.sit.bad .tag{background:#ef4444;color:#fff}
+.group .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:10px;border-top:1px dashed var(--border)}
+.group.checked .expl{display:block}
+.group.correct{border-color:#6ee7b7}
+.group.wrong{border-color:#fca5a5}
+.group.half{border-color:#fcd34d}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+
+.steps{margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.past{background:#ecfdf5;border-color:#a7f3d0}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+@media(max-width:600px){.level{grid-template-columns:40px 1fr}.level .risk{grid-column:2;justify-self:start}}
+
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(5n+2){border-top-color:var(--purple)}
+.pillar:nth-child(5n+3){border-top-color:var(--secondary)}
+.pillar:nth-child(5n+4){border-top-color:var(--accent)}
+.pillar:nth-child(5n+5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+details.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-family:var(--mono);color:var(--primary);font-weight:700}
+details.acc[open] summary::after{content:"−"}
+details.acc[open] summary{border-bottom:1px dashed var(--border)}
+details.acc > div{padding:12px 16px;font-size:.9rem}
+
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+.lock-wrap{text-align:center;padding:30px 10px}
+.lock-wrap .big-lock{font-size:3rem}
+.lock-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:16px}
+.lock-pill{font-size:.82rem;font-weight:600;padding:6px 14px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border)}
+.lock-pill.ok{background:var(--secondary-light);border-color:#6ee7b7;color:#065f46}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.filter-row button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;color:var(--dark2)}
+.filter-row button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+.score-table td:last-child{font-family:var(--mono);font-weight:700}
+.link-card{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f8fafc;border:1px dashed #93c5fd;border-radius:12px;padding:16px 18px;margin-top:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+@media print{.tabs-wrap,.actions-row,.nav-bottom{display:none}.panel{display:block!important}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <span class="badge">🚀 NoCode AI / Vibe Coding — Séance 6 · Support théorique</span>
+    <h1>Livrer son MVP</h1>
+    <p class="subtitle">Rendre votre projet public, propre et défendable : un repository GitHub lisible, une application déployée sur Vercel, une documentation vérifiée et une soutenance préparée.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 6 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : Application déployée (URL publique) + repository GitHub propre + README.md + AI-LOG.md + soutenance préparée</span></div>
+    <div class="global-progress">
+      <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🐙 Repository propre <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">▲ Déployer sur Vercel <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🛡️ Production Supabase <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">📚 Documenter <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🎤 Soutenance <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">🔭 Aller plus loin <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<main>
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
+    <div class="key-box"><div class="big">Je sais livrer mon MVP.</div><p style="margin:8px 0 0">Un MVP n&#x27;existe vraiment que lorsqu&#x27;il est en ligne, compréhensible par quelqu&#x27;un d&#x27;autre et défendu par celui qui l&#x27;a construit : l&#x27;IA vous aide à livrer, mais c&#x27;est vous qui répondez de ce qui est livré.</p></div>
+    <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step past"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step past"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step past"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step past"><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step past"><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step here"><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
+    <h3>Le fil pédagogique</h3>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td>Séance 4</td><td>Je sais construire une vraie application.</td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l&#x27;IA produit.</td></tr><tr><td><strong>Séance 6</strong> — aujourd&#39;hui</td><td><strong>Je sais livrer mon MVP.</strong></td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Organiser un repository GitHub propre : structure, .gitignore, .env.example, commits et historique lisibles ;</li><li>Réagir correctement à la fuite d&#x27;un secret : révoquer, régénérer, puis nettoyer ;</li><li>Déployer une application Next.js sur Vercel avec les bonnes variables d&#x27;environnement ;</li><li>Configurer Supabase pour la production : URL d&#x27;authentification, migrations, RLS et logs ;</li><li>Diagnostiquer les erreurs de déploiement les plus courantes ;</li><li>Rédiger avec l&#x27;IA puis vérifier un README.md, un AI-LOG.md et un PROJECT.md à jour ;</li><li>Préparer et défendre une soutenance qui montre le produit et la méthode IA.</li></ul></div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Votre MVP contrôlé en S5 (fonctionnel en local, relu, testé, RLS vérifiée) ;</li><li>Votre repository GitHub avec PROJECT.md, DESIGN.md, AGENTS.md et AI-LOG.md ;</li><li>Un compte Vercel relié à votre compte GitHub et l&#x27;accès à votre projet Supabase ;</li><li>Votre agent de code configuré (Claude Code, Codex, Cursor, Copilot, Antigravity ou OpenCode).</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Git &amp; GitHub</span><span class="famille-tag f2">Déploiement</span><span class="famille-tag f3">Production</span><span class="famille-tag f4">Documentation</span><span class="famille-tag f5">Soutenance &amp; suite</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
+    <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-6-livrer-son-mvp-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🐙 Repository propre ▸</button></div>
+  </div>
+</section>
+<section class="panel" data-panel="c0">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🐙</span>Un repository GitHub propre</div>
+  <p class="lead">Votre repository est la première chose que le jury ouvre. Avant même de lancer l'application, il lit la structure, le README, l'historique des commits. Un repository propre prouve que vous maîtrisez ce que l'agent a produit.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Organiser un repository lisible et sûr : structure claire, fichiers sensibles exclus, commits explicites, branches et pull requests, et savoir réagir si un secret a fuité.</div>
+  <h3>Ce que doit contenir un repository de MVP</h3>
+  <pre class="prompt">cinelist/
+├── app/                  <span class="hl3"># routes Next.js (App Router)</span>
+├── components/           <span class="hl3"># composants UI réutilisables</span>
+├── lib/                  <span class="hl3"># clients Supabase, utilitaires</span>
+├── supabase/migrations/  <span class="hl3"># schéma SQL versionné</span>
+├── public/
+├── .env.example          <span class="hl"># noms des variables, sans valeurs</span>
+├── .gitignore            <span class="hl"># exclut .env.local, node_modules, .next</span>
+├── PROJECT.md  DESIGN.md  AGENTS.md
+├── README.md             <span class="hl2"># porte d'entrée du projet</span>
+├── AI-LOG.md             <span class="hl2"># journal des décisions IA</span>
+├── package.json  package-lock.json
+└── tsconfig.json</pre>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Un dossier <code>test2-final</code>, des fichiers <code>old_page.tsx</code> jamais supprimés, un <code>.env.local</code> commité, des captures d'écran en vrac à la racine, un README généré par défaut par <code>create-next-app</code>.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Une arborescence que l'on comprend sans explication, du code mort supprimé, les fichiers de contexte (<code>PROJECT.md</code>, <code>AGENTS.md</code>…) à la racine, un README réécrit pour votre projet.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🙈</span>.gitignore et .env.example</div>
+  <p>Le fichier <span class="term-item">.gitignore</span> liste ce que Git ne doit jamais suivre : dépendances (<code>node_modules/</code>), build (<code>.next/</code>), et surtout vos fichiers de secrets (<code>.env.local</code>). Le <code>.gitignore</code> généré par <code>npx create-next-app@latest</code> ignore déjà les fichiers <code>.env*</code>.</p>
+  <p>Le fichier <span class="term-item">.env.example</span> fait l'inverse : il est commité et documente les variables nécessaires, sans leurs valeurs. Comme le <code>.gitignore</code> ignore <code>.env*</code>, ajoutez l'exception <code>!.env.example</code> pour qu'il soit suivi.</p>
+  <pre class="prompt"><span class="hl3"># .env.example — copier en .env.local puis remplir</span>
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+<span class="hl2"># serveur uniquement, jamais préfixée NEXT_PUBLIC_</span>
+SUPABASE_SERVICE_ROLE_KEY=</pre>
+  <div class="instruction-box"><strong class="title">Règle NEXT_PUBLIC_</strong>Toute variable préfixée <code>NEXT_PUBLIC_</code> est intégrée au JavaScript envoyé au navigateur : elle est publique. La clé anon de Supabase peut l'être car la RLS protège les données. La clé <code>SUPABASE_SERVICE_ROLE_KEY</code> contourne la RLS : elle reste côté serveur, sans préfixe, et n'apparaît jamais dans un composant client.</div>
+  <p>Si un fichier sensible a déjà été suivi, l'ajouter au <code>.gitignore</code> ne suffit pas : retirez-le de l'index avec <code>git rm --cached .env.local</code>, puis commitez. Il reste cependant présent dans l'historique (voir plus bas).</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">📝</span>Commits, branches et pull requests</div>
+  <p>Un historique lisible raconte la construction du projet. La convention <span class="term-item">Conventional Commits</span> préfixe chaque message par un type : <code>feat</code> (fonctionnalité), <code>fix</code> (correction), <code>docs</code> (documentation), <code>refactor</code>, <code>style</code>, <code>test</code>, <code>chore</code> (maintenance), avec une portée optionnelle entre parenthèses.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Message flou</th><th>Message clair</th></tr>
+    <tr><td><code>update</code></td><td><code>feat(watchlist): ajouter le filtre par statut vu / à voir</code></td></tr>
+    <tr><td><code>fix bug</code></td><td><code>fix(auth): rediriger vers /dashboard après confirmation email</code></td></tr>
+    <tr><td><code>modifs claude</code></td><td><code>docs: compléter le README avec les comptes de test</code></td></tr>
+    <tr><td><code>wip wip wip</code></td><td><code>refactor(events): extraire la carte événement en composant</code></td></tr>
+  </table></div>
+  <h3>Travailler par branche</h3>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Créer une <span class="term-item">branche de fonctionnalité</span> depuis main : <code>git switch -c feat/recherche-jeux</code>.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Faire travailler l'agent, relire, puis <code>git add</code> et <code>git commit -m "feat(games): rechercher un jeu par titre"</code>.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Pousser la branche : <code>git push -u origin feat/recherche-jeux</code>.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Ouvrir une <span class="term-item">pull request</span> sur GitHub : description, captures, relecture (par votre binôme ou par vous-même avec l'aide de l'IA).</span></div>
+    <div class="step"><span class="s-num">5</span><span>Fusionner dans main seulement quand le build passe et la preview fonctionne.</span></div>
+  </div>
+  <p class="muted">Même seul, la pull request est utile : elle regroupe un changement cohérent, déclenche un déploiement de preview sur Vercel et laisse une trace lisible pour le jury. Consultez votre historique avec <code>git log --oneline</code>.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🔑</span>Aucun secret dans l'historique</div>
+  <p class="lead">Git conserve tout. Un secret supprimé dans le dernier commit reste lisible dans les commits précédents, et un repository public est parcouru en permanence par des robots qui cherchent des clés.</p>
+  <div class="warn-box"><strong>⛔ Un secret a fuité ?</strong> Le réflexe n'est pas de réécrire l'historique en premier, mais de considérer la clé comme compromise.</div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span><strong>Révoquer / régénérer</strong> la clé chez le fournisseur (Supabase, OpenAI, TMDB…) : c'est la <span class="term-item">rotation de secret</span>. L'ancienne clé devient inutilisable.</span></div>
+    <div class="step"><span class="s-num">2</span><span><strong>Mettre à jour</strong> la nouvelle valeur dans <code>.env.local</code> et dans les variables d'environnement Vercel, puis redéployer.</span></div>
+    <div class="step"><span class="s-num">3</span><span><strong>Nettoyer l'historique</strong> si nécessaire (outils comme <code>git filter-repo</code> ou BFG Repo-Cleaner) et vérifier les logs d'usage du fournisseur.</span></div>
+    <div class="step"><span class="s-num">4</span><span><strong>Prévenir</strong> la récidive : <code>.gitignore</code> correct, protection contre les push de secrets de GitHub (secret scanning / push protection) activée, consigne dans <code>AGENTS.md</code>.</span></div>
+  </div>
+  <div class="key-box"><div class="big">Rotation d'abord, nettoyage ensuite.</div><p style="margin:8px 0 0">Nettoyer l'historique ne rend pas un secret à nouveau secret : quelqu'un a pu le copier avant. Seule la révocation le neutralise.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm0"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt0">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill0"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="0">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="0">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres0"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : ▲ Déployer sur Vercel ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c1">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">▲</span>De GitHub à une URL publique</div>
+  <p class="lead">Vercel est la plateforme de référence pour Next.js : elle se connecte à votre repository GitHub, construit l'application à chaque push et la publie sur une URL publique en HTTPS.</p>
+  <div class="chain"><span class="term-item">git push</span><span class="chain-arrow">→</span><span class="term-item">GitHub</span><span class="chain-arrow">→</span><span class="term-item">Build Vercel</span><span class="chain-arrow">→</span><span class="term-item">Déploiement</span><span class="chain-arrow">→</span><span class="term-item">URL publique</span></div>
+  <h3>Premier déploiement</h3>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Vérifier en local que <code>npm run build</code> passe sans erreur : si le build échoue chez vous, il échouera sur Vercel.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Sur Vercel : <strong>Add New… → Project</strong>, puis importer le repository GitHub (autoriser l'accès si demandé).</span></div>
+    <div class="step"><span class="s-num">3</span><span>Vercel détecte le framework Next.js et propose la commande de build ; laissez les valeurs par défaut sauf besoin précis.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Renseigner les <span class="term-item">variables d'environnement</span> (<code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, éventuellement <code>SUPABASE_SERVICE_ROLE_KEY</code>).</span></div>
+    <div class="step"><span class="s-num">5</span><span>Lancer le déploiement, ouvrir l'URL <code>https://cinelist-xxx.vercel.app</code> et tester le parcours complet.</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🌿</span>Preview et production</div>
+  <p>Une fois le repository relié, Vercel fait du <span class="term-item">déploiement continu</span> : chaque push déclenche un nouveau build.</p>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🔍 Déploiement de preview</h4><p class="muted">Créé pour chaque push sur une autre branche que main et pour chaque pull request. Il a sa propre URL, commentée automatiquement dans la PR. Idéal pour tester <code>feat/inscriptions</code> de CampusHub sans toucher au site public.</p></div>
+    <div class="mini-card"><h4>🚀 Déploiement de production</h4><p class="muted">Créé à chaque push (ou fusion) sur la branche de production, main par défaut. Il met à jour l'URL principale du projet, celle que vous donnez au jury.</p></div>
+  </div>
+  <h3>Variables par environnement</h3>
+  <p>Chaque variable peut être définie pour <strong>Production</strong>, <strong>Preview</strong> et <strong>Development</strong>. Vous pouvez ainsi pointer vos previews vers un projet Supabase de test et la production vers le projet réel. La commande <code>vercel env pull</code> du CLI Vercel récupère les variables de développement dans un fichier local.</p>
+  <div class="warn-box"><strong>⛔ Piège classique</strong> Modifier une variable sur Vercel ne change pas le déploiement déjà en ligne. Il faut <strong>redéployer</strong>. Les variables <code>NEXT_PUBLIC_</code> sont en plus intégrées au moment du build : sans nouveau build, l'ancienne valeur reste dans le JavaScript servi.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🌐</span>URL publique et domaines</div>
+  <p>Vercel attribue une <span class="term-item">URL publique</span> en <code>.vercel.app</code> à la production, plus une URL unique par déploiement. Vous pouvez ajouter un <span class="term-item">domaine personnalisé</span> (<code>gamebacklog.fr</code>) dans les réglages du projet, en configurant les enregistrements DNS indiqués par Vercel.</p>
+  <ul class="clean">
+    <li>Pour la soutenance, l'URL <code>.vercel.app</code> de production suffit : notez-la dans le README et dans la description du repository GitHub.</li>
+    <li>Toute nouvelle URL (domaine personnalisé, previews) doit être déclarée dans l'authentification Supabase, sinon les redirections échouent (chapitre suivant).</li>
+    <li>Vérifiez la visibilité : les previews peuvent être protégées par l'authentification Vercel (Deployment Protection) ; la production doit rester accessible au jury.</li>
+  </ul>
+  <div class="key-box"><div class="big">main = production.</div><p style="margin:8px 0 0">Ne poussez sur main que ce qui a été testé en preview. Tout ce qui arrive sur main part en ligne.</p></div>
+</div>
+<div class="card" data-explorer="x1">
+  <div class="section-title"><span class="icon-bg purple">▲</span>Explorateur — les notions du déploiement Vercel</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 2</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm1"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt1">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill1"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="1">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="1">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres1"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🛡️ Production Supabase ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c2">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🔐</span>L'authentification en production</div>
+  <p class="lead">En local, Supabase renvoie vos utilisateurs vers <code>http://localhost:3000</code>. En ligne, c'est la première chose qui casse : liens de confirmation qui ouvrent localhost, connexion qui boucle, redirection refusée.</p>
+  <p>Dans le tableau de bord Supabase, section <strong>Authentication → URL Configuration</strong> :</p>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🏠 Site URL</h4><p class="muted">L'URL par défaut de votre application, utilisée dans les emails (confirmation, réinitialisation) quand aucune redirection n'est précisée. En production : <code>https://cinelist.vercel.app</code>.</p></div>
+    <div class="mini-card"><h4>↪️ Redirect URLs</h4><p class="muted">La liste autorisée des URLs vers lesquelles l'auth peut renvoyer : <code>https://cinelist.vercel.app/auth/callback</code>, <code>http://localhost:3000/**</code>, et un motif pour les previews Vercel. Une URL absente est refusée.</p></div>
+  </div>
+  <h3>Confirmations email</h3>
+  <p>Par défaut, Supabase exige que l'utilisateur confirme son adresse avant de se connecter. Vérifiez en production que l'email arrive, que le lien pointe vers votre domaine Vercel et que la route de callback échange bien le code contre une session. Le service d'email intégré de Supabase est limité en volume et destiné aux tests : pour un usage réel, configurez un SMTP personnalisé.</p>
+  <div class="instruction-box"><strong class="title">Pour la soutenance</strong>Créez à l'avance des <span class="term-item">comptes de test</span> déjà confirmés. Le jury ne doit pas attendre un email pour tester CampusHub.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🗄️</span>Base de données : migrations et RLS</div>
+  <p>Une <span class="term-item">migration</span> est un fichier SQL versionné (dans <code>supabase/migrations/</code>) qui décrit une évolution du schéma. Elle permet de reproduire exactement la même base ailleurs et de savoir ce qui a été appliqué.</p>
+  <ul class="clean">
+    <li>Avec le CLI Supabase : <code>supabase migration new add_reviews</code> crée le fichier, <code>supabase link</code> relie le projet distant, <code>supabase db push</code> applique les migrations en attente.</li>
+    <li>Si vous avez tout fait dans le SQL Editor, exportez au moins le SQL final dans le repository : c'est la preuve de votre modèle de données.</li>
+    <li>Vérifiez que la production contient bien toutes les tables : une table <code>favorites</code> créée seulement en local fera planter la page en ligne.</li>
+  </ul>
+  <div class="warn-box"><strong>⛔ RLS en production</strong> Contrôlez à nouveau que la RLS est activée sur chaque table exposée et que les policies filtrent par <code>auth.uid()</code>. Le Security Advisor du tableau de bord Supabase signale les tables sans RLS. Testez avec deux comptes : l'utilisateur A ne doit jamais voir la watchlist de B.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">📜</span>Lire les logs</div>
+  <p>Quand ça marche en local mais pas en ligne, ne demandez pas « corrige » à l'agent à l'aveugle : allez chercher le message d'erreur réel dans les <span class="term-item">logs</span>.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Où</th><th>Ce qu'on y trouve</th></tr>
+    <tr><td>Vercel → Deployments → Build Logs</td><td>Erreurs de compilation : TypeScript, import introuvable, dépendance manquante.</td></tr>
+    <tr><td>Vercel → Logs (runtime)</td><td>Erreurs à l'exécution des Server Components, Server Actions et Route Handlers.</td></tr>
+    <tr><td>Supabase → Logs</td><td>Requêtes API refusées, erreurs Postgres, événements d'authentification.</td></tr>
+    <tr><td>Console du navigateur</td><td>Erreurs côté client, requêtes réseau en échec (onglet Réseau).</td></tr>
+  </table></div>
+  <p class="muted">Copiez l'erreur exacte dans votre prompt : contexte (production Vercel), message, fichier concerné, ce que vous avez déjà vérifié.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🧯</span>Les erreurs de déploiement courantes</div>
+  <div class="table-wrap"><table>
+    <tr><th>Symptôme</th><th>Cause probable</th><th>Correction</th></tr>
+    <tr><td>« supabaseUrl is required » ou page blanche</td><td>Variable d'environnement manquante ou mal nommée sur Vercel</td><td>Ajouter la variable pour le bon environnement, puis redéployer</td></tr>
+    <tr><td>Build en échec, « Type error »</td><td>Erreur TypeScript tolérée par <code>npm run dev</code> ; selon la version et la configuration, erreur de lint</td><td>Lancer <code>npm run build</code> et <code>npm run lint</code> en local, corriger, repousser</td></tr>
+    <tr><td>Lien de confirmation qui ouvre localhost</td><td>Site URL restée sur <code>http://localhost:3000</code></td><td>Mettre l'URL Vercel dans Site URL et Redirect URLs</td></tr>
+    <tr><td>« Module not found: ./components/Header »</td><td>Fichier nommé <code>header.tsx</code> : macOS et Windows ignorent la casse, le serveur Linux de Vercel non</td><td>Aligner l'import et le nom du fichier (<code>git mv</code> pour renommer)</td></tr>
+    <tr><td>Liste vide en ligne, pleine en local</td><td>Table ou policy RLS absente en production</td><td>Appliquer les migrations, vérifier les policies</td></tr>
+  </table></div>
+  <p>La <span class="term-item">sensibilité à la casse</span> est un piège sournois : renommer seulement la casse d'un fichier peut ne pas être détecté par Git sur macOS ou Windows. <code>git mv header.tsx Header.tsx</code> enregistre le changement correctement.</p>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm2"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt2">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill2"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="2">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="2">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres2"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : 📚 Documenter ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c3">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">📖</span>README.md : la porte d'entrée</div>
+  <p class="lead">Le <span class="term-item">README.md</span> répond en une lecture à trois questions : qu'est-ce que c'est, est-ce que ça marche, comment je le lance. C'est le document que le jury, un recruteur ou un futur coéquipier lit en premier.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🎯 Pitch</h4><p class="muted">Une ou deux phrases : pour qui, quel problème, quelle solution.</p></div>
+    <div class="mini-card"><h4>✅ Fonctionnalités</h4><p class="muted">Ce qui marche réellement dans le MVP, pas la liste des envies.</p></div>
+    <div class="mini-card"><h4>🧱 Stack</h4><p class="muted">Next.js / TypeScript, Supabase, Vercel, agent utilisé.</p></div>
+    <div class="mini-card"><h4>⚙️ Installation</h4><p class="muted">Clonage, <code>npm install</code>, copie du <code>.env.example</code>, <code>npm run dev</code>.</p></div>
+    <div class="mini-card"><h4>🔧 Variables d'env.</h4><p class="muted">Nom, rôle, public ou serveur. Jamais les valeurs.</p></div>
+    <div class="mini-card"><h4>🌐 Démo</h4><p class="muted">URL publique, comptes de test, captures d'écran.</p></div>
+  </div>
+  <p>Le <span class="term-item">guide d'installation</span> doit être testé : clonez votre repository dans un nouveau dossier et suivez vos propres instructions à la lettre. Si vous devez improviser une étape, elle manque au README.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🤖</span>AI-LOG.md et PROJECT.md à jour</div>
+  <p>Le <span class="term-item">AI-LOG.md</span> est la preuve de votre méthodologie IA. Finalisé, il doit montrer que vous avez piloté l'agent, pas subi ses propositions.</p>
+  <pre class="prompt">## Décision — Recherche des événements (CampusHub)
+- <span class="hl3">Contexte</span> : filtre par date et par campus demandé en S4
+- <span class="hl3">Prompt / agent</span> : Claude Code, plan demandé avant exécution
+- <span class="hl2">Proposition IA</span> : filtrer côté client après chargement complet
+- <span class="hl">Décision</span> : refusé, filtrage côté Supabase (.eq, .gte) pour la pagination
+- <span class="hl">Vérification</span> : test avec 2 comptes, build OK, RLS inchangée</pre>
+  <p>Le <span class="term-item">PROJECT.md</span> doit décrire l'état réel à la livraison : fonctionnalités livrées, fonctionnalités reportées, décisions de périmètre. Un PROJECT.md qui promet encore des notifications jamais construites décrédibilise le reste.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ AI-LOG vide de sens</h4><p class="muted">« J'ai demandé à Claude de faire la page, ça marche. »</p></div>
+    <div class="mini-card good"><h4>✅ AI-LOG utile</h4><p class="muted">Ce qui a été demandé, ce que l'IA a proposé, ce que vous avez accepté ou refusé, et comment vous l'avez vérifié.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🔎</span>Faire rédiger par l'IA, puis vérifier</div>
+  <p>L'agent connaît votre code : il rédige vite un premier jet de README à partir du <code>package.json</code>, de l'arborescence et de vos fichiers de contexte. Mais il invente facilement.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Donner le contexte : <code>PROJECT.md</code>, <code>AI-LOG.md</code>, <code>.env.example</code>, URL de production.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Imposer une structure et une contrainte : « uniquement ce qui existe dans le code, signale ce que tu ne peux pas vérifier ».</span></div>
+    <div class="step"><span class="s-num">3</span><span>Pratiquer la <span class="term-item">relecture humaine</span> ligne par ligne : chaque fonctionnalité citée existe-t-elle ? chaque commande fonctionne-t-elle ?</span></div>
+    <div class="step"><span class="s-num">4</span><span>Tester le guide d'installation et l'URL de démo, puis commiter : <code>docs: rédiger le README</code>.</span></div>
+  </div>
+  <div class="warn-box"><strong>⛔ Hallucinations de documentation</strong> Fonctionnalité annoncée mais absente, commande <code>npm run seed</code> qui n'existe pas dans le <code>package.json</code>, badge de tests alors qu'il n'y a pas de tests, vraie clé recopiée depuis <code>.env.local</code> : autant d'erreurs que le jury repère immédiatement.</div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm3"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt3">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill3"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="3">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="3">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres3"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🎤 Soutenance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c4">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🎤</span>Construire le plan de soutenance</div>
+  <p class="lead">La soutenance n'est pas une visite guidée de toutes les pages. C'est une démonstration qui prouve trois choses : le produit répond à un besoin, il fonctionne, et vous savez comment il a été construit.</p>
+  <div class="pillars">
+    <div class="pillar"><div class="n">1</div><h4>Pitch</h4><p>Le problème, la cible, la solution, en quelques phrases.</p><div class="q">« Pourquoi cette appli ? »</div></div>
+    <div class="pillar"><div class="n">2</div><h4>Démo</h4><p>Un parcours utilisateur réaliste, de bout en bout, en production.</p><div class="q">« Est-ce que ça marche ? »</div></div>
+    <div class="pillar"><div class="n">3</div><h4>Choix techniques</h4><p>Modèle de données, auth, RLS, déploiement.</p><div class="q">« Pourquoi comme ça ? »</div></div>
+    <div class="pillar"><div class="n">4</div><h4>Méthode IA</h4><p>Contexte, pilotage, contrôle : fichiers, extraits d'AI-LOG.</p><div class="q">« Qui a décidé ? »</div></div>
+    <div class="pillar"><div class="n">5</div><h4>Limites et suite</h4><p>Ce qui ne marche pas encore, pourquoi, et la prochaine étape.</p><div class="q">« Et après ? »</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🎬</span>La démo scénarisée</div>
+  <p>Une <span class="term-item">démo scénarisée</span> suit un parcours écrit à l'avance, avec des données préparées. Exemple pour GameBacklog :</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Connexion avec le compte de test <code>demo@gamebacklog.dev</code> (backlog déjà rempli de quelques jeux).</span></div>
+    <div class="step"><span class="s-num">2</span><span>Ajout d'un jeu, passage de « à jouer » à « en cours » (CRUD + relation utilisateur / jeu).</span></div>
+    <div class="step"><span class="s-num">3</span><span>Recherche par titre et filtre par statut.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Dashboard personnel, puis affichage mobile (responsive).</span></div>
+    <div class="step"><span class="s-num">5</span><span>Connexion avec un second compte : le backlog du premier est invisible (RLS).</span></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Le plan B</strong>Le wifi tombe, Supabase répond lentement, un déploiement fait au dernier moment casse tout. Préparez un <span class="term-item">plan B de démo</span> : vidéo enregistrée du parcours, captures d'écran, déploiement précédent prêt à être restauré (rollback Vercel), application lancée en local. Et ne poussez rien sur main juste avant de passer.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🧠</span>Montrer la méthode IA et défendre ses choix</div>
+  <p>Le jury évalue la méthodologie IA : montrez le chemin <strong>Prompt → Context → Agentic</strong> sur des exemples concrets.</p>
+  <ul class="clean">
+    <li><strong>Contexte</strong> : ouvrez <code>PROJECT.md</code>, <code>DESIGN.md</code>, <code>AGENTS.md</code> et expliquez ce qu'ils ont changé dans les réponses de l'agent.</li>
+    <li><strong>Pilotage</strong> : un plan demandé avant exécution, une tâche découpée, un niveau de délégation choisi.</li>
+    <li><strong>Contrôle</strong> : une proposition refusée, un bug détecté en relecture, une policy RLS corrigée (extrait d'AI-LOG).</li>
+  </ul>
+  <h3>Répondre aux questions du jury</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Question probable</th><th>Réponse attendue</th></tr>
+    <tr><td>« Pourquoi Supabase ? »</td><td>Postgres relationnel, Auth intégrée, RLS pour isoler les données de chaque utilisateur.</td></tr>
+    <tr><td>« Expliquez cette policy. »</td><td>Lire la policy et dire en français qui peut faire quoi, sur quelle table.</td></tr>
+    <tr><td>« Qu'avez-vous écrit vous-même ? »</td><td>Les fichiers de contexte, les décisions, les corrections : l'AI-LOG sert de preuve.</td></tr>
+    <tr><td>« Que se passe-t-il si… ? »</td><td>Être honnête : « ce cas n'est pas géré, voici comment je le traiterais ».</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🚧</span>Assumer ce qui ne marche pas encore</div>
+  <p>Présenter ses <span class="term-item">limites connues</span> est un signe de maîtrise, pas un aveu d'échec. Pour chaque limite : ce qui manque, pourquoi (priorité, temps, complexité, risque), et comment vous le feriez.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Cacher un bug en espérant que le jury ne clique pas au mauvais endroit, ou répondre « c'est l'IA qui a fait ça » à une question sur le code.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">« La recherche de CinéList ne gère pas encore les accents. J'ai priorisé la RLS. La correction passerait par une recherche insensible aux accents côté Postgres. »</p></div>
+  </div>
+  <div class="key-box"><div class="big">Vous défendez un produit et une méthode.</div><p style="margin:8px 0 0">Le jury ne cherche pas une application parfaite, mais quelqu'un qui comprend, contrôle et assume ce qu'il livre.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 5</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm4"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt4">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill4"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="4">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="4">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="4">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres4"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c3">◂ Précédent</button><button class="btn btn-primary" data-goto="c5">Suite : 🔭 Aller plus loin ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c5">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">➕</span>Les bonus, une fois le MVP solide</div>
+  <p class="lead">Les bonus valorisent un projet qui fonctionne déjà. Un bonus brillant sur un socle cassé (auth instable, CRUD incomplet, RLS absente) ne compense rien.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🤖 API IA</h4><p class="muted">Résumé des avis de CinéList, suggestion de jeux pour GameBacklog. Appel depuis un Route Handler (<code>app/api/.../route.ts</code>) ou une Server Action.</p></div>
+    <div class="mini-card"><h4>🎞️ API externe</h4><p class="muted">TMDB pour les affiches et synopsis de films, RAWG pour les jaquettes et plateformes de jeux. Clé obtenue sur le site du fournisseur.</p></div>
+    <div class="mini-card"><h4>⚡ Automatisation</h4><p class="muted">n8n ou Make : email de rappel la veille d'un événement CampusHub, déclenché par un webhook ou une planification.</p></div>
+  </div>
+  <div class="warn-box"><strong>⛔ Clé API côté serveur uniquement</strong> Une clé OpenAI, Anthropic, TMDB ou RAWG ne se préfixe jamais par <code>NEXT_PUBLIC_</code>. Le navigateur appelle votre route serveur, qui appelle le fournisseur avec la <span class="term-item">clé API côté serveur</span> lue dans <code>process.env</code>. Ajoutez-la dans Vercel et dans <code>.env.example</code> (sans valeur).</div>
+  <pre class="prompt"><span class="hl3">// app/api/movies/search/route.ts (principe)</span>
+export async function GET(request: Request) {
+  const query = new URL(request.url).searchParams.get('q')
+  <span class="hl">// la clé reste sur le serveur</span>
+  const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query ?? '')}`, {
+    headers: { Authorization: `Bearer ${process.env.TMDB_API_TOKEN}` },
+  })
+  return Response.json(await res.json())
+}</pre>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🔁</span>Itérer après le MVP</div>
+  <p>Le MVP est un point de départ. L'<span class="term-item">itération post-MVP</span> part des retours réels : jury, camarades, premiers utilisateurs.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Collecter les retours (questions du jury, tests par des camarades, bugs constatés).</span></div>
+    <div class="step"><span class="s-num">2</span><span>Les trier : bug, amélioration UX, nouvelle fonctionnalité. Les bugs passent d'abord.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Mettre à jour <code>PROJECT.md</code> (nouveau périmètre), puis ouvrir des issues GitHub.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Reprendre le cycle : contexte → plan de l'agent → branche → PR → preview → production.</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">⚖️</span>Livrer de manière responsable</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>💶 Coûts</h4><p class="muted">Les offres gratuites de Vercel et Supabase ont des quotas ; une API IA est facturée à l'usage. Fixez une limite de dépenses et protégez vos routes pour éviter qu'un robot ne vide votre crédit.</p></div>
+    <div class="mini-card"><h4>🔒 Données personnelles</h4><p class="muted">Emails, avis, inscriptions sont des données personnelles (RGPD) : collectez le minimum, ne les envoyez pas à une API IA sans raison, permettez la suppression du compte.</p></div>
+    <div class="mini-card"><h4>🔗 Dépendance fournisseur</h4><p class="muted">Vercel, Supabase, un modèle IA : chaque service peut changer ses prix ou ses conditions. Savoir ce qui serait difficile à migrer fait partie des choix techniques.</p></div>
+    <div class="mini-card"><h4>🧭 Limites du vibe coding</h4><p class="muted">Aller vite ne dispense pas de comprendre. Un code que vous ne savez pas expliquer, maintenir ou sécuriser n'est pas vraiment le vôtre.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🏁</span>Bilan du parcours</div>
+  <div class="levels">
+    <div class="level"><span class="lv">S1</span><span><strong>Prompt Engineering</strong> : parler à l'IA avec les 5 Piliers, itérer, vérifier.</span><span class="risk f1">Prompt</span></div>
+    <div class="level"><span class="lv">S2</span><span><strong>Context Engineering</strong> : PROJECT.md, DESIGN.md, AGENTS.md comme mémoire du projet.</span><span class="risk f2">Context</span></div>
+    <div class="level"><span class="lv">S3–S4</span><span><strong>Agentic Coding</strong> : déléguer à un agent, construire une vraie application.</span><span class="risk f3">Agentic</span></div>
+    <div class="level"><span class="lv">S5</span><span><strong>Contrôle</strong> : relire, tester, sécuriser ce que l'IA produit.</span><span class="risk f4">Contrôle</span></div>
+    <div class="level"><span class="lv">S6</span><span><strong>Livraison</strong> : déployer, documenter, défendre.</span><span class="risk f5">Livraison</span></div>
+  </div>
+  <div class="key-box"><div class="big">L'outil changera, la méthode reste.</div><p style="margin:8px 0 0">Donner du contexte, piloter, contrôler, livrer : ce cycle fonctionne avec Claude Code, Codex, Cursor, Copilot, Antigravity, OpenCode ou le prochain agent.</p></div>
+</div>
+<div class="card" data-explorer="x5">
+  <div class="section-title"><span class="icon-bg purple">🔭</span>Explorateur — les bonus et leurs pièges</div>
+  <p class="muted">Cliquez sur chaque bonus pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 5</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm5"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt5">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill5"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="5">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="5">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres5"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="syn">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🐙 Repository propre</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>▲ Déployer sur Vercel</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🛡️ Production Supabase</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>📚 Documenter</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🎤 Soutenance</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>🔭 Aller plus loin</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
+    <div class="key-box"><div class="big">Un MVP n&#x27;existe vraiment que lorsqu&#x27;il est en ligne, compréhensible par quelqu&#x27;un d&#x27;autre et défendu par celui qui l&#x27;a construit : l&#x27;IA vous aide à livrer, mais c&#x27;est vous qui répondez de ce qui est livré.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Organiser un repository GitHub propre : structure, .gitignore, .env.example, commits et historique lisibles ;</li><li>Réagir correctement à la fuite d&#x27;un secret : révoquer, régénérer, puis nettoyer ;</li><li>Déployer une application Next.js sur Vercel avec les bonnes variables d&#x27;environnement ;</li><li>Configurer Supabase pour la production : URL d&#x27;authentification, migrations, RLS et logs ;</li><li>Diagnostiquer les erreurs de déploiement les plus courantes ;</li><li>Rédiger avec l&#x27;IA puis vérifier un README.md, un AI-LOG.md et un PROJECT.md à jour ;</li><li>Préparer et défendre une soutenance qui montre le produit et la méthode IA.</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Une URL publique Vercel qui fonctionne, avec inscription, connexion et CRUD testés en production ;</label><label><input type="checkbox"> Un repository GitHub propre : aucun secret, un .env.example, un historique de commits lisible ;</label><label><input type="checkbox"> Un README.md complet (pitch, fonctionnalités, stack, installation, variables, URL de démo, comptes de test) ;</label><label><input type="checkbox"> Un AI-LOG.md finalisé et un PROJECT.md à jour avec l&#x27;état réel du MVP ;</label><label><input type="checkbox"> Un plan de soutenance (soutenance.md) avec un parcours de démo, vos choix techniques, vos limites et un plan B.</label></div>
+    <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-6-livrer-son-mvp-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="objectif-box"><strong class="title">Et après la séance 6 — Évaluation et bonus</strong>Votre note se compose du Projet (70 % : fonctionnalités, BDD/Auth/CRUD, UX/UI, qualité et sécurité, méthodologie IA, Git et déploiement) et d&#x27;un QCM individuel (30 %) portant sur l&#x27;ensemble des séances. Les bonus (API IA côté serveur, API externe, automatisation) ne comptent que si le socle du MVP fonctionne : sécurisez d&#x27;abord l&#x27;essentiel, puis itérez.</div>
+  </div>
+</section>
+</main>
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 6 — Livrer son MVP — Théorie<br>Mode formateur : ajoutez <code>?formateur</code> à l'adresse de la page.</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const FAMILIES={"f1": "Git & GitHub", "f2": "Déploiement", "f3": "Production", "f4": "Documentation", "f5": "Soutenance & suite"};
+const EXPLORERS={"x1": {"title": "Explorateur — les notions du déploiement Vercel", "icon": "▲", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "Import du repo", "fam": "f2", "rows": [["Définition", "Relier un repository GitHub à un projet Vercel pour que chaque push soit construit et déployé."], ["Exemple", "Importer gabi/cinelist : Vercel détecte Next.js et propose la configuration de build."], ["Piège", "Importer un repository où l'application est dans un sous-dossier sans régler le Root Directory."], ["À retenir", "Une seule fois par projet ; ensuite tout passe par git push."]]}, {"id": "Build", "fam": "f2", "rows": [["Définition", "Étape qui compile l'application (next build) : TypeScript, bundling, génération des pages."], ["Exemple", "Le build de GameBacklog échoue car un type Game ne contient pas la propriété platform utilisée dans une page."], ["Piège", "Tester seulement avec npm run dev, qui tolère des erreurs que le build refuse."], ["À retenir", "Lancez npm run build en local avant chaque push sur main."]]}, {"id": "Variables d'env.", "fam": "f2", "rows": [["Définition", "Valeurs de configuration injectées sans être écrites dans le code, définies par environnement."], ["Exemple", "NEXT_PUBLIC_SUPABASE_URL en Production pointe vers le projet Supabase réel de CampusHub."], ["Piège", "Oublier de redéployer après avoir ajouté ou modifié une variable."], ["À retenir", "Le .env.local ne part jamais sur Vercel : il faut tout ressaisir dans les réglages."]]}, {"id": "Preview", "fam": "f2", "rows": [["Définition", "Déploiement créé pour une branche ou une pull request, avec sa propre URL."], ["Exemple", "La PR feat/avis de CinéList reçoit une URL de preview pour tester les avis avant fusion."], ["Piège", "Des previews branchées sur la base de production peuvent modifier de vraies données."], ["À retenir", "Tester en preview, fusionner ensuite."]]}, {"id": "Production", "fam": "f2", "rows": [["Définition", "Déploiement issu de la branche de production (main), servi sur l'URL principale."], ["Exemple", "La fusion de la PR met à jour cinelist.vercel.app automatiquement."], ["Piège", "Pousser directement sur main un code non testé la veille de la soutenance."], ["À retenir", "Vercel permet de revenir instantanément à un déploiement précédent (rollback)."]]}, {"id": "Domaine", "fam": "f2", "rows": [["Définition", "Nom de domaine associé au projet Vercel, en plus de l'URL .vercel.app."], ["Exemple", "gamebacklog.fr configuré via les enregistrements DNS indiqués par Vercel."], ["Piège", "Oublier d'ajouter le nouveau domaine dans les Redirect URLs de Supabase."], ["À retenir", "Optionnel pour le MVP : l'URL .vercel.app suffit."]]}]}, "x5": {"title": "Explorateur — les bonus et leurs pièges", "icon": "🔭", "intro": "Cliquez sur chaque bonus pour afficher sa fiche.", "items": [{"id": "API IA", "fam": "f5", "rows": [["Définition", "Appeler un modèle (OpenAI, Anthropic…) depuis le serveur pour enrichir une fonctionnalité."], ["Exemple", "Résumer en trois lignes les avis d'un film de CinéList."], ["Piège", "Clé exposée côté client, ou appel sans limite déclenchable à volonté."], ["À retenir", "Route serveur, clé sans NEXT_PUBLIC_, limite de dépenses."]]}, {"id": "API externe", "fam": "f5", "rows": [["Définition", "Service tiers qui fournit des données métier (films, jeux) via HTTP."], ["Exemple", "RAWG fournit jaquette et plateformes d'un jeu ajouté dans GameBacklog."], ["Piège", "Ignorer les conditions d'utilisation ou l'attribution demandée par le fournisseur."], ["À retenir", "Stocker l'identifiant externe en base, pas toute la réponse."]]}, {"id": "Automatisation", "fam": "f5", "rows": [["Définition", "Scénario n8n ou Make déclenché par un événement ou une planification."], ["Exemple", "Un webhook appelé à chaque inscription CampusHub envoie un email de confirmation."], ["Piège", "Un webhook public sans secret partagé, déclenchable par n'importe qui."], ["À retenir", "Protéger le déclencheur et documenter le scénario dans le README."]]}, {"id": "Itération", "fam": "f5", "rows": [["Définition", "Nouveau cycle de développement à partir des retours sur le MVP."], ["Exemple", "Le jury trouve le filtre peu visible : issue GitHub, branche, PR, preview."], ["Piège", "Tout reconstruire au lieu de corriger ce que les retours désignent."], ["À retenir", "Les bugs avant les nouveautés, PROJECT.md mis à jour."]]}, {"id": "Responsabilité", "fam": "f5", "rows": [["Définition", "Assumer coûts, données personnelles, dépendances et limites de ce que l'on publie."], ["Exemple", "Permettre la suppression du compte et de ses avis dans CinéList."], ["Piège", "Envoyer des données personnelles à une API IA sans nécessité."], ["À retenir", "Publier une application, c'est en répondre."]]}]}};
+const QCMS=[[{"q": "Quel fichier doit être commité pour documenter les variables d'environnement sans exposer leurs valeurs ?", "o": [".env.example", ".env.local", ".gitignore", "next.config.ts"], "a": 0, "e": ".env.example liste les noms des variables avec des valeurs vides ; .env.local contient les vraies valeurs et reste ignoré."}, {"q": "Quel message de commit respecte la convention Conventional Commits ?", "o": ["Correction du bug de login", "FIX: login ok maintenant", "fix(auth): corriger la redirection après connexion", "update auth"], "a": 2, "e": "Le format type(portée): description, avec un type normalisé comme fix, rend l'historique lisible et filtrable."}, {"q": "Vous découvrez que SUPABASE_SERVICE_ROLE_KEY a été poussée dans un repository public. Quelle est la première action ?", "o": ["Supprimer le fichier et refaire un commit", "Passer le repository en privé", "Réécrire l'historique avec git filter-repo", "Régénérer la clé dans Supabase et mettre à jour les variables"], "a": 3, "e": "La clé doit être considérée comme compromise : la rotation la rend inutilisable. Le nettoyage de l'historique vient après."}, {"q": "Vous avez ajouté .env.local au .gitignore, mais Git continue de le suivre. Pourquoi ?", "o": ["Le .gitignore ne s'applique qu'aux fichiers déjà suivis", "Le fichier était déjà suivi : il faut le retirer de l'index avec git rm --cached", "Il faut redémarrer VS Code", "Le .gitignore doit être dans le dossier app/"], "a": 1, "e": "Le .gitignore n'agit que sur les fichiers non suivis ; un fichier déjà commité doit être retiré de l'index explicitement."}, {"q": "Pourquoi ouvrir une pull request même quand on travaille seul ?", "o": ["C'est obligatoire pour pouvoir pousser sur GitHub", "Cela évite d'écrire des messages de commit", "Cela regroupe un changement cohérent, déclenche une preview Vercel et laisse une trace relisible", "Cela chiffre automatiquement les secrets"], "a": 2, "e": "La pull request structure le travail, permet de tester la preview avant la fusion et documente la méthode pour le jury."}], [{"q": "Que déclenche un push sur une branche feat/filtres reliée à Vercel ?", "o": ["Un déploiement de production", "Rien, seul main est déployé", "La suppression du déploiement précédent", "Un déploiement de preview avec sa propre URL"], "a": 3, "e": "Chaque branche autre que la branche de production et chaque pull request obtiennent un déploiement de preview."}, {"q": "Vous modifiez NEXT_PUBLIC_SUPABASE_URL dans les réglages Vercel, mais le site en ligne utilise toujours l'ancienne valeur. Pourquoi ?", "o": ["Les variables NEXT_PUBLIC_ sont intégrées au build : il faut redéployer", "Vercel met plusieurs jours à propager les variables", "Il faut aussi modifier le .env.local", "Les variables publiques ne sont pas supportées"], "a": 0, "e": "Une variable modifiée ne s'applique qu'aux nouveaux déploiements, et les variables NEXT_PUBLIC_ sont figées dans le JavaScript au moment du build."}, {"q": "Quelle vérification faire en local avant de pousser sur main ?", "o": ["npm run dev", "npm run build", "git log --oneline", "npx create-next-app@latest"], "a": 1, "e": "npm run build reproduit l'étape de compilation de Vercel et révèle les erreurs que le serveur de développement laisse passer."}, {"q": "Comment pointer les previews vers une base de test et la production vers la base réelle ?", "o": ["C'est impossible, une seule valeur par variable", "En créant deux repositories GitHub", "En définissant des valeurs différentes pour les environnements Preview et Production", "En modifiant le code selon l'URL"], "a": 2, "e": "Vercel permet de définir chaque variable séparément pour Production, Preview et Development."}, {"q": "Où la variable SUPABASE_SERVICE_ROLE_KEY doit-elle être utilisée ?", "o": ["Uniquement côté serveur, sans préfixe NEXT_PUBLIC_", "Dans un composant client avec le préfixe NEXT_PUBLIC_", "Dans le README pour que le jury puisse tester", "Dans le .env.example avec sa valeur"], "a": 0, "e": "Elle contourne la RLS : exposée au navigateur, elle donnerait un accès total à la base."}], [{"q": "Après inscription sur l'application en ligne, le lien de confirmation ouvre http://localhost:3000. Que corriger ?", "o": ["La variable NEXT_PUBLIC_SUPABASE_ANON_KEY", "Le fichier .gitignore", "La Site URL dans la configuration d'authentification Supabase", "Le domaine personnalisé Vercel"], "a": 2, "e": "La Site URL sert de base aux liens envoyés par email ; restée sur localhost, elle renvoie les utilisateurs vers votre machine."}, {"q": "À quoi servent les Redirect URLs de Supabase ?", "o": ["À rediriger les anciennes pages vers les nouvelles", "À définir l'URL de la base de données", "À configurer le DNS du domaine", "À lister les URLs autorisées vers lesquelles l'authentification peut renvoyer l'utilisateur"], "a": 3, "e": "C'est une liste autorisée : toute URL de redirection absente est refusée, ce qui protège contre les redirections malveillantes."}, {"q": "Le build Vercel échoue avec « Module not found: ./components/GameCard » alors que tout fonctionne sur votre Mac. Cause la plus probable ?", "o": ["Le fichier s'appelle gamecard.tsx : la casse diffère et le serveur Linux y est sensible", "Vercel ne supporte pas les composants", "Il manque la clé service_role", "Le repository est privé"], "a": 0, "e": "macOS et Windows ignorent souvent la casse des noms de fichiers ; le système de build de Vercel, non."}, {"q": "La page « Mes favoris » de CinéList est vide en production mais remplie en local. Que vérifier en priorité ?", "o": ["Les couleurs du DESIGN.md", "Que la table et ses policies RLS existent bien dans le projet Supabase de production", "Le message du dernier commit", "La taille des images"], "a": 1, "e": "Une migration non appliquée ou une policy absente en production produit exactement ce symptôme."}, {"q": "Où trouver l'erreur exacte d'un Server Action qui échoue uniquement en ligne ?", "o": ["Dans les Build Logs uniquement", "Dans le README", "Dans le fichier .env.example", "Dans les logs runtime de Vercel"], "a": 3, "e": "Les erreurs d'exécution côté serveur apparaissent dans les logs runtime du projet Vercel, pas dans les logs de build."}], [{"q": "Quel élément ne doit jamais figurer dans un README public ?", "o": ["La valeur de SUPABASE_SERVICE_ROLE_KEY", "L'URL de démo", "Les noms des variables d'environnement", "Des identifiants de comptes de test dédiés"], "a": 0, "e": "Le README documente les noms et le rôle des variables, jamais leurs valeurs secrètes. Des comptes de test dédiés, sans données réelles, sont en revanche utiles au jury."}, {"q": "Comment vérifier que la section installation du README est correcte ?", "o": ["Demander à l'IA si elle est correcte", "Vérifier l'orthographe", "Relancer npm run dev dans le dossier habituel", "Cloner le repository dans un nouveau dossier et suivre les instructions à la lettre"], "a": 3, "e": "Seul un test depuis zéro révèle les étapes implicites que vous faites sans y penser."}, {"q": "Quelle entrée d'AI-LOG.md démontre le mieux une méthodologie IA ?", "o": ["« Claude a fait la page de login. »", "« Beaucoup de prompts utilisés. »", "« L'IA a proposé un filtrage côté client ; refusé au profit d'un filtrage Supabase ; vérifié avec deux comptes. »", "« Code généré à 100 % par l'IA. »"], "a": 2, "e": "Une bonne entrée montre la proposition, la décision humaine et la vérification : c'est la preuve du pilotage."}, {"q": "L'agent a rédigé un README qui mentionne « export CSV de la watchlist ». Cette fonctionnalité n'existe pas. Que faire ?", "o": ["La laisser, elle sera peut-être codée plus tard", "La supprimer du README ou la déplacer dans une section « pistes d'évolution »", "Demander à l'agent de la coder la veille de la soutenance", "Ajouter un astérisque"], "a": 1, "e": "Le README décrit l'existant ; une idée non livrée se range explicitement dans les évolutions possibles."}, {"q": "À la livraison, PROJECT.md doit…", "o": ["refléter l'état réel : ce qui est livré, ce qui est reporté et pourquoi", "rester tel qu'il a été écrit en S2", "être supprimé car le README le remplace", "contenir le code source des composants"], "a": 0, "e": "PROJECT.md reste le document de cadrage ; à jour, il montre la cohérence entre intentions et livraison."}], [{"q": "Qu'est-ce qu'une démo scénarisée ?", "o": ["Une visite de toutes les pages de l'application", "Une vidéo remplaçant la démo en direct", "Une présentation des fichiers du repository", "Un parcours utilisateur préparé à l'avance, avec des données de démonstration"], "a": 3, "e": "Elle suit un parcours réaliste et écrit, ce qui réduit l'improvisation et met en valeur les fonctionnalités du socle."}, {"q": "Quel élément fait partie d'un bon plan B de démo ?", "o": ["Une vidéo enregistrée du parcours et un déploiement précédent prêt à être restauré", "Pousser un correctif sur main juste avant de passer", "Demander au jury de revenir plus tard", "Désactiver la RLS pour éviter les erreurs"], "a": 0, "e": "Le plan B permet de montrer le produit même si le réseau ou le déploiement pose problème."}, {"q": "Le jury demande : « Qu'est-ce qui ne fonctionne pas encore ? ». Meilleure réponse ?", "o": ["« Tout fonctionne. »", "« Je ne sais pas, c'est l'IA qui a codé. »", "« Les notifications ne sont pas faites : j'ai priorisé la RLS ; je les ajouterais via un trigger et un email. »", "« Le jury n'a pas besoin de le savoir. »"], "a": 2, "e": "Une limite annoncée avec sa raison et une piste de solution montre la maîtrise du projet."}, {"q": "Comment montrer concrètement votre méthode IA pendant la soutenance ?", "o": ["Afficher le nombre de prompts envoyés", "Montrer les fichiers de contexte et un extrait d'AI-LOG avec une proposition refusée et une vérification", "Dire quel modèle d'IA est le meilleur", "Relancer l'agent en direct pour générer une nouvelle page"], "a": 1, "e": "Contexte, pilotage et contrôle se prouvent par des traces : fichiers de contexte et décisions documentées."}, {"q": "Pour montrer la RLS pendant la démo, que faire ?", "o": ["Lire la documentation Supabase au jury", "Montrer la clé service_role", "Supprimer une table en direct", "Se connecter avec un second compte et constater que les données du premier sont invisibles"], "a": 3, "e": "La démonstration avec deux comptes rend l'isolation des données visible et vérifiable."}], [{"q": "Comment intégrer correctement une API IA dans votre application Next.js ?", "o": ["Appeler l'API depuis un composant client avec NEXT_PUBLIC_OPENAI_KEY", "Écrire la clé dans le README", "Appeler l'API depuis un Route Handler ou une Server Action, avec une clé sans préfixe NEXT_PUBLIC_", "Stocker la clé dans une table Supabase publique"], "a": 2, "e": "La clé reste sur le serveur ; le navigateur n'appelle que votre propre route."}, {"q": "Quand un bonus (API externe, automatisation) est-il pertinent ?", "o": ["Dès le début du projet", "Quand le socle du MVP fonctionne : auth, CRUD, RLS, déploiement", "À la place du déploiement", "Uniquement si le projet est en binôme"], "a": 1, "e": "Les bonus ne comptent que si le MVP est fonctionnel : le socle passe d'abord."}, {"q": "Quel risque désigne la « dépendance à un fournisseur » ?", "o": ["Un bug dans un composant React", "L'utilisation de plusieurs branches Git", "Le fait d'utiliser TypeScript", "La difficulté à quitter un service dont on dépend si ses prix ou conditions changent"], "a": 3, "e": "Plus un projet s'appuie sur des fonctions propriétaires d'un service, plus une migration devient coûteuse."}, {"q": "Après la soutenance, le jury signale que le filtre de CinéList est peu visible. Première étape d'itération adaptée ?", "o": ["Consigner le retour (issue GitHub, PROJECT.md) puis le traiter dans une branche avec PR et preview", "Réécrire toute l'interface avec un nouveau framework", "Ignorer le retour", "Modifier directement main en production"], "a": 0, "e": "L'itération reprend le cycle de travail habituel, à partir d'un retour tracé."}, {"q": "Quel ordre résume la progression du module ?", "o": ["Agentic Coding → Prompt Engineering → Context Engineering", "Context Engineering → Agentic Coding → Prompt Engineering", "Prompt Engineering → Context Engineering → Agentic Coding", "Prompt Engineering → Agentic Coding → Context Engineering"], "a": 2, "e": "On apprend d'abord à formuler, puis à donner le contexte, enfin à déléguer à un agent."}]];
+const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function download(name, txt){ const blob=new Blob([txt],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez le chapitre puis recommencez.'; return 'Reprenez le chapitre, puis recommencez l\'activité.'; }
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return false;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Toutes les activités sont validées !' : 'Activité validée ✅');
+  if(typeof onDone==='function') onDone(act);
+  return true;
+}
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* Explorateurs */
+$$('[data-explorer]').forEach(box=>{
+  const E = EXPLORERS[box.dataset.explorer]; const seen=new Set();
+  const chain=$('.chain',box), detail=$('.concept-detail',box);
+  E.items.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>show(i)); chain.appendChild(b);
+  });
+  function show(i){
+    const k=E.items[i]; seen.add(i);
+    $$('.chain-node',box).forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+    detail.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(FAMILIES[k.fam]||'')+'</span></div>'+
+      k.rows.map(r=>'<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>').join('');
+    const f=$('.progress-fill',box), t=$('.progress-label span:last-child',box);
+    f.style.width=Math.round(seen.size/E.items.length*100)+'%'; t.textContent=seen.size+' / '+E.items.length;
+  }
+  show(0);
+});
+const qState = {};
+const L = ['A','B','C','D','E'];
+function renderQCM(ci){
+  const box=$('#qcm'+ci); box.innerHTML='';
+  const qs = shuffle(QCMS[ci]).map(q=>{ const opts=shuffle(q.o.map((t,i)=>({t,good:i===q.a}))); return {q:q.q,e:q.e,opts}; });
+  qState[ci]={qs};
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div'); d.className='qcm-q';
+    d.innerHTML='<div class="qt"><span class="q-num">Q'+(qi+1)+'</span>'+esc(q.q)+'</div><div class="qcm-opts" role="radiogroup">'+
+      q.opts.map((o,oi)=>'<button type="button" class="qcm-opt" role="radio" aria-checked="false" data-oi="'+oi+'"><span class="l">'+L[oi]+'</span><span>'+esc(o.t)+'</span></button>').join('')+
+      '</div><div class="expl"></div>';
+    $$('.qcm-opt',d).forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('checked')) return;
+      $$('.qcm-opt',d).forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});
+      b.classList.add('sel'); b.setAttribute('aria-checked','true'); d.dataset.ans=b.dataset.oi; updQ(ci);
+    }));
+    box.appendChild(d);
+  });
+  $('#qres'+ci).classList.remove('show'); updQ(ci);
+}
+function updQ(ci){ const rows=$$('#qcm'+ci+' .qcm-q'); setProgress('qfill'+ci,'qtxt'+ci,rows.filter(r=>r.dataset.ans!==undefined).length,rows.length); }
+const scores = {};
+function checkQCM(ci, silent){
+  const rows=$$('#qcm'+ci+' .qcm-q');
+  if(!silent && rows.some(r=>r.dataset.ans===undefined)){ toast('Répondez à toutes les questions avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,qi)=>{
+    const q=qState[ci].qs[qi]; const ans=r.dataset.ans===undefined?-1:+r.dataset.ans;
+    const gi=q.opts.findIndex(o=>o.good); const good=ans===gi; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    $$('.qcm-opt',r).forEach((b,oi)=>{ b.classList.toggle('good',oi===gi); b.classList.toggle('bad',oi===ans&&!good); });
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ Bonne réponse : <strong>'+L[gi]+'</strong>. ')+esc(q.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#qres'+ci).innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#qres'+ci).classList.add('show');
+  if(!silent){ scores[ci]=Math.max(scores[ci]||0,ok); updScores(); markDone('ch'+ci); }
+}
+function revealQCM(ci){
+  $$('#qcm'+ci+' .qcm-q').forEach((r,qi)=>{ const gi=qState[ci].qs[qi].opts.findIndex(o=>o.good); r.dataset.ans=gi; $$('.qcm-opt',r).forEach((b,oi)=>b.classList.toggle('sel',oi===gi)); });
+  updQ(ci); checkQCM(ci,true);
+}
+function updScores(){
+  let tot=0,max=0;
+  QCMS.forEach((q,ci)=>{ const c=$('#score'+ci); if(scores[ci]!==undefined){ c.textContent=scores[ci]+' / '+q.length; tot+=scores[ci]; } max+=q.length; });
+  $('#scoreTotal').textContent=tot+' / '+max;
+}
+QCMS.forEach((_,ci)=>renderQCM(ci));
+$$('[data-qcheck]').forEach(b=>b.addEventListener('click',()=>checkQCM(+b.dataset.qcheck)));
+$$('[data-qreveal]').forEach(b=>b.addEventListener('click',()=>revealQCM(+b.dataset.qreveal)));
+$$('[data-qreset]').forEach(b=>b.addEventListener('click',()=>renderQCM(+b.dataset.qreset)));
+$$('#finCheck input').forEach(c=>c.addEventListener('change',()=>{}));
+
+})();
+</script>
+</body>
+</html>

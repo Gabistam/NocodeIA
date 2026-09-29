@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Séance 2 — Du besoin au contexte projet · Théorie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --secondary:#059669;--secondary-light:#d1fae5;
+  --accent:#d97706;--accent-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --purple:#7c3aed;--purple-light:#ede9fe;
+  --dark:#0f172a;--dark2:#1e293b;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --bg:#f1f5f9;--card:#ffffff;--radius:14px;
+  --sans:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;min-height:100vh}
+code,.mono{font-family:var(--mono)}
+code{background:#f1f5f9;border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:.84em}
+pre code,.key-box code,.nest.n4 code{background:transparent;border:none;padding:0;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1e40af 100%);color:#fff;padding:42px 24px 34px;position:relative;overflow:hidden}
+header.practice{background:linear-gradient(135deg,#0f172a 0%,#064e3b 60%,#047857 100%)}
+header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%)}
+header.practice::after{background:radial-gradient(circle,rgba(52,211,153,.25),transparent 70%)}
+.header-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:10px}
+header .subtitle{color:#cbd5e1;max-width:720px;font-size:1rem}
+.meta-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.meta-pill{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px}
+.global-progress{margin-top:24px;max-width:520px}
+.global-progress .label{display:flex;justify-content:space-between;font-size:.8rem;color:#cbd5e1;margin-bottom:6px}
+.global-progress .track{height:8px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.global-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#10b981,#34d399);border-radius:999px;transition:width .5s ease}
+.mode-flag{display:none;margin-top:14px;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;width:max-content}
+body.formateur .mode-flag{display:block}
+
+.tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 16px;scrollbar-width:thin}
+.tab{border:none;background:none;padding:15px 14px;font-size:.85rem;font-weight:600;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .done-mark{display:none;color:var(--secondary)}
+.tab.done .done-mark{display:inline}
+.tab .lock-mark{font-size:.8rem}
+
+main{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel.active{animation:none}.global-progress .fill,.progress-fill{transition:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:22px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+@media(max-width:600px){.card{padding:20px 16px}}
+.section-title{display:flex;align-items:center;gap:14px;font-size:1.3rem;font-weight:700;margin-bottom:18px;color:var(--dark)}
+.icon-bg{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;background:var(--primary-light)}
+.icon-bg.green{background:var(--secondary-light)}.icon-bg.amber{background:var(--accent-light)}.icon-bg.purple{background:var(--purple-light)}.icon-bg.red{background:var(--danger-light)}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--dark)}
+p{margin-bottom:10px}
+.lead{font-size:1.05rem;color:var(--dark2)}
+.muted{color:var(--muted);font-size:.88rem}
+ul.clean{list-style:none}
+ul.clean li{padding:6px 0 6px 26px;position:relative}
+ul.clean li::before{content:"▸";position:absolute;left:6px;color:var(--primary);font-weight:700}
+ol{padding-left:22px}ol li{padding:3px 0}
+
+.objectif-box{background:#eff6ff;border:1px solid #bfdbfe;border-left:5px solid var(--primary);border-radius:10px;padding:18px 20px;margin:16px 0}
+.objectif-box strong.title{display:block;color:var(--primary-dark);margin-bottom:8px}
+.instruction-box{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--accent);border-radius:10px;padding:18px 20px;margin:16px 0}
+.instruction-box strong.title{display:block;color:#92400e;margin-bottom:8px}
+.key-box{background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin:18px 0;border-left:5px solid #10b981}
+.key-box .big{font-size:1.15rem;font-weight:700;color:#fff}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-left:5px solid var(--danger);border-radius:10px;padding:16px 20px;margin:16px 0}
+
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.mini-card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff}
+.mini-card h4{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mini-card.bad{border-color:#fecaca;background:#fef2f2}
+.mini-card.good{border-color:#a7f3d0;background:#f0fdf4}
+.mini-card pre.prompt{margin-top:8px}
+
+.famille-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.2px}
+.f1{background:var(--primary-light);color:#1e40af}
+.f2{background:var(--secondary-light);color:#065f46}
+.f3{background:var(--accent-light);color:#92400e}
+.f4{background:var(--purple-light);color:#5b21b6}
+.f5{background:var(--danger-light);color:#991b1b}
+
+.term-item{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.85rem;padding:10px 14px;border-radius:8px;display:inline-block}
+.chain .term-item,.objectif-box .term-item{padding:6px 12px}
+pre.prompt{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:18px 20px;border-radius:10px;white-space:pre-wrap;word-break:break-word;line-height:1.65;overflow-x:auto;position:relative;margin:12px 0}
+pre.prompt .hl{color:#34d399}
+pre.prompt .hl2{color:#fbbf24}
+pre.prompt .hl3{color:#93c5fd}
+
+.btn{border:none;border-radius:10px;padding:11px 18px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:var(--secondary);color:#fff}.btn-success:hover{background:#047857}
+.btn-ghost{background:#fff;color:var(--dark2);border:1px solid var(--border)}.btn-ghost:hover{background:#f8fafc}
+.btn-warning{background:var(--accent);color:#fff}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.btn-reveal{display:none}
+body.formateur .btn-reveal{display:inline-flex}
+.reveal-content{display:none}
+.reveal-content.shown{display:block}
+
+.progress-wrap{margin:14px 0 4px}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.progress-track{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#059669,#10b981);border-radius:999px;transition:width .4s ease}
+
+.result-panel{display:none;background:var(--dark);color:#e2e8f0;border-radius:12px;padding:22px 24px;margin-top:20px}
+.result-panel.show{display:block}
+.result-panel .score{font-family:var(--mono);font-size:2rem;font-weight:700;color:#34d399}
+.result-panel .msg{margin-top:6px;color:#cbd5e1}
+
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+.chain-node{border:2px solid var(--border);background:#fff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;color:var(--dark2)}
+.chain-node:hover{border-color:var(--primary)}
+.chain-node.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chain-node.seen:not(.active){border-color:#93c5fd}
+.chain-arrow{color:var(--muted);font-weight:700}
+.concept-detail{border:1px solid var(--border);border-radius:12px;padding:22px;background:#f8fafc;min-height:180px}
+.concept-detail .row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.concept-detail .row:last-child{border-bottom:none}
+.concept-detail .k{font-weight:700;font-size:.82rem;color:var(--muted)}
+@media(max-width:600px){.concept-detail .row{grid-template-columns:1fr;gap:2px}}
+
+/* QCM */
+.qcm-q{border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.qcm-q .qt{font-weight:600;margin-bottom:10px}
+.qcm-opts{display:grid;gap:8px}
+.qcm-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-size:.9rem;background:#fff;text-align:left;width:100%;color:var(--text)}
+.qcm-opt:hover{background:#f8fafc;border-color:#93c5fd}
+.qcm-opt .l{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:18px}
+.qcm-opt.sel{border-color:var(--primary);background:#eff6ff}
+.qcm-q.checked .qcm-opt{cursor:default}
+.qcm-opt.good{border-color:#6ee7b7;background:#ecfdf5}
+.qcm-opt.bad{border-color:#fca5a5;background:#fef2f2}
+.qcm-q.correct{border-color:#6ee7b7}
+.qcm-q.wrong{border-color:#fca5a5}
+.qcm-q .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:8px;border-top:1px dashed var(--border)}
+.qcm-q.checked .expl{display:block}
+.q-num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:6px}
+
+/* V/F */
+.vf-row{padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff}
+.vf-row .vf-q{font-weight:500;margin-bottom:10px}
+.vf-btns{display:flex;gap:8px}
+.vf-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 18px;font-weight:600;font-size:.85rem;color:var(--text)}
+.vf-btn.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.vf-row.correct{border-color:#6ee7b7;background:#ecfdf5}
+.vf-row.wrong{border-color:#fca5a5;background:#fef2f2}
+.vf-row .expl{display:none;margin-top:10px;font-size:.85rem}
+.vf-row.checked .expl{display:block}
+
+/* Cas 1 matching */
+.match-grid{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:16px;margin-top:10px}
+@media(max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.m-term{background:var(--dark);color:#e2e8f0;font-family:var(--mono);font-size:.84rem;padding:10px 12px;border-radius:8px;border:2px solid var(--dark);text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.m-term:hover{border-color:#60a5fa}
+.m-term.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.35)}
+.m-def{background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.86rem;text-align:left;display:flex;gap:10px;align-items:flex-start;color:var(--text)}
+.m-def:hover{border-color:#93c5fd}
+.pair-badge{font-family:var(--mono);font-size:.72rem;font-weight:700;min-width:24px;height:24px;border-radius:6px;display:inline-grid;place-items:center;background:#e2e8f0;color:var(--muted);flex-shrink:0}
+.paired .pair-badge{background:var(--primary);color:#fff}
+.m-def.paired{border-color:#93c5fd;background:#eff6ff}
+.m-term.good,.m-def.good{border-color:#10b981}
+.m-def.good{background:#ecfdf5}
+.m-term.bad,.m-def.bad{border-color:#ef4444}
+.m-def.bad{background:#fef2f2}
+.round-pills{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.round-pill{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.round-pill.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.round-pill.ok{background:var(--secondary-light);color:#065f46;border-color:#6ee7b7}
+
+/* Cas 2 */
+.group{border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;background:#fff}
+.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.group-head strong{font-size:1rem}
+.g-label{font-size:.8rem;font-weight:700;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.choice-row{display:flex;flex-wrap:wrap;gap:8px}
+.choice{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:600;color:var(--dark2)}
+.choice.sel{background:var(--dark);color:#fff;border-color:var(--dark)}
+.choice.good{background:#10b981;color:#fff;border-color:#10b981}
+.choice.bad{background:#ef4444;color:#fff;border-color:#ef4444}
+.sit{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--border);border-radius:9px;padding:10px 12px;background:#f8fafc;font-size:.88rem;margin-bottom:8px;color:var(--text)}
+.sit:hover{border-color:#fbbf24}
+.sit .tag{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2e8f0;color:var(--muted);white-space:nowrap}
+.sit.sel{border-color:var(--accent);background:#fffbeb}
+.sit.sel .tag{background:var(--accent);color:#fff}
+.sit.good{border-color:#10b981;background:#ecfdf5}
+.sit.good .tag{background:#10b981;color:#fff}
+.sit.bad{border-color:#ef4444;background:#fef2f2}
+.sit.bad .tag{background:#ef4444;color:#fff}
+.group .expl{display:none;margin-top:10px;font-size:.86rem;padding-top:10px;border-top:1px dashed var(--border)}
+.group.checked .expl{display:block}
+.group.correct{border-color:#6ee7b7}
+.group.wrong{border-color:#fca5a5}
+.group.half{border-color:#fcd34d}
+
+/* forms */
+label.f-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px;color:var(--dark2)}
+input.f-input,textarea.f-input{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:9px;font-family:var(--sans);font-size:.9rem;background:#fff;color:var(--text)}
+textarea.f-input{min-height:78px;resize:vertical}
+
+.steps{margin:14px 0}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step input[type=checkbox]{width:20px;height:20px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+.step .s-num{font-family:var(--mono);font-weight:700;color:var(--primary);min-width:24px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:8px;cursor:pointer}
+.checklist label:hover{background:#f8fafc}
+.checklist input{width:18px;height:18px;accent-color:var(--secondary);margin-top:3px;flex-shrink:0}
+
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 14px;font-weight:600}
+th:first-child{border-top-left-radius:10px}th:last-child{border-top-right-radius:10px}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:#f8fafc}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;background:#f1f5f9;border:1px solid var(--border);padding:3px 10px;border-radius:999px;color:var(--dark2)}
+
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0}
+.route-step{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.route-step .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.route-step .t{font-weight:700;font-size:.9rem;color:var(--dark)}
+.route-step .c{font-size:.75rem;color:var(--muted)}
+.route-step.past{background:#ecfdf5;border-color:#a7f3d0}
+.route-step.here{background:var(--primary);border-color:var(--primary)}
+.route-step.here .t,.route-step.here .n,.route-step.here .c{color:#fff}
+
+.levels{display:grid;gap:8px;margin:14px 0}
+.level{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.level .lv{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--primary)}
+.level .risk{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+@media(max-width:600px){.level{grid-template-columns:40px 1fr}.level .risk{grid-column:2;justify-self:start}}
+
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.pillar{border-radius:12px;padding:16px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--primary)}
+.pillar:nth-child(5n+2){border-top-color:var(--purple)}
+.pillar:nth-child(5n+3){border-top-color:var(--secondary)}
+.pillar:nth-child(5n+4){border-top-color:var(--accent)}
+.pillar:nth-child(5n+5){border-top-color:var(--danger)}
+.pillar .n{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.pillar h4{font-size:1rem;margin:4px 0 6px}
+.pillar p{font-size:.84rem;color:var(--dark2);margin:0}
+.pillar .q{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:8px}
+
+details.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";font-family:var(--mono);color:var(--primary);font-weight:700}
+details.acc[open] summary::after{content:"−"}
+details.acc[open] summary{border-bottom:1px dashed var(--border)}
+details.acc > div{padding:12px 16px;font-size:.9rem}
+
+.gloss{display:grid;gap:10px;margin-top:10px}
+.gloss-item{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.gloss-item .gt{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+@media(max-width:620px){.gloss-item{grid-template-columns:1fr}}
+.lock-wrap{text-align:center;padding:30px 10px}
+.lock-wrap .big-lock{font-size:3rem}
+.lock-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:16px}
+.lock-pill{font-size:.82rem;font-weight:600;padding:6px 14px;border-radius:999px;background:#f1f5f9;border:1px solid var(--border)}
+.lock-pill.ok{background:var(--secondary-light);border-color:#6ee7b7;color:#065f46}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.filter-row button{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;color:var(--dark2)}
+.filter-row button.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+
+.score-table td:last-child{font-family:var(--mono);font-weight:700}
+.link-card{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#f8fafc;border:1px dashed #93c5fd;border-radius:12px;padding:16px 18px;margin-top:16px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:10px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.nav-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 50px}
+@media print{.tabs-wrap,.actions-row,.nav-bottom{display:none}.panel{display:block!important}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <span class="badge">🧭 NoCode AI / Vibe Coding — Séance 2 · Support théorique</span>
+    <h1>Du besoin au contexte projet</h1>
+    <p class="subtitle">Transformer votre brief en un contexte projet clair, priorisé et versionné : PROJECT.md, DESIGN.md et AGENTS.md, que n&#x27;importe quel coding agent pourra lire.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 2 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : PROJECT.md + DESIGN.md + AGENTS.md</span></div>
+    <div class="global-progress">
+      <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
+      <div class="track"><div class="fill" id="globalFill"></div></div>
+    </div>
+    <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
+  </div>
+</header>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🎯 Problème &amp; cible <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🧱 Définir le MVP <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">📝 User stories <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">🗺️ Parcours &amp; écrans <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🎨 Design System <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">🧠 Context Engineering <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<main>
+<section class="panel active" data-panel="0">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
+    <div class="key-box"><div class="big">Je sais lui donner le bon contexte.</div><p style="margin:8px 0 0">Un agent ne devine pas votre projet : il lit ce que vous avez écrit. Un bon contexte versionné vaut mieux que cent prompts brillants.</p></div>
+    <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step here"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step here"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step "><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step "><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step "><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step "><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
+    <h3>Le fil pédagogique</h3>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td><strong>Séance 2</strong> — aujourd&#39;hui</td><td><strong>Je sais lui donner le bon contexte.</strong></td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td>Séance 4</td><td>Je sais construire une vraie application.</td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l&#x27;IA produit.</td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Formuler le problème, la cible (persona) et la proposition de valeur de votre projet ;</li><li>Délimiter un MVP réaliste avec la méthode MoSCoW et une liste explicite du hors périmètre ;</li><li>Rédiger des user stories INVEST accompagnées de critères d&#x27;acceptation Étant donné / Quand / Alors ;</li><li>Concevoir le parcours utilisateur, l&#x27;arborescence et les wireframes, y compris les états vide, chargement et erreur ;</li><li>Définir un Design System minimal (tokens, composants, variantes) respectant le contraste WCAG AA ;</li><li>Rédiger PROJECT.md, DESIGN.md et AGENTS.md pour fournir à l&#x27;agent un contexte minimal mais suffisant.</li></ul></div>
+    <div class="grid grid-2">
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Votre brief.md produit en séance 1 (idée, cible, besoin, fonctionnalités envisagées).</li><li>Le choix de votre projet fil rouge (CinéList, GameBacklog ou CampusHub) et de votre binôme éventuel.</li><li>Un compte sur un assistant IA (Claude, ChatGPT, Gemini…) et, si possible, un accès à un outil de maquettage IA (v0, Claude Design ou Figma).</li><li>Un dépôt GitHub créé (même vide) pour y versionner vos fichiers de contexte.</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Cadrage</span><span class="famille-tag f2">Spécification</span><span class="famille-tag f3">Parcours &amp; UX</span><span class="famille-tag f4">Design System</span><span class="famille-tag f5">Context Engineering</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
+    <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-2-du-besoin-au-contexte-projet-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🎯 Problème &amp; cible ▸</button></div>
+  </div>
+</section>
+<section class="panel" data-panel="c0">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🎯</span>Partir du problème, pas de la solution</div>
+  <p class="lead">En séance 1, vous avez appris à parler à l'IA. Aujourd'hui, vous apprenez à lui donner le bon contexte. Et le premier élément de contexte n'est pas technique : c'est le problème que votre application résout, et pour qui.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Transformer votre brief.md en trois éléments précis et réutilisables : un énoncé du problème, un persona principal et une proposition de valeur. Ils formeront l'ouverture de votre PROJECT.md.</div>
+  <h3>Pourquoi commencer par là ?</h3>
+  <p>Un coding agent sait produire du code très vite. S'il ne sait pas quel problème il résout, il remplit les vides avec des fonctionnalités génériques : un tableau de bord inutile, un système de commentaires, trois rôles utilisateurs. Plus le problème est flou, plus le code généré part dans toutes les directions. Un problème bien formulé sert ensuite de critère pour trancher : « cette fonctionnalité aide-t-elle à résoudre le problème ? Sinon, elle attend. »</p>
+  <h3>L'énoncé du problème <span class="famille-tag f1">Cadrage</span></h3>
+  <p>Un énoncé du problème tient en une ou deux phrases et suit une structure simple :</p>
+  <pre class="prompt"><span class="hl3">[Cible]</span> a du mal à <span class="hl">[tâche ou besoin]</span> parce que <span class="hl2">[obstacle actuel]</span>, ce qui <span class="hl2">[conséquence concrète]</span>.</pre>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🎬 CinéList</h4><p class="muted">Les étudiants qui regardent beaucoup de séries ont du mal à retrouver ce qu'ils voulaient voir, parce que les recommandations sont éparpillées entre messages, notes du téléphone et plateformes, ce qui leur fait perdre du temps et oublier des titres.</p></div>
+    <div class="mini-card"><h4>🎮 GameBacklog</h4><p class="muted">Les joueurs qui achètent des jeux en promotion ont du mal à savoir où ils en sont, parce que leurs jeux sont répartis sur plusieurs plateformes, ce qui les pousse à racheter ou à abandonner des jeux sans les finir.</p></div>
+    <div class="mini-card"><h4>🎓 CampusHub</h4><p class="muted">Les étudiants d'un campus ont du mal à découvrir les événements associatifs, parce qu'ils sont annoncés sur des canaux dispersés, ce qui laisse des soirées à moitié vides et des étudiants qui se sentent exclus.</p></div>
+  </div>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">« Faire une app de films avec Supabase et Next.js. » C'est une solution technique, pas un problème. Rien n'indique pour qui, ni pourquoi.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Nommer une cible, une difficulté observable et sa conséquence. La technique viendra plus tard, dans AGENTS.md.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">👤</span>Le persona : une cible incarnée</div>
+  <p class="lead">Un persona est un portrait fictif mais réaliste de votre utilisateur principal. Il remplace « les utilisateurs » (tout le monde, donc personne) par une personne à qui l'on peut poser des questions.</p>
+  <h3>Ce que contient un persona utile</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Rubrique</th><th>Question</th><th>Exemple GameBacklog</th></tr>
+    <tr><td>Identité</td><td>Qui est-ce, en une ligne ?</td><td>Yanis, étudiant en BTS, joue le soir et le week-end.</td></tr>
+    <tr><td>Contexte d'usage</td><td>Où, sur quel appareil, à quel moment ?</td><td>Surtout sur mobile, dans les transports ou avant de lancer une partie.</td></tr>
+    <tr><td>Objectifs</td><td>Que veut-il accomplir ?</td><td>Finir les jeux commencés avant d'en acheter de nouveaux.</td></tr>
+    <tr><td>Frustrations</td><td>Qu'est-ce qui le bloque aujourd'hui ?</td><td>Ne se souvient plus de ce qu'il possède ni de ce qu'il a abandonné.</td></tr>
+    <tr><td>Citation</td><td>Que dirait-il spontanément ?</td><td>« J'ai quarante jeux et je ne sais jamais lequel lancer. »</td></tr>
+  </table></div>
+  <div class="warn-box"><strong>⛔ Piège</strong> Le persona inventé pour justifier ses propres idées (« Léa, 20 ans, adore toutes les fonctionnalités que j'ai prévues »). Un persona se nourrit d'observations réelles : interrogez deux ou trois personnes de votre entourage, ou utilisez l'interview IA de la séance 1 pour lister vos hypothèses, puis confrontez-les à de vrais utilisateurs.</div>
+  <p>Gardez <strong>un persona principal</strong>, deux au maximum. CampusHub a naturellement deux profils (l'étudiant participant et l'organisateur associatif) : choisissez celui que le MVP sert en priorité et notez l'autre comme secondaire.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">💎</span>Proposition de valeur et passage à PROJECT.md</div>
+  <p class="lead">La proposition de valeur dit en une phrase ce que votre produit apporte de plus que l'existant. C'est la boussole de toutes les décisions de périmètre.</p>
+  <pre class="prompt">Pour <span class="hl3">[persona]</span> qui <span class="hl">[besoin]</span>, <span class="hl3">[nom du produit]</span> est <span class="hl">[catégorie]</span> qui <span class="hl2">[bénéfice principal]</span>.
+Contrairement à <span class="hl2">[alternative actuelle]</span>, notre produit <span class="hl2">[différence clé]</span>.</pre>
+  <p><strong>Exemple CinéList :</strong> « Pour les étudiants qui veulent garder la trace des films et séries qu'on leur conseille, CinéList est une watchlist personnelle qui centralise titres, statuts, notes et avis. Contrairement aux notes du téléphone, elle permet de filtrer, de noter et de retrouver un titre immédiatement. »</p>
+  <h3>De brief.md vers PROJECT.md</h3>
+  <p>Votre brief.md de la séance 1 était une idée structurée. PROJECT.md en est la version exploitable par un agent : plus précise, priorisée et stable.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Dans brief.md (S1)</th><th>Devient dans PROJECT.md (S2)</th></tr>
+    <tr><td>Idée générale</td><td>Pitch en une phrase + proposition de valeur</td></tr>
+    <tr><td>Public visé</td><td>Persona principal (et secondaire éventuel)</td></tr>
+    <tr><td>Besoin</td><td>Énoncé du problème structuré</td></tr>
+    <tr><td>Liste de fonctionnalités</td><td>MVP priorisé MoSCoW + hors périmètre</td></tr>
+    <tr><td>Questions ouvertes</td><td>Décisions prises ou hypothèses à vérifier</td></tr>
+  </table></div>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Donnez votre brief.md à l'IA et demandez-lui de reformuler le problème selon la structure cible / tâche / obstacle / conséquence.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Demandez-lui de lister les hypothèses implicites de votre brief (qui, où, sur quel appareil) et tranchez chacune.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Faites proposer trois formulations de proposition de valeur, gardez la plus concrète et réécrivez-la avec vos mots.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Collez le résultat validé en tête de PROJECT.md : ce sera le point d'entrée de l'agent.</span></div>
+  </div>
+  <div class="key-box"><div class="big">Le problème d'abord, la solution ensuite.</div><p style="margin:8px 0 0">Si vous ne savez pas expliquer le problème en deux phrases, l'agent ne le saura pas non plus.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm0"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt0">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill0"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="0">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="0">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres0"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🧱 Définir le MVP ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c1">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🧱</span>Qu'est-ce qu'un MVP, vraiment ?</div>
+  <p class="lead">Le MVP (Minimum Viable Product) est la plus petite version du produit qui résout réellement le problème pour la cible et qui fonctionne de bout en bout. Minimum ne veut pas dire bâclé : viable veut dire utilisable, sécurisé et déployé.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Fixer un périmètre réaliste : ce que votre application fera, ce qu'elle ne fera pas, et sur quelles données elle reposera.</div>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ Le faux MVP</h4><p class="muted">Dix fonctionnalités à moitié faites : un fil social, des badges, une IA de recommandation, un mode sombre… mais la connexion plante et rien n'est déployé.</p></div>
+    <div class="mini-card good"><h4>✅ Le vrai MVP</h4><p class="muted">Un parcours cœur complet : je me connecte, j'ajoute un titre à ma watchlist, je change son statut, je le note, je le retrouve par filtre. Déployé, responsive, sécurisé.</p></div>
+  </div>
+  <h3>Le socle obligatoire du module</h3>
+  <p>Quel que soit votre projet, votre MVP doit couvrir ce socle. Il fait partie de vos « Must » par définition :</p>
+  <div class="chips"><span class="chip">Authentification</span><span class="chip">Base de données</span><span class="chip">≥ 2 entités métier</span><span class="chip">Relation entre données</span><span class="chip">CRUD</span><span class="chip">Recherche / filtrage</span><span class="chip">Espace personnel / dashboard</span><span class="chip">Responsive</span><span class="chip">Design System</span><span class="chip">Git / GitHub</span><span class="chip">Déploiement</span></div>
+  <div class="instruction-box"><strong class="title">Les bonus attendent</strong>API IA, API externe (par exemple un catalogue de films), automatisation : uniquement quand le MVP fonctionne et est déployé. Notez-les en « Could » ou « Won't (pour l'instant) », jamais en « Must ».</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">📊</span>Prioriser avec MoSCoW</div>
+  <p class="lead">MoSCoW classe chaque fonctionnalité dans l'une de quatre catégories. L'intérêt n'est pas l'étiquette : c'est d'obliger à trancher.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Catégorie</th><th>Sens</th><th>Exemple CinéList</th></tr>
+    <tr><td><strong>Must have</strong></td><td>Sans elle, le produit ne résout pas le problème ou ne respecte pas le socle.</td><td>Inscription / connexion ; ajouter, modifier, supprimer un titre de sa watchlist ; statut (à voir, en cours, vu) ; filtre par statut.</td></tr>
+    <tr><td><strong>Should have</strong></td><td>Importante, mais le produit reste utilisable sans.</td><td>Note sur 5 et avis court ; recherche par titre ; favoris.</td></tr>
+    <tr><td><strong>Could have</strong></td><td>Agréable si le temps le permet.</td><td>Tri par date d'ajout ; statistiques du dashboard ; affiches via une API externe.</td></tr>
+    <tr><td><strong>Won't have (this time)</strong></td><td>Explicitement exclue de cette version.</td><td>Partage social, recommandations par IA, application mobile native.</td></tr>
+  </table></div>
+  <ul class="clean">
+    <li>Si tout est « Must », rien ne l'est : visez un Must qui représente une part nettement minoritaire de vos idées de départ.</li>
+    <li>Une fonctionnalité « Must » doit pouvoir se relier directement au problème ou au socle obligatoire.</li>
+    <li>Le classement évolue : une « Should » peut monter en « Must » si un test utilisateur le justifie. Mettez alors PROJECT.md à jour.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">🚫</span>Le hors périmètre et les entités métier</div>
+  <p class="lead">Écrire ce que l'application ne fera pas est aussi important qu'écrire ce qu'elle fera. Un agent a tendance à « bien faire » en ajoutant ce qui n'a pas été demandé ; la section hors périmètre de PROJECT.md l'en empêche.</p>
+  <pre class="prompt">## Hors périmètre (ne pas implémenter)
+- Pas de rôle administrateur ni de modération
+- Pas de messagerie entre utilisateurs
+- Pas de paiement
+- Pas d'import automatique depuis les plateformes de streaming</pre>
+  <h3>Les entités métier pressenties <span class="famille-tag f2">Spécification</span></h3>
+  <p>Une entité métier est un objet que votre application manipule et stocke : c'est ce qui deviendra une table dans Supabase. À ce stade, vous ne dessinez pas le schéma complet (ce sera en séance 4) : vous nommez les entités, leurs attributs essentiels et les relations.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Projet</th><th>Entités pressenties</th><th>Relation clé</th></tr>
+    <tr><td>🎬 CinéList</td><td>profil, titre (film ou série), entrée de watchlist (statut, note, avis, favori)</td><td>Un utilisateur possède plusieurs entrées ; chaque entrée pointe vers un titre.</td></tr>
+    <tr><td>🎮 GameBacklog</td><td>profil, jeu, entrée de backlog (statut à jouer / en cours / terminé, note, plateforme)</td><td>Un utilisateur possède plusieurs entrées ; un jeu peut apparaître dans plusieurs backlogs.</td></tr>
+    <tr><td>🎓 CampusHub</td><td>profil, événement, inscription</td><td>Un utilisateur s'inscrit à plusieurs événements ; un événement a plusieurs inscrits (relation plusieurs-à-plusieurs via l'inscription).</td></tr>
+  </table></div>
+  <div class="warn-box"><strong>⛔ Piège</strong> Une seule table « films » avec une colonne « utilisateur » ne satisfait pas l'exigence « ≥ 2 entités métier avec relation ». Séparez ce qui appartient au catalogue de ce qui appartient à l'utilisateur.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">✅</span>Vérifier la couverture du socle</div>
+  <p class="lead">Avant de valider votre MVP, reliez chaque exigence du socle à une fonctionnalité concrète. Un trou dans ce tableau est un trou dans votre note.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Exigence du socle</th><th>Comment CampusHub la couvre</th></tr>
+    <tr><td>Authentification</td><td>Inscription et connexion par email via Supabase Auth.</td></tr>
+    <tr><td>≥ 2 entités + relation</td><td>Événement et inscription, reliés au profil.</td></tr>
+    <tr><td>CRUD</td><td>L'organisateur crée, modifie et supprime ses événements ; l'étudiant s'inscrit et se désinscrit.</td></tr>
+    <tr><td>Recherche / filtrage</td><td>Filtre par date et par catégorie, recherche par mot-clé.</td></tr>
+    <tr><td>Espace personnel</td><td>Dashboard « Mes inscriptions » et « Mes événements ».</td></tr>
+    <tr><td>Responsive + Design System</td><td>Mobile d'abord, tokens et composants décrits dans DESIGN.md.</td></tr>
+    <tr><td>Git + déploiement</td><td>Dépôt GitHub, déploiement continu sur Vercel.</td></tr>
+  </table></div>
+  <div class="key-box"><div class="big">Un MVP se juge à ce qu'il retire.</div><p style="margin:8px 0 0">Chaque ligne de hors périmètre vous protège contre une dérive, la vôtre comme celle de l'agent.</p></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 2</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm1"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt1">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill1"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="1">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="1">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres1"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 📝 User stories ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c2">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">📝</span>Écrire des user stories</div>
+  <p class="lead">Une user story décrit un besoin du point de vue de l'utilisateur, pas une tâche technique. Elle dit qui veut quoi, et surtout pourquoi.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Transformer vos fonctionnalités MVP en user stories testables, chacune accompagnée de critères d'acceptation que vous pourrez donner tels quels à l'agent.</div>
+  <pre class="prompt">En tant que <span class="hl3">[persona / rôle]</span>,
+je veux <span class="hl">[action]</span>,
+afin de <span class="hl2">[bénéfice]</span>.</pre>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🎬 CinéList</h4><p class="muted">En tant qu'étudiant cinéphile, je veux marquer un titre comme « vu » et lui attribuer une note, afin de me souvenir de ce que j'en ai pensé.</p></div>
+    <div class="mini-card"><h4>🎮 GameBacklog</h4><p class="muted">En tant que joueur, je veux filtrer mon backlog par statut « en cours », afin de choisir rapidement le jeu à reprendre.</p></div>
+    <div class="mini-card"><h4>🎓 CampusHub</h4><p class="muted">En tant qu'étudiant, je veux m'inscrire à un événement en un clic, afin de réserver ma place avant qu'il soit complet.</p></div>
+  </div>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">« Créer la table watchlist_items avec une colonne rating. » C'est une tâche technique : aucun utilisateur, aucun bénéfice.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Partir de l'utilisateur et du bénéfice. La table viendra naturellement quand l'agent implémentera la story.</p></div>
+  </div>
+  <p>Une fonctionnalité trop large pour une seule story (« gérer sa watchlist ») s'appelle une <strong>epic</strong> : on la découpe en plusieurs stories (ajouter, modifier le statut, noter, supprimer, filtrer).</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧪</span>Le test INVEST</div>
+  <p class="lead">INVEST est une grille de six qualités pour vérifier qu'une story est prête à être développée.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Lettre</th><th>Qualité</th><th>Question à se poser</th></tr>
+    <tr><td><strong>I</strong></td><td>Independent (indépendante)</td><td>Peut-elle être livrée sans attendre une autre story ?</td></tr>
+    <tr><td><strong>N</strong></td><td>Negotiable (négociable)</td><td>Décrit-elle un besoin plutôt qu'une solution figée ?</td></tr>
+    <tr><td><strong>V</strong></td><td>Valuable (utile)</td><td>Apporte-t-elle une valeur visible à l'utilisateur ?</td></tr>
+    <tr><td><strong>E</strong></td><td>Estimable</td><td>Comprend-on assez bien ce qu'il faut faire pour l'estimer ?</td></tr>
+    <tr><td><strong>S</strong></td><td>Small (petite)</td><td>Tient-elle dans une petite itération avec l'agent ?</td></tr>
+    <tr><td><strong>T</strong></td><td>Testable</td><td>Peut-on vérifier objectivement qu'elle est terminée ?</td></tr>
+  </table></div>
+  <h3>Le découpage vertical</h3>
+  <p>Découpez une epic en tranches <strong>verticales</strong> : chaque story traverse toutes les couches (interface, logique, base de données) pour une petite fonctionnalité complète. À l'inverse, un découpage horizontal (« d'abord toute la BDD, puis toute l'interface ») ne livre aucune valeur avant la fin et rend chaque étape impossible à tester.</p>
+  <div class="chain"><span class="term-item">Epic : gérer ses inscriptions</span><span class="chain-arrow">→</span><span class="term-item">S'inscrire</span><span class="chain-arrow">→</span><span class="term-item">Voir ses inscriptions</span><span class="chain-arrow">→</span><span class="term-item">Se désinscrire</span></div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">✔️</span>Critères d'acceptation : Étant donné / Quand / Alors</div>
+  <p class="lead">Les critères d'acceptation définissent quand une story est terminée. Écrits au format Given / When / Then (en français Étant donné / Quand / Alors), ils sont précis, vérifiables, et presque directement transformables en tests.</p>
+  <pre class="prompt"><span class="hl3">Story :</span> En tant qu'étudiant, je veux m'inscrire à un événement afin de réserver ma place.
+
+<span class="hl">Critère 1 — cas nominal</span>
+Étant donné que je suis connecté et que l'événement a des places disponibles
+Quand je clique sur « S'inscrire »
+Alors mon inscription est enregistrée et le bouton devient « Se désinscrire »
+
+<span class="hl2">Critère 2 — événement complet</span>
+Étant donné que l'événement a atteint sa capacité maximale
+Quand j'ouvre sa fiche
+Alors le bouton « S'inscrire » est désactivé et le message « Complet » s'affiche
+
+<span class="hl2">Critère 3 — non connecté</span>
+Étant donné que je ne suis pas connecté
+Quand je clique sur « S'inscrire »
+Alors je suis redirigé vers la page de connexion</pre>
+  <ul class="clean">
+    <li>Couvrez au moins le cas nominal, un cas d'erreur et un cas limite (liste vide, doublon, droits insuffisants).</li>
+    <li>Décrivez un résultat observable, pas une implémentation : « le titre apparaît dans la liste », pas « la fonction insertItem est appelée ».</li>
+    <li>Ces critères serviront en séance 5 pour contrôler ce que l'agent a produit.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🤖</span>Faire générer, puis faire critiquer par l'IA</div>
+  <p class="lead">L'IA rédige vite des stories correctes en apparence. Votre valeur ajoutée est la critique : ne gardez rien que vous ne sauriez défendre.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Donnez à l'IA votre persona, votre MVP MoSCoW et votre hors périmètre, puis demandez les stories des fonctionnalités « Must ».</span></div>
+    <div class="step"><span class="s-num">2</span><span>Dans un second message, demandez-lui de critiquer ses propres stories avec la grille INVEST et de signaler celles qui sont trop grosses ou techniques.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Demandez les critères Étant donné / Quand / Alors, en exigeant un cas d'erreur par story.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Relisez : supprimez ce qui sort du périmètre, corrigez le vocabulaire pour qu'il soit celui de votre projet.</span></div>
+  </div>
+  <pre class="prompt">Tu es product owner. Voici mon PROJECT.md (persona, MVP, hors périmètre).
+Rédige les user stories des fonctionnalités <span class="hl">Must</span> au format
+« En tant que… je veux… afin de… ».
+Contraintes : une story = une tranche verticale ; aucune story hors périmètre.
+Ensuite, évalue chaque story avec INVEST et signale les faiblesses.
+Ne rédige pas encore les critères d'acceptation.</pre>
+  <div class="warn-box"><strong>⛔ Piège</strong> Accepter vingt stories générées sans les lire. L'IA ajoute souvent des stories « administrateur », « notifications » ou « export PDF » que personne n'a demandées : c'est exactement le hors périmètre que vous avez écrit.</div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm2"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt2">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill2"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="2">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="2">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres2"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : 🗺️ Parcours &amp; écrans ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c3">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🗺️</span>Le user flow : le chemin de l'utilisateur</div>
+  <p class="lead">Un user flow représente les étapes qu'un utilisateur traverse pour atteindre un objectif, écran par écran, décision par décision. Il relie vos user stories entre elles.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Dessiner le parcours principal de votre application, en déduire la liste des écrans et leurs routes, puis produire des wireframes qui prévoient tous les états.</div>
+  <h3>Parcours principal CinéList</h3>
+  <div class="chain"><span class="term-item">Accueil</span><span class="chain-arrow">→</span><span class="term-item">Connexion</span><span class="chain-arrow">→</span><span class="term-item">Dashboard</span><span class="chain-arrow">→</span><span class="term-item">Ajouter un titre</span><span class="chain-arrow">→</span><span class="term-item">Watchlist filtrée</span><span class="chain-arrow">→</span><span class="term-item">Fiche titre (note, avis)</span></div>
+  <ul class="clean">
+    <li><strong>Chemin nominal</strong> (happy path) : tout se passe bien, c'est le parcours à réussir en priorité.</li>
+    <li><strong>Branches</strong> : utilisateur non connecté redirigé vers la connexion, titre déjà présent dans la watchlist, formulaire invalide.</li>
+    <li><strong>Point d'entrée et de sortie</strong> : d'où arrive l'utilisateur, et où se termine l'objectif.</li>
+  </ul>
+  <div class="instruction-box"><strong class="title">Astuce</strong>Demandez à l'IA de produire le user flow en diagramme Mermaid (<code>flowchart TD</code>) à partir de vos stories : il se versionne dans le dépôt et GitHub l'affiche directement dans les fichiers Markdown.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🌳</span>Arborescence et wireframes basse fidélité</div>
+  <p class="lead">L'arborescence est la liste hiérarchique des écrans de l'application. Avec Next.js (App Router), chaque écran correspond à un dossier dans <code>app/</code> : l'arborescence devient presque directement la structure des routes.</p>
+  <pre class="prompt">/                     Accueil (présentation + connexion)
+/login                Connexion / inscription
+/dashboard            Espace personnel : compteurs + derniers ajouts   <span class="hl2">(protégé)</span>
+/watchlist            Liste filtrable par statut, recherche par titre  <span class="hl2">(protégé)</span>
+/watchlist/new        Formulaire d'ajout                               <span class="hl2">(protégé)</span>
+/titles/[id]          Fiche d'un titre : statut, note, avis            <span class="hl2">(protégé)</span></pre>
+  <h3>Le wireframe basse fidélité</h3>
+  <p>Un wireframe basse fidélité est un schéma en niveaux de gris : blocs, titres, boutons, sans couleur ni image définitives. Il sert à valider l'organisation de l'écran avant de s'occuper de l'esthétique.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>✏️ Papier</h4><p class="muted">Le plus rapide pour explorer plusieurs dispositions et les comparer.</p></div>
+    <div class="mini-card"><h4>🖊️ Excalidraw</h4><p class="muted">Tableau blanc en ligne, style croquis, exportable en image pour le dépôt.</p></div>
+    <div class="mini-card"><h4>🟪 Figma</h4><p class="muted">Utile si vous comptez ensuite monter en fidélité dans le même outil.</p></div>
+  </div>
+  <p>Dessinez d'abord la version <strong>mobile</strong> : le responsive fait partie du socle, et un écran pensé pour mobile s'élargit plus facilement qu'un écran desktop ne se réduit.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">⏳</span>Les états oubliés : vide, chargement, erreur</div>
+  <p class="lead">Un écran n'a pas un seul état. Les maquettes montrent souvent la version idéale, remplie de données. En production, l'utilisateur voit d'abord une liste vide, un chargement, parfois une erreur.</p>
+  <div class="table-wrap"><table>
+    <tr><th>État</th><th>Quand ?</th><th>Exemple GameBacklog (écran « Mon backlog »)</th></tr>
+    <tr><td><strong>Vide</strong></td><td>Aucune donnée encore.</td><td>« Votre backlog est vide. Ajoutez votre premier jeu » + bouton d'action.</td></tr>
+    <tr><td><strong>Chargement</strong></td><td>Les données arrivent.</td><td>Squelettes de cartes (skeleton) plutôt qu'un écran blanc.</td></tr>
+    <tr><td><strong>Erreur</strong></td><td>Réseau coupé, requête refusée.</td><td>Message compréhensible + bouton « Réessayer », sans jargon technique.</td></tr>
+    <tr><td><strong>Succès / rempli</strong></td><td>Cas nominal.</td><td>Grille de cartes avec statut et note.</td></tr>
+    <tr><td><strong>Aucun résultat</strong></td><td>Filtre ou recherche sans correspondance.</td><td>« Aucun jeu terminé pour l'instant » + lien pour réinitialiser les filtres.</td></tr>
+  </table></div>
+  <div class="warn-box"><strong>⛔ Piège</strong> Si ces états ne sont écrits nulle part, l'agent génère souvent uniquement l'état rempli. Mentionnez-les dans vos critères d'acceptation et dans DESIGN.md : ils seront alors implémentés dès le départ.</div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">🪄</span>Générer des écrans avec l'IA : v0, Claude Design, Figma</div>
+  <p class="lead">Des outils génèrent des maquettes ou des interfaces à partir d'une description : v0 (Vercel) produit des composants React / Tailwind, Claude Design produit des prototypes visuels itératifs, Figma propose des fonctions IA (dont Figma Make) pour générer des écrans ou des prototypes.</p>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span>Partez de votre wireframe et de la story concernée : l'outil doit générer un écran précis, pas « une app de films ».</span></div>
+    <div class="step"><span class="s-num">2</span><span>Donnez vos tokens (couleurs, typographie, rayons) pour que le rendu respecte votre Design System.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Demandez explicitement les états vide, chargement et erreur, et les versions mobile et desktop.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Gardez les captures validées dans le dépôt (par exemple un dossier <code>docs/screens/</code>) et référencez-les dans DESIGN.md.</span></div>
+  </div>
+  <pre class="prompt">Génère l'écran <span class="hl">« Mon backlog »</span> de GameBacklog, mobile d'abord.
+Contenu : barre de filtres (à jouer / en cours / terminé), grille de cartes
+(jaquette, titre, plateforme, badge de statut, note sur 5).
+Design : fond <span class="hl3">#0F172A</span>, accent <span class="hl3">#22C55E</span>, police Inter, rayon 12 px.
+Montre aussi l'état vide, l'état de chargement (skeleton) et l'état d'erreur.</pre>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Copier le code d'une maquette générée directement dans le projet sans relecture : dépendances imprévues, données fictives en dur, accessibilité non vérifiée.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Utiliser la maquette comme référence visuelle pour l'agent, qui implémentera l'écran avec vos composants et votre DESIGN.md.</p></div>
+  </div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm3"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt3">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill3"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="3">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="3">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres3"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🎨 Design System ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c4">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🎨</span>Les design tokens : les décisions de design nommées</div>
+  <p class="lead">Un Design System est l'ensemble des règles et des éléments réutilisables qui rendent une interface cohérente. Sa base est constituée de design tokens : des valeurs nommées (couleur, taille, espacement…) utilisées partout à la place de valeurs en dur.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Définir un Design System minimal (tokens, composants, variantes, règles d'accessibilité) et le décrire dans DESIGN.md pour que chaque écran généré par l'agent soit cohérent.</div>
+  <div class="table-wrap"><table>
+    <tr><th>Catégorie</th><th>Exemples de tokens</th><th>Valeurs CinéList</th></tr>
+    <tr><td>Couleurs</td><td>background, foreground, primary, muted, border, destructive</td><td>fond #0B0B12, texte #F4F4F5, primaire #E11D48</td></tr>
+    <tr><td>Typographie</td><td>famille, échelle de tailles, graisses</td><td>Inter ; 14 / 16 / 20 / 24 / 32 px ; 400 et 600</td></tr>
+    <tr><td>Espacements</td><td>échelle régulière</td><td>4, 8, 12, 16, 24, 32, 48 px</td></tr>
+    <tr><td>Rayons</td><td>sm, md, lg</td><td>6, 10, 16 px</td></tr>
+    <tr><td>Ombres</td><td>niveaux d'élévation</td><td>une ombre douce pour les cartes, une pour les modales</td></tr>
+  </table></div>
+  <h3>Tokens primitifs et tokens sémantiques</h3>
+  <p>Un token primitif décrit une valeur (<code>rose-600 = #E11D48</code>). Un token sémantique décrit un usage (<code>primary = rose-600</code>). Les composants n'utilisent que les tokens sémantiques : changer la couleur de marque ou ajouter un thème sombre revient alors à modifier une seule ligne.</p>
+  <pre class="prompt">/* app/globals.css — tokens exposés en variables CSS */
+:root {
+  --background: #0B0B12;
+  --foreground: #F4F4F5;
+  --primary: #E11D48;
+  --primary-foreground: #FFFFFF;
+  --muted: #71717A;
+  --radius: 10px;
+}</pre>
+  <p>Avec Tailwind CSS v4, ces variables peuvent être déclarées dans un bloc <code>@theme</code> pour générer les classes utilitaires correspondantes ; shadcn/ui repose sur la même logique de variables sémantiques (<code>--primary</code>, <code>--background</code>…).</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🧩</span>Composants et variantes</div>
+  <p class="lead">Un composant est un élément d'interface réutilisable (bouton, carte, champ, badge). Une variante est une déclinaison prévue de ce composant, selon son rôle, sa taille ou son état.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Composant</th><th>Variantes</th><th>États à prévoir</th></tr>
+    <tr><td>Button</td><td>primary, secondary, ghost, destructive ; sm, md, lg</td><td>hover, focus visible, disabled, loading</td></tr>
+    <tr><td>Input</td><td>texte, email, mot de passe, recherche</td><td>focus, erreur avec message, disabled</td></tr>
+    <tr><td>Card</td><td>titre (CinéList), jeu (GameBacklog), événement (CampusHub)</td><td>survol, sélection</td></tr>
+    <tr><td>Badge de statut</td><td>à voir / en cours / vu ; complet</td><td>toujours texte + couleur</td></tr>
+    <tr><td>EmptyState</td><td>avec ou sans action</td><td>icône, message, bouton</td></tr>
+  </table></div>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Laisser l'agent créer un nouveau style de bouton sur chaque page : cinq bleus différents, trois rayons, des marges au hasard.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Lister les composants dans DESIGN.md et exiger dans AGENTS.md que l'agent réutilise les composants de <code>components/ui</code> avant d'en créer un nouveau.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">♿</span>Accessibilité : le contraste WCAG AA et au-delà</div>
+  <p class="lead">Les WCAG (Web Content Accessibility Guidelines) définissent des niveaux de conformité. Le niveau AA est la référence attendue pour un produit web.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🔤 Texte normal</h4><p class="muted">Rapport de contraste d'au moins 4,5:1 entre le texte et son fond.</p></div>
+    <div class="mini-card"><h4>🔠 Grand texte</h4><p class="muted">Au moins 3:1 pour le texte de grande taille (environ 24 px, ou 18,5 px en gras).</p></div>
+    <div class="mini-card"><h4>🔘 Composants</h4><p class="muted">Au moins 3:1 pour les bordures de champs, icônes et indicateurs de focus.</p></div>
+  </div>
+  <ul class="clean">
+    <li>Vérifiez chaque paire de tokens (texte sur fond, texte sur primaire) avec un vérificateur de contraste, par exemple celui des outils de développement du navigateur.</li>
+    <li>Ne codez jamais une information par la couleur seule : un badge « vu » vert doit aussi porter le mot « Vu ».</li>
+    <li>Gardez un focus clavier toujours visible et des zones cliquables confortables sur mobile.</li>
+    <li>Un gris clair sur fond blanc (#9CA3AF sur #FFFFFF) échoue au test 4,5:1 : c'est l'erreur la plus fréquente des maquettes générées.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg purple">📐</span>DESIGN.md : le Design System lisible par l'agent</div>
+  <p class="lead">DESIGN.md décrit votre Design System en texte : l'agent le lit avant de créer un écran, et vous garantissez ainsi la cohérence visuelle d'une session à l'autre.</p>
+  <pre class="prompt"># DESIGN.md — CinéList
+## Principes
+- Mobile d'abord, sombre par défaut, lisibilité avant décoration
+## Tokens
+- Couleurs : background #0B0B12, foreground #F4F4F5, primary #E11D48 ...
+- Typographie : Inter ; tailles 14 / 16 / 20 / 24 / 32 px
+- Espacements : échelle 4 / 8 / 12 / 16 / 24 / 32 / 48 px
+- Rayons : sm 6 px, md 10 px, lg 16 px
+## Composants
+- Button (primary, secondary, ghost, destructive), Input, Card, Badge, EmptyState
+## États
+- Chaque liste prévoit : vide, chargement (skeleton), erreur (+ Réessayer)
+## Accessibilité
+- Contraste WCAG AA vérifié ; focus visible ; jamais la couleur seule</pre>
+  <div class="key-box"><div class="big">La cohérence ne se demande pas, elle s'écrit.</div><p style="margin:8px 0 0">Sans DESIGN.md, chaque nouvelle session de l'agent réinvente votre charte graphique.</p></div>
+</div>
+<div class="card" data-explorer="x4">
+  <div class="section-title"><span class="icon-bg purple">🎨</span>Explorateur — les briques d&#x27;un Design System</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 5</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 5</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm4"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt4">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill4"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="4">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="4">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="4">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres4"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c3">◂ Précédent</button><button class="btn btn-primary" data-goto="c5">Suite : 🧠 Context Engineering ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="c5">
+<div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg">🧠</span>Du Prompt Engineering au Context Engineering</div>
+  <p class="lead">En séance 1, vous avez appris à rédiger un bon prompt. Mais un coding agent travaille sur de nombreuses sessions, et chaque nouvelle session repart sans mémoire de la précédente. Le Context Engineering consiste à organiser les informations durables que l'agent doit connaître, pour qu'il n'ait pas besoin qu'on les lui répète.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre le rôle de PROJECT.md, DESIGN.md et AGENTS.md, rédiger un AGENTS.md efficace et savoir maintenir ces fichiers vivants.</div>
+  <div class="chain"><span class="term-item">Prompt Engineering (S1)</span><span class="chain-arrow">→</span><span class="term-item">Context Engineering (S2)</span><span class="chain-arrow">→</span><span class="term-item">Agentic Coding (S3)</span></div>
+  <p>Le prompt dit <strong>ce qu'il faut faire maintenant</strong>. Le contexte dit <strong>dans quel projet, avec quelles règles</strong>. Un prompt court (« implémente la story US-03 ») donne un excellent résultat si le contexte est bon ; un prompt parfait donne un résultat médiocre si l'agent ignore la stack, les conventions et le périmètre.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>📘 PROJECT.md</h4><p class="muted">Le quoi et le pourquoi : problème, persona, MVP, hors périmètre, entités, stories.</p></div>
+    <div class="mini-card"><h4>🎨 DESIGN.md</h4><p class="muted">Le à quoi ça ressemble : tokens, composants, états, accessibilité.</p></div>
+    <div class="mini-card"><h4>🤖 AGENTS.md</h4><p class="muted">Le comment travailler : stack, commandes, conventions, interdits, workflow.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg green">🗂️</span>Le rôle de chaque fichier du dépôt</div>
+  <p class="lead">Chaque fichier répond à une question et a un public. Les mélanger produit des fichiers trop longs que personne, humain ou agent, ne lit vraiment.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Fichier</th><th>Question</th><th>Lu surtout par</th><th>Mis à jour quand…</th></tr>
+    <tr><td><code>PROJECT.md</code></td><td>Que construit-on, pour qui, jusqu'où ?</td><td>Agent et équipe</td><td>le périmètre ou une story change</td></tr>
+    <tr><td><code>DESIGN.md</code></td><td>À quoi l'interface doit-elle ressembler ?</td><td>Agent et équipe</td><td>un token ou un composant est ajouté</td></tr>
+    <tr><td><code>AGENTS.md</code></td><td>Comment l'agent doit-il travailler dans ce dépôt ?</td><td>Coding agents</td><td>la stack, une commande ou une règle change</td></tr>
+    <tr><td><code>README.md</code></td><td>Comment installer et lancer le projet ?</td><td>Humains (correcteur, visiteur)</td><td>l'installation ou le déploiement change</td></tr>
+    <tr><td><code>AI-LOG.md</code></td><td>Quelles décisions a-t-on prises avec l'IA, et pourquoi ?</td><td>Équipe et évaluateur</td><td>après chaque décision notable</td></tr>
+  </table></div>
+  <p>AGENTS.md renvoie vers les deux autres (« lis PROJECT.md et DESIGN.md avant toute tâche ») plutôt que de les recopier : une information ne doit vivre qu'à un seul endroit.</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🤖</span>AGENTS.md : une convention ouverte</div>
+  <p class="lead">AGENTS.md est un format ouvert (documenté sur agents.md) : un fichier Markdown à la racine du dépôt, pensé comme un « README pour les agents ». De nombreux coding agents le lisent automatiquement, dont Codex, Cursor, GitHub Copilot ou OpenCode.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Outil</th><th>Fichier d'instructions propre</th><th>Lien avec AGENTS.md</th></tr>
+    <tr><td>Claude Code</td><td><code>CLAUDE.md</code></td><td>Un CLAUDE.md d'une ligne <code>@AGENTS.md</code> importe son contenu.</td></tr>
+    <tr><td>Cursor</td><td>Règles de projet dans <code>.cursor/rules/</code></td><td>Lit aussi AGENTS.md à la racine.</td></tr>
+    <tr><td>GitHub Copilot</td><td><code>.github/copilot-instructions.md</code></td><td>Le coding agent Copilot prend aussi en charge AGENTS.md.</td></tr>
+    <tr><td>Codex, OpenCode</td><td>AGENTS.md directement</td><td>Format natif.</td></tr>
+  </table></div>
+  <p>Stratégie recommandée : <strong>une seule source de vérité</strong> (AGENTS.md), et des fichiers spécifiques réduits à un renvoi. Vous restez ainsi indépendant de l'outil, comme le veut la méthode du module.</p>
+  <pre class="prompt"># AGENTS.md — CinéList
+
+## Contexte
+Lis <span class="hl">PROJECT.md</span> (périmètre) et <span class="hl">DESIGN.md</span> (interface) avant toute tâche.
+
+## Stack
+Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth, RLS), déploiement Vercel.
+
+## Commandes
+- <span class="hl3">npm run dev</span> : serveur local
+- <span class="hl3">npm run lint</span> puis <span class="hl3">npm run build</span> : à lancer avant chaque commit
+
+## Conventions
+- Composants dans components/, réutiliser components/ui avant d'en créer
+- Accès aux données via le client Supabase dans lib/supabase/
+- Noms de tables et colonnes en anglais, snake_case
+
+## Interdits
+- <span class="hl2">Jamais</span> de clé secrète dans le code ni de SUPABASE_SERVICE_ROLE_KEY côté client
+- <span class="hl2">Jamais</span> de table sans politique RLS
+- Aucune fonctionnalité listée dans « Hors périmètre » de PROJECT.md
+- Pas de nouvelle dépendance sans le signaler
+
+## Workflow
+1. Proposer un plan court et attendre validation
+2. Implémenter une seule story à la fois, sur une branche dédiée
+3. Lancer lint et build, résumer les changements, proposer un message de commit</pre>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg red">⚖️</span>Minimal mais suffisant, et vivant</div>
+  <p class="lead">Tout ce qui est dans le contexte occupe l'attention de l'agent. Un fichier trop long dilue les règles importantes ; un fichier trop court laisse l'agent deviner.</p>
+  <div class="grid grid-2">
+    <div class="mini-card bad"><h4>❌ Trop</h4><p class="muted">Recopier toute la documentation de Next.js, des paragraphes de bonnes pratiques générales, des règles contradictoires, un historique des discussions.</p></div>
+    <div class="mini-card good"><h4>✅ Suffisant</h4><p class="muted">Ce qui est propre à votre projet et que l'agent ne peut pas deviner : votre stack exacte, vos commandes, vos conventions, vos interdits, votre façon de travailler.</p></div>
+  </div>
+  <h3>Des fichiers vivants</h3>
+  <ul class="clean">
+    <li>Chaque fois que vous corrigez deux fois l'agent sur le même point, ajoutez une règle dans AGENTS.md.</li>
+    <li>Chaque fois qu'une décision change le périmètre, mettez PROJECT.md à jour et notez la décision dans AI-LOG.md.</li>
+    <li>Commitez ces fichiers comme du code : leur historique Git raconte l'évolution du projet.</li>
+    <li>Demandez régulièrement à l'agent de relire AGENTS.md et de signaler les règles obsolètes ou contradictoires.</li>
+  </ul>
+  <div class="warn-box"><strong>⛔ Sécurité</strong> Ces fichiers sont versionnés et souvent publics. N'y écrivez jamais de clés, mots de passe ou URL privées : les secrets vont dans <code>.env.local</code> (ignoré par Git) et dans les variables d'environnement de Vercel.</div>
+  <div class="key-box"><div class="big">Le contexte est votre meilleur prompt.</div><p style="margin:8px 0 0">Écrit une fois, relu à chaque session, il transforme un agent généraliste en membre de votre équipe.</p></div>
+</div>
+<div class="card" data-explorer="x5">
+  <div class="section-title"><span class="icon-bg purple">🗂️</span>Explorateur — les fichiers de contexte</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
+</div>
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
+  <div class="instruction-box"><strong class="title">Consigne</strong>Une seule bonne réponse par question. Répondez à tout, vérifiez, puis lisez les explications, y compris pour les bonnes réponses. Questions et options sont mélangées à chaque essai.</div>
+  <div id="qcm5"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Réponses données</span><span id="qtxt5">0 / 0</span></div><div class="progress-track"><div class="progress-fill" id="qfill5"></div></div></div>
+  <div class="actions-row">
+    <button class="btn btn-primary" data-qcheck="5">✔ Vérifier</button>
+    <button class="btn btn-warning btn-reveal" data-qreveal="5">👁 Révéler</button>
+    <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
+  </div>
+  <div class="result-panel" id="qres5"></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+</div>
+</section>
+<section class="panel" data-panel="syn">
+  <div class="card">
+    <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🎯 Problème &amp; cible</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🧱 Définir le MVP</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>📝 User stories</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>🗺️ Parcours &amp; écrans</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🎨 Design System</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>🧠 Context Engineering</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
+    <div class="key-box"><div class="big">Un agent ne devine pas votre projet : il lit ce que vous avez écrit. Un bon contexte versionné vaut mieux que cent prompts brillants.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Formuler le problème, la cible (persona) et la proposition de valeur de votre projet ;</li><li>Délimiter un MVP réaliste avec la méthode MoSCoW et une liste explicite du hors périmètre ;</li><li>Rédiger des user stories INVEST accompagnées de critères d&#x27;acceptation Étant donné / Quand / Alors ;</li><li>Concevoir le parcours utilisateur, l&#x27;arborescence et les wireframes, y compris les états vide, chargement et erreur ;</li><li>Définir un Design System minimal (tokens, composants, variantes) respectant le contraste WCAG AA ;</li><li>Rédiger PROJECT.md, DESIGN.md et AGENTS.md pour fournir à l&#x27;agent un contexte minimal mais suffisant.</li></ul></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un PROJECT.md avec problème, persona, proposition de valeur, MVP priorisé (MoSCoW), hors périmètre, entités et user stories ;</label><label><input type="checkbox"> Des critères d&#x27;acceptation Étant donné / Quand / Alors pour au moins vos stories « Must » ;</label><label><input type="checkbox"> Un user flow principal, une arborescence d&#x27;écrans et des wireframes basse fidélité avec leurs états vide, chargement et erreur ;</label><label><input type="checkbox"> Un DESIGN.md décrivant vos tokens (couleurs, typographie, espacements, rayons) et vos composants de base ;</label><label><input type="checkbox"> Un AGENTS.md décrivant la stack, les commandes, les conventions, les interdits et le workflow ;</label><label><input type="checkbox"> Ces trois fichiers commités à la racine de votre dépôt GitHub.</label></div>
+    <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-2-du-besoin-au-contexte-projet-pratique.html">Ouvrir le support pratique ▸</a></div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Je sais travailler avec un agent</strong>Vous passerez du chat au coding agent : installation du projet Next.js, lecture de vos fichiers de contexte par l&#x27;agent, plan puis exécution par petites étapes. Apportez vos trois fichiers .md à jour : ils seront la première chose que l&#x27;agent lira.</div>
+  </div>
+</section>
+</main>
+<footer>NoCode AI / Vibe Coding — De l'idée au MVP avec l'IA — Séance 2 — Du besoin au contexte projet — Théorie<br>Mode formateur : ajoutez <code>?formateur</code> à l'adresse de la page.</footer>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+"use strict";
+const FAMILIES={"f1": "Cadrage", "f2": "Spécification", "f3": "Parcours & UX", "f4": "Design System", "f5": "Context Engineering"};
+const EXPLORERS={"x4": {"title": "Explorateur — les briques d'un Design System", "icon": "🎨", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "Design token", "fam": "f4", "rows": [["Définition", "Valeur de design nommée (couleur, taille, espacement, rayon) réutilisée partout à la place d'une valeur en dur."], ["Exemple", "--primary: #E11D48 dans CinéList, utilisé par les boutons, liens actifs et badges."], ["Piège", "Écrire #E11D48 directement dans les composants : impossible ensuite de changer la couleur proprement."], ["À retenir", "Les composants consomment des tokens sémantiques, jamais des valeurs brutes."]]}, {"id": "Échelle typographique", "fam": "f4", "rows": [["Définition", "Série limitée de tailles de texte prédéfinies, associées à des usages (corps, sous-titre, titre)."], ["Exemple", "14 / 16 / 20 / 24 / 32 px avec Inter pour GameBacklog."], ["Piège", "Laisser apparaître des tailles arbitraires (15, 17, 19 px) au fil des écrans."], ["À retenir", "Peu de tailles, bien hiérarchisées : la lisibilité vient de la régularité."]]}, {"id": "Composant & variante", "fam": "f4", "rows": [["Définition", "Élément d'interface réutilisable, décliné en variantes prévues selon son rôle, sa taille ou son état."], ["Exemple", "Button primary, secondary, ghost, destructive ; tailles sm, md, lg ; états disabled et loading."], ["Piège", "Créer un nouveau bouton par page au lieu d'ajouter une variante au composant existant."], ["À retenir", "Une variante s'ajoute au composant ; elle ne le duplique pas."]]}, {"id": "Contraste WCAG AA", "fam": "f4", "rows": [["Définition", "Exigence d'accessibilité : 4,5:1 pour le texte normal, 3:1 pour le grand texte et les éléments d'interface."], ["Exemple", "Texte #F4F4F5 sur fond #0B0B12 : contraste largement suffisant."], ["Piège", "Texte gris clair sur fond blanc, très fréquent dans les maquettes générées par IA."], ["À retenir", "Chaque paire texte / fond de DESIGN.md doit être vérifiée une fois pour toutes."]]}, {"id": "États d'écran", "fam": "f3", "rows": [["Définition", "Versions d'un même écran selon la situation des données : vide, chargement, erreur, rempli, aucun résultat."], ["Exemple", "Liste des événements CampusHub : skeleton au chargement, message si aucun événement cette semaine."], ["Piège", "Ne maquetter que l'état rempli : l'agent n'implémente alors que celui-là."], ["À retenir", "Écrivez les états dans DESIGN.md et dans les critères d'acceptation."]]}]}, "x5": {"title": "Explorateur — les fichiers de contexte", "icon": "🗂️", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "PROJECT.md", "fam": "f5", "rows": [["Définition", "Description du produit : problème, persona, proposition de valeur, MVP MoSCoW, hors périmètre, entités, user stories."], ["Exemple", "CinéList : « Must : ajouter un titre, changer son statut, filtrer par statut ; hors périmètre : partage social »."], ["Piège", "Y mettre des détails techniques (versions, commandes) qui appartiennent à AGENTS.md."], ["À retenir", "Il répond à : que construit-on, pour qui, et jusqu'où ?"]]}, {"id": "DESIGN.md", "fam": "f5", "rows": [["Définition", "Description textuelle du Design System : principes, tokens, composants, variantes, états, accessibilité."], ["Exemple", "GameBacklog : fond #0F172A, accent #22C55E, Inter, rayon 12 px, badge de statut texte + couleur."], ["Piège", "Se contenter d'une capture Figma : l'agent a besoin de valeurs exactes et de règles écrites."], ["À retenir", "Il garantit que chaque écran généré ressemble aux précédents."]]}, {"id": "AGENTS.md", "fam": "f5", "rows": [["Définition", "Convention ouverte : instructions à la racine du dépôt, lues automatiquement par de nombreux coding agents."], ["Exemple", "Stack, commandes npm run lint et npm run build, conventions de dossiers, interdits (RLS, secrets), workflow par story."], ["Piège", "Le transformer en encyclopédie : les règles importantes se noient dans le bruit."], ["À retenir", "Il répond à : comment l'agent doit-il travailler dans ce dépôt ?"]]}, {"id": "CLAUDE.md & règles Cursor", "fam": "f5", "rows": [["Définition", "Fichiers d'instructions propres à un outil : CLAUDE.md pour Claude Code, .cursor/rules/ pour Cursor."], ["Exemple", "Un CLAUDE.md contenant seulement @AGENTS.md pour importer les règles communes."], ["Piège", "Maintenir trois versions divergentes des mêmes règles pour trois outils."], ["À retenir", "Une source de vérité, des renvois pour chaque outil."]]}, {"id": "Contexte minimal suffisant", "fam": "f5", "rows": [["Définition", "Principe : fournir à l'agent tout ce qu'il ne peut pas deviner, et rien de plus."], ["Exemple", "« Noms de tables en anglais snake_case » est utile ; « écris du code propre » ne l'est pas."], ["Piège", "Coller toute la documentation d'un framework ou l'historique des conversations."], ["À retenir", "Chaque ligne doit changer le comportement de l'agent, sinon elle est à supprimer."]]}, {"id": "Documentation vivante", "fam": "f5", "rows": [["Définition", "Fichiers de contexte mis à jour en continu, versionnés avec le code, au fil des décisions."], ["Exemple", "Après avoir corrigé deux fois l'agent sur les imports, CampusHub ajoute une règle à AGENTS.md."], ["Piège", "Rédiger les fichiers en début de projet puis ne plus jamais les toucher."], ["À retenir", "Un contexte obsolète induit l'agent en erreur plus sûrement qu'une absence de contexte."]]}]}};
+const QCMS=[[{"q": "Quelle formulation est un véritable énoncé du problème ?", "o": ["Créer une app Next.js de gestion de jeux vidéo.", "Les joueurs ont du mal à savoir quels jeux ils possèdent et où ils en sont, car leurs jeux sont éparpillés sur plusieurs plateformes.", "Utiliser Supabase pour stocker une liste de jeux.", "Proposer la meilleure application de jeux du marché."], "a": 1, "e": "Un énoncé du problème nomme une cible, une difficulté et sa cause. Les autres options décrivent une solution, une technologie ou une ambition."}, {"q": "À quoi sert principalement un persona ?", "o": ["À remplacer les tests utilisateurs.", "À décrire l'architecture de la base de données.", "À incarner l'utilisateur principal pour guider les choix de fonctionnalités et d'interface.", "À lister toutes les catégories d'utilisateurs possibles."], "a": 2, "e": "Le persona rend la cible concrète : on peut se demander « est-ce utile pour Yanis ? » au lieu de raisonner sur « les utilisateurs » en général."}, {"q": "Combien de personas est-il raisonnable de retenir pour un MVP ?", "o": ["Un principal, deux au maximum.", "Au moins cinq, pour couvrir tous les cas.", "Aucun, ce n'est utile qu'en entreprise.", "Un par fonctionnalité."], "a": 0, "e": "Un MVP sert d'abord une cible précise. Multiplier les personas dilue le périmètre et complique les priorités."}, {"q": "Quel élément distingue une proposition de valeur d'une simple description du produit ?", "o": ["La mention de la stack technique.", "La liste exhaustive des écrans.", "Le nombre d'utilisateurs visés.", "La comparaison avec l'alternative actuelle et la différence clé apportée."], "a": 3, "e": "La proposition de valeur explique pourquoi choisir ce produit plutôt que ce que la cible utilise déjà (notes du téléphone, tableur, groupe de messagerie…)."}, {"q": "Que devient la liste de fonctionnalités du brief.md dans PROJECT.md ?", "o": ["Elle est recopiée telle quelle.", "Elle est supprimée : l'agent décidera lui-même.", "Un MVP priorisé avec MoSCoW, accompagné d'une liste explicite du hors périmètre.", "Un fichier de code TypeScript."], "a": 2, "e": "PROJECT.md transforme les idées en décisions : ce qui est indispensable, souhaitable, optionnel, et ce qui est volontairement exclu."}], [{"q": "Quelle définition du MVP est la plus juste ?", "o": ["Une maquette cliquable sans code.", "La plus petite version fonctionnelle qui résout réellement le problème pour la cible.", "La version avec toutes les fonctionnalités mais sans design.", "Un prototype réservé aux développeurs."], "a": 1, "e": "Le MVP est minimal mais viable : utilisable de bout en bout par la cible, sécurisé et déployé."}, {"q": "Dans MoSCoW, que signifie la catégorie « Won't have (this time) » ?", "o": ["Une fonctionnalité abandonnée définitivement.", "Une fonctionnalité que l'IA ne sait pas coder.", "Une fonctionnalité secondaire à faire en priorité.", "Une fonctionnalité explicitement exclue de cette version."], "a": 3, "e": "« Won't (this time) » exclut la fonctionnalité de la version en cours, sans fermer la porte à une version ultérieure."}, {"q": "Pour CinéList, où placer « recommandations de films par IA » ?", "o": ["Could ou Won't : c'est un bonus, à envisager seulement quand le MVP fonctionne.", "Must : c'est ce qui rend l'application moderne.", "Should : l'IA est au cœur du module.", "Nulle part : il ne faut jamais la mentionner."], "a": 0, "e": "L'API IA fait partie des bonus du module. Elle ne doit jamais passer devant le socle obligatoire."}, {"q": "Pourquoi écrire une section « Hors périmètre » dans PROJECT.md ?", "o": ["Pour allonger le document.", "Pour éviter que l'agent ajoute des fonctionnalités non demandées et pour protéger le périmètre.", "Parce que Supabase l'exige.", "Pour lister les bugs connus."], "a": 1, "e": "Un agent comble les vides. Dire explicitement ce qui est exclu évite qu'il implémente une messagerie ou un rôle admin de sa propre initiative."}, {"q": "Quel ensemble d'entités respecte l'exigence « ≥ 2 entités métier avec relation » pour GameBacklog ?", "o": ["Une table unique « jeux » avec toutes les colonnes.", "Une table « utilisateurs » et une table « paramètres ».", "Jeu et entrée de backlog, l'entrée reliant un utilisateur à un jeu avec un statut.", "Un fichier JSON stocké dans le navigateur."], "a": 2, "e": "Le jeu (catalogue) et l'entrée de backlog (propre à l'utilisateur) sont deux entités métier reliées : c'est ce que demande le socle."}], [{"q": "Quelle phrase est une user story bien formée ?", "o": ["Ajouter une colonne rating à la table watchlist_items.", "En tant que joueur, je veux filtrer mon backlog par statut afin de choisir le jeu à reprendre.", "Le système doit être rapide.", "Faire la page dashboard."], "a": 1, "e": "La story nomme un utilisateur, une action et un bénéfice. Les autres options sont une tâche technique, une exigence vague ou un écran."}, {"q": "Dans INVEST, que signifie le « T » ?", "o": ["Technique", "Terminée", "Transverse", "Testable"], "a": 3, "e": "Une story testable permet de vérifier objectivement qu'elle est terminée, grâce à ses critères d'acceptation."}, {"q": "Qu'est-ce qu'un découpage vertical ?", "o": ["Découper une epic en petites fonctionnalités complètes qui traversent interface, logique et données.", "Faire d'abord toute la base de données, puis toute l'interface.", "Découper l'écran en colonnes.", "Répartir les stories entre les membres du binôme."], "a": 0, "e": "Chaque tranche verticale livre une petite valeur testable de bout en bout, ce qui convient parfaitement au travail par petites étapes avec un agent."}, {"q": "Quel critère d'acceptation est le mieux rédigé ?", "o": ["L'inscription doit bien marcher.", "La fonction register() est appelée avec l'identifiant de l'événement.", "Étant donné un événement complet, quand j'ouvre sa fiche, alors le bouton « S'inscrire » est désactivé et « Complet » s'affiche.", "Tester l'inscription sur plusieurs navigateurs."], "a": 2, "e": "Il décrit un contexte, une action et un résultat observable. Les autres sont vagues ou décrivent une implémentation."}, {"q": "Après avoir fait générer des user stories par l'IA, quelle est la bonne démarche ?", "o": ["Les copier directement dans PROJECT.md.", "Les faire critiquer avec INVEST, retirer ce qui sort du périmètre et reformuler avec le vocabulaire du projet.", "Demander à l'IA d'en générer davantage pour être exhaustif.", "Les transformer immédiatement en code."], "a": 1, "e": "L'IA produit un premier jet ; la critique et la sélection restent votre responsabilité."}], [{"q": "Qu'est-ce qu'un user flow ?", "o": ["La liste des tables de la base de données.", "Le chemin, étape par étape, qu'un utilisateur suit pour atteindre un objectif dans l'application.", "Le flux de déploiement vers Vercel.", "Le nombre d'utilisateurs connectés en même temps."], "a": 1, "e": "Le user flow enchaîne écrans et décisions pour un objectif donné, avec son chemin nominal et ses branches."}, {"q": "Avec Next.js App Router, à quoi correspond l'arborescence des écrans ?", "o": ["Aux dossiers de routes dans app/.", "Aux tables Supabase.", "Aux branches Git.", "Aux variables d'environnement."], "a": 0, "e": "Avec l'App Router, chaque dossier de app/ contenant un page.tsx correspond à une route : l'arborescence se traduit presque directement en structure de fichiers."}, {"q": "Quel est l'intérêt principal d'un wireframe basse fidélité ?", "o": ["Livrer le design final au client.", "Générer automatiquement le code.", "Tester les couleurs de la marque.", "Valider l'organisation de l'écran avant de travailler l'esthétique."], "a": 3, "e": "En niveaux de gris, on se concentre sur la structure et la hiérarchie de l'information, pas sur les couleurs."}, {"q": "Un utilisateur de CinéList vient de créer son compte et ouvre sa watchlist. Quel état doit être prévu ?", "o": ["L'état d'erreur.", "L'état rempli avec des films d'exemple.", "L'état vide, avec un message et une action pour ajouter un premier titre.", "Aucun, la page peut rester blanche."], "a": 2, "e": "Un nouvel utilisateur n'a encore aucune donnée : l'état vide doit l'orienter vers la première action."}, {"q": "Quelle est la bonne façon d'utiliser un écran généré par v0, Claude Design ou Figma ?", "o": ["Coller tout le code généré sans le lire.", "S'en servir comme référence visuelle et le faire implémenter par l'agent avec vos composants et votre DESIGN.md.", "L'ignorer : ces outils ne servent à rien.", "Le remplacer par une capture d'une application existante."], "a": 1, "e": "La maquette générée guide le rendu ; l'implémentation passe par l'agent, en respectant votre Design System et vos conventions."}], [{"q": "Qu'est-ce qu'un design token ?", "o": ["Un jeton d'authentification Supabase.", "Une valeur de design nommée, réutilisée partout à la place d'une valeur en dur.", "Une image de la charte graphique.", "Un composant React."], "a": 1, "e": "Un token nomme une décision de design (couleur, taille, espacement, rayon) pour qu'elle soit appliquée de façon cohérente."}, {"q": "Pourquoi les composants doivent-ils utiliser des tokens sémantiques (primary) plutôt que primitifs (rose-600) ?", "o": ["Parce que les noms sont plus courts.", "Parce que Tailwind refuse les tokens primitifs.", "Pour pouvoir changer la couleur de marque ou ajouter un thème en modifiant une seule valeur.", "Pour améliorer les performances de la base de données."], "a": 2, "e": "Le token sémantique décrit un usage : on change la valeur associée sans toucher aux composants."}, {"q": "Quel rapport de contraste minimal le niveau WCAG AA exige-t-il pour du texte de taille normale ?", "o": ["4,5:1", "2:1", "3:1", "7:1"], "a": 0, "e": "4,5:1 pour le texte normal au niveau AA ; 3:1 suffit pour le grand texte et les composants d'interface ; 7:1 correspond au niveau AAA."}, {"q": "Dans GameBacklog, le statut « terminé » n'est indiqué que par un point vert. Quel principe est enfreint ?", "o": ["La cohérence des espacements.", "L'échelle typographique.", "Le découpage vertical.", "Ne jamais transmettre une information par la couleur seule."], "a": 3, "e": "Les personnes daltoniennes ou utilisant un lecteur d'écran ne perçoivent pas cette information : il faut ajouter un texte ou une icône explicite."}, {"q": "À quoi sert DESIGN.md dans le dépôt ?", "o": ["À stocker les images du site.", "À décrire en texte les tokens, composants, états et règles d'accessibilité pour que l'agent produise des écrans cohérents.", "À remplacer le fichier CSS global.", "À lister les bugs d'interface."], "a": 1, "e": "DESIGN.md est la mémoire visuelle du projet : l'agent le lit avant de générer un écran."}], [{"q": "Quelle est la différence essentielle entre Prompt Engineering et Context Engineering ?", "o": ["Le Context Engineering organise les informations durables du projet que l'agent lit à chaque session ; le prompt formule la tâche du moment.", "Il n'y en a aucune, ce sont deux noms pour la même chose.", "Le Context Engineering consiste à écrire des prompts plus longs.", "Le Prompt Engineering ne concerne que les images."], "a": 0, "e": "Le prompt dit quoi faire maintenant ; le contexte dit dans quel projet et avec quelles règles, sans avoir à le répéter."}, {"q": "Dans quel fichier placer la règle « ne jamais utiliser SUPABASE_SERVICE_ROLE_KEY côté client » ?", "o": ["PROJECT.md", "DESIGN.md", "README.md", "AGENTS.md"], "a": 3, "e": "C'est une règle de travail destinée à l'agent : elle relève des interdits d'AGENTS.md."}, {"q": "Qu'est-ce qu'AGENTS.md ?", "o": ["Un fichier propriétaire lu uniquement par Claude Code.", "La liste des membres de l'équipe.", "Une convention ouverte : un fichier Markdown d'instructions à la racine du dépôt, lu par de nombreux coding agents.", "Un fichier de configuration de Vercel."], "a": 2, "e": "AGENTS.md est un format ouvert, adopté par de nombreux outils ; Claude Code utilise CLAUDE.md, qui peut importer AGENTS.md."}, {"q": "Quelle ligne a le moins sa place dans un AGENTS.md « minimal mais suffisant » ?", "o": ["Lancer npm run lint puis npm run build avant chaque commit.", "Écris toujours du code de qualité et bien pensé.", "Jamais de table sans politique RLS.", "Réutiliser components/ui avant de créer un composant."], "a": 1, "e": "Une consigne générique ne change pas le comportement de l'agent. Les autres lignes sont spécifiques et vérifiables."}, {"q": "Vous avez corrigé l'agent deux fois parce qu'il crée des composants en double. Que faire ?", "o": ["Ajouter une règle dans AGENTS.md et commiter le fichier.", "Recommencer le projet avec un autre outil.", "Le répéter dans chaque prompt sans rien écrire ailleurs.", "Supprimer DESIGN.md."], "a": 0, "e": "Les fichiers de contexte sont vivants : une correction répétée devient une règle durable, versionnée avec le code."}]];
+const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
+const params = new URLSearchParams(location.search);
+if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const shuffle = a => { const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); }
+function copyText(txt){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(()=>toast('Copié dans le presse-papiers ✅')).catch(()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copié dans le presse-papiers ✅');}catch(e){toast('Copie impossible : sélectionnez le texte manuellement');} ta.remove(); }
+function download(name, txt){ const blob=new Blob([txt],{type:'text/markdown;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+function setProgress(fillId, txtId, done, total, suffix){ const p = total ? Math.round(done/total*100) : 0; $('#'+fillId).style.width = p+'%'; $('#'+txtId).textContent = done+' / '+total+(suffix||''); }
+function scoreMsg(pct){ if(pct>=90) return 'Excellent : les notions sont acquises.'; if(pct>=70) return 'Bon résultat. Relisez les explications des erreurs pour consolider.'; if(pct>=50) return 'Des bases, mais plusieurs confusions. Relisez le chapitre puis recommencez.'; return 'Reprenez le chapitre, puis recommencez l\'activité.'; }
+const done = new Set();
+function markDone(act){
+  if(done.has(act)) return false;
+  done.add(act);
+  $$('.tab[data-act="'+act+'"]').forEach(t=>t.classList.add('done'));
+  const n = done.size;
+  $('#globalFill').style.width = Math.round(n/ACTS.length*100)+'%';
+  $('#globalPct').textContent = n+' / '+ACTS.length;
+  toast(n===ACTS.length ? '🎉 Toutes les activités sont validées !' : 'Activité validée ✅');
+  if(typeof onDone==='function') onDone(act);
+  return true;
+}
+function openTab(i){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab==i));
+  $$('.panel').forEach(p=>p.classList.toggle('active', p.dataset.panel==i));
+  const tw = $('.tabs-wrap'); window.scrollTo({top: tw.offsetTop, behavior: 'smooth'});
+  const at = $('.tab[data-tab="'+i+'"]'); if(at) at.scrollIntoView({inline:'center', block:'nearest'});
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.goto)));
+
+/* Explorateurs */
+$$('[data-explorer]').forEach(box=>{
+  const E = EXPLORERS[box.dataset.explorer]; const seen=new Set();
+  const chain=$('.chain',box), detail=$('.concept-detail',box);
+  E.items.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='chain-node'; b.textContent=k.id; b.dataset.i=i;
+    b.addEventListener('click',()=>show(i)); chain.appendChild(b);
+  });
+  function show(i){
+    const k=E.items[i]; seen.add(i);
+    $$('.chain-node',box).forEach(n=>{ n.classList.toggle('active', n.dataset.i==i); if(seen.has(+n.dataset.i)) n.classList.add('seen'); });
+    detail.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap"><span class="term-item">'+esc(k.id)+'</span><span class="famille-tag '+k.fam+'">'+esc(FAMILIES[k.fam]||'')+'</span></div>'+
+      k.rows.map(r=>'<div class="row"><span class="k">'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>').join('');
+    const f=$('.progress-fill',box), t=$('.progress-label span:last-child',box);
+    f.style.width=Math.round(seen.size/E.items.length*100)+'%'; t.textContent=seen.size+' / '+E.items.length;
+  }
+  show(0);
+});
+const qState = {};
+const L = ['A','B','C','D','E'];
+function renderQCM(ci){
+  const box=$('#qcm'+ci); box.innerHTML='';
+  const qs = shuffle(QCMS[ci]).map(q=>{ const opts=shuffle(q.o.map((t,i)=>({t,good:i===q.a}))); return {q:q.q,e:q.e,opts}; });
+  qState[ci]={qs};
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div'); d.className='qcm-q';
+    d.innerHTML='<div class="qt"><span class="q-num">Q'+(qi+1)+'</span>'+esc(q.q)+'</div><div class="qcm-opts" role="radiogroup">'+
+      q.opts.map((o,oi)=>'<button type="button" class="qcm-opt" role="radio" aria-checked="false" data-oi="'+oi+'"><span class="l">'+L[oi]+'</span><span>'+esc(o.t)+'</span></button>').join('')+
+      '</div><div class="expl"></div>';
+    $$('.qcm-opt',d).forEach(b=>b.addEventListener('click',()=>{
+      if(d.classList.contains('checked')) return;
+      $$('.qcm-opt',d).forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});
+      b.classList.add('sel'); b.setAttribute('aria-checked','true'); d.dataset.ans=b.dataset.oi; updQ(ci);
+    }));
+    box.appendChild(d);
+  });
+  $('#qres'+ci).classList.remove('show'); updQ(ci);
+}
+function updQ(ci){ const rows=$$('#qcm'+ci+' .qcm-q'); setProgress('qfill'+ci,'qtxt'+ci,rows.filter(r=>r.dataset.ans!==undefined).length,rows.length); }
+const scores = {};
+function checkQCM(ci, silent){
+  const rows=$$('#qcm'+ci+' .qcm-q');
+  if(!silent && rows.some(r=>r.dataset.ans===undefined)){ toast('Répondez à toutes les questions avant de vérifier.'); return; }
+  let ok=0;
+  rows.forEach((r,qi)=>{
+    const q=qState[ci].qs[qi]; const ans=r.dataset.ans===undefined?-1:+r.dataset.ans;
+    const gi=q.opts.findIndex(o=>o.good); const good=ans===gi; if(good) ok++;
+    r.classList.remove('correct','wrong'); r.classList.add('checked', good?'correct':'wrong');
+    $$('.qcm-opt',r).forEach((b,oi)=>{ b.classList.toggle('good',oi===gi); b.classList.toggle('bad',oi===ans&&!good); });
+    $('.expl',r).innerHTML=(good?'✅ ':'❌ Bonne réponse : <strong>'+L[gi]+'</strong>. ')+esc(q.e);
+  });
+  const pct=Math.round(ok/rows.length*100);
+  $('#qres'+ci).innerHTML='<div class="score">'+ok+' / '+rows.length+'</div><div class="msg">'+scoreMsg(pct)+'</div>';
+  $('#qres'+ci).classList.add('show');
+  if(!silent){ scores[ci]=Math.max(scores[ci]||0,ok); updScores(); markDone('ch'+ci); }
+}
+function revealQCM(ci){
+  $$('#qcm'+ci+' .qcm-q').forEach((r,qi)=>{ const gi=qState[ci].qs[qi].opts.findIndex(o=>o.good); r.dataset.ans=gi; $$('.qcm-opt',r).forEach((b,oi)=>b.classList.toggle('sel',oi===gi)); });
+  updQ(ci); checkQCM(ci,true);
+}
+function updScores(){
+  let tot=0,max=0;
+  QCMS.forEach((q,ci)=>{ const c=$('#score'+ci); if(scores[ci]!==undefined){ c.textContent=scores[ci]+' / '+q.length; tot+=scores[ci]; } max+=q.length; });
+  $('#scoreTotal').textContent=tot+' / '+max;
+}
+QCMS.forEach((_,ci)=>renderQCM(ci));
+$$('[data-qcheck]').forEach(b=>b.addEventListener('click',()=>checkQCM(+b.dataset.qcheck)));
+$$('[data-qreveal]').forEach(b=>b.addEventListener('click',()=>revealQCM(+b.dataset.qreveal)));
+$$('[data-qreset]').forEach(b=>b.addEventListener('click',()=>renderQCM(+b.dataset.qreset)));
+$$('#finCheck input').forEach(c=>c.addEventListener('change',()=>{}));
+
+})();
+</script>
+</body>
+</html>
