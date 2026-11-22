@@ -304,8 +304,8 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 5
   <div class="header-inner">
     <span class="badge">🏗️ NoCode AI / Vibe Coding — Séance 4 · Support théorique</span>
     <h1>Construire une vraie application</h1>
-    <p class="subtitle">Passer du prototype au MVP : une base de données modélisée, une authentification, un CRUD sécurisé par RLS, de la recherche et un dashboard, construits ticket par ticket avec votre agent.</p>
-    <div class="meta-pills"><span class="meta-pill">🧭 Séance 4 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">📝 Livrable : MVP avec Auth + BDD + CRUD fonctionnels</span></div>
+    <p class="subtitle">Passer du prototype au MVP : des données bien organisées, des comptes utilisateurs, des fonctions pour créer, modifier et supprimer, de la recherche et un tableau de bord. Tout se construit étape par étape avec votre agent, sans écrire de code vous-même.</p>
+    <div class="meta-pills"><span class="meta-pill">🧭 Séance 4 sur 6</span><span class="meta-pill">📚 Support théorique</span><span class="meta-pill">📖 6 chapitres</span><span class="meta-pill">❓ 30 questions de QCM</span><span class="meta-pill">🙌 Aucun code à écrire</span><span class="meta-pill">📝 Livrable : MVP avec comptes + données + CRUD fonctionnels</span></div>
     <div class="global-progress">
       <div class="label"><span>QCM de chapitre validés</span><span id="globalPct">0 / 6</span></div>
       <div class="track"><div class="fill" id="globalFill"></div></div>
@@ -313,104 +313,87 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:30px 16px 5
     <div class="mode-flag">Mode formateur actif — boutons « Révéler » visibles</div>
   </div>
 </header>
-<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🧱 Architecture Next.js + Supabase <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🗂️ Modéliser les données <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🔐 Authentification <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">✏️ CRUD &amp; formulaires <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🛡️ RLS &amp; secrets <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">🔎 Recherche, dashboard &amp; tickets <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="Chapitres de la séance"><button class="tab active" data-tab="0" role="tab">🚀 Démarrage</button><button class="tab" data-tab="c0" data-act="ch0" role="tab">🏢 Les briques d'une application <span class="done-mark">✅</span></button><button class="tab" data-tab="c1" data-act="ch1" role="tab">🗂️ Organiser les données <span class="done-mark">✅</span></button><button class="tab" data-tab="c2" data-act="ch2" role="tab">🔐 Comptes &amp; connexion <span class="done-mark">✅</span></button><button class="tab" data-tab="c3" data-act="ch3" role="tab">✏️ Créer, modifier, supprimer <span class="done-mark">✅</span></button><button class="tab" data-tab="c4" data-act="ch4" role="tab">🛡️ Sécurité &amp; secrets <span class="done-mark">✅</span></button><button class="tab" data-tab="c5" data-act="ch5" role="tab">🔎 Recherche, dashboard &amp; tickets <span class="done-mark">✅</span></button><button class="tab" data-tab="syn" role="tab">🏁 Synthèse</button></nav></div>
 <main>
 <section class="panel active" data-panel="0">
   <div class="card">
     <div class="section-title"><span class="icon-bg">🎯</span>Où en est-on dans le parcours ?</div>
-    <div class="key-box"><div class="big">Je sais construire une vraie application.</div><p style="margin:8px 0 0">Une vraie application, ce n&#x27;est pas plus d&#x27;écrans : c&#x27;est un modèle de données solide, des utilisateurs authentifiés et des règles de sécurité appliquées par la base, construits en petits tickets vérifiés un par un.</p></div>
+    <div class="key-box"><div class="big">Je sais construire une vraie application.</div><p style="margin:8px 0 0">Une vraie application, ce n'est pas plus d'écrans : ce sont des informations bien rangées, des utilisateurs qui ont chacun leur compte et des règles qui protègent leurs données. Vous n'écrivez pas le code : vous décidez, vous demandez à l'agent, et vous vérifiez dans le navigateur.</p></div>
     <div class="route"><div class="route-step past"><div class="n">1</div><div class="t">Cadrer</div><div class="c">Comprendre le besoin</div></div><div class="route-step past"><div class="n">2</div><div class="t">Clarifier</div><div class="c">Bien utiliser une IA</div></div><div class="route-step past"><div class="n">3</div><div class="t">Contextualiser</div><div class="c">Contexte projet</div></div><div class="route-step past"><div class="n">4</div><div class="t">Concevoir</div><div class="c">UX/UI + Design System</div></div><div class="route-step past"><div class="n">5</div><div class="t">Générer</div><div class="c">Piloter un agent</div></div><div class="route-step here"><div class="n">6</div><div class="t">Construire</div><div class="c">Auth + BDD + CRUD</div></div><div class="route-step "><div class="n">7</div><div class="t">Contrôler</div><div class="c">Lire, tester, sécuriser</div></div><div class="route-step "><div class="n">8</div><div class="t">Livrer</div><div class="c">GitHub + déploiement</div></div></div><p class="muted">En vert : les étapes déjà franchies. En bleu : les étapes travaillées dans cette séance.</p>
     <h3>Le fil pédagogique</h3>
-    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l&#x27;IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td><strong>Séance 4</strong> — aujourd&#39;hui</td><td><strong>Je sais construire une vraie application.</strong></td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l&#x27;IA produit.</td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+    <div class="table-wrap"><table><tr><th>Étape</th><th>Ce que vous saurez faire</th></tr><tr><td>Séance 1</td><td>Je sais parler à l'IA.</td></tr><tr><td>Séance 2</td><td>Je sais lui donner le bon contexte.</td></tr><tr><td>Séance 3</td><td>Je sais travailler avec un agent.</td></tr><tr><td><strong>Séance 4</strong> — aujourd'hui</td><td><strong>Je sais construire une vraie application.</strong></td></tr><tr><td>Autonomie</td><td>Je sais avancer sans dépendre du formateur.</td></tr><tr><td>Séance 5</td><td>Je sais contrôler ce que l'IA produit.</td></tr><tr><td>Séance 6</td><td>Je sais livrer mon MVP.</td></tr></table></div>
+  </div>
+  <div class="card">
+    <div class="section-title"><span class="icon-bg purple">🧭</span>Votre posture dans cette séance</div>
+    <p class="lead">Vous n'avez pas besoin de savoir programmer. Votre travail est de <strong>piloter</strong> : savoir ce que vous voulez, le demander clairement, puis contrôler le résultat.</p>
+    <div class="grid grid-3">
+      <div class="mini-card"><h4>🧭 Vous décidez</h4><ul class="clean"><li>Quelles informations l'application garde</li><li>Qui a le droit de les voir et de les modifier</li><li>Quelles fonctionnalités, dans quel ordre</li></ul></div>
+      <div class="mini-card"><h4>🤖 L'agent exécute</h4><ul class="clean"><li>Écrit le code des écrans et du serveur</li><li>Crée les tableaux dans Supabase</li><li>Branche la connexion et les comptes</li></ul></div>
+      <div class="mini-card"><h4>🔎 Vous vérifiez</h4><ul class="clean"><li>Dans le navigateur : est-ce que ça marche ?</li><li>Dans Supabase : les données sont-elles bien rangées ?</li><li>Avec un second compte : est-ce que c'est sûr ?</li></ul></div>
+    </div>
+    <div class="instruction-box"><strong class="title">Comment sont traités les mots techniques</strong>Chaque notion est expliquée en mots simples, avec une image du quotidien. Dans chaque chapitre, un encadré repliable « 🔧 Le jargon que votre agent va employer » liste les termes que vous croiserez dans ses réponses : il suffit de les <strong>reconnaître</strong>.</div>
   </div>
   <div class="card">
     <div class="section-title"><span class="icon-bg green">✅</span>Objectifs de la séance</div>
-    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Comprendre l&#x27;architecture d&#x27;une application Next.js + Supabase et savoir où placer chaque morceau de logique ;</li><li>Modéliser les données de votre projet (entités, clés, relations 1-N et N-N) et les créer par migrations SQL ;</li><li>Mettre en place l&#x27;authentification Supabase, protéger les pages et lier un profil à chaque utilisateur ;</li><li>Construire un CRUD complet avec validation client et serveur et des états d&#x27;interface soignés ;</li><li>Sécuriser les données avec Row Level Security et une gestion rigoureuse des clés et secrets ;</li><li>Ajouter recherche, filtres, pagination et un dashboard personnel ;</li><li>Découper le socle en tickets ordonnés confiés à l&#x27;agent, avec un commit par ticket.</li></ul></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Expliquer en mots simples les trois briques d'une application (écrans, serveur, base de données) et le rôle de Supabase ;</li><li>Organiser les informations de votre projet en tableaux reliés entre eux, et demander à l'agent de les créer ;</li><li>Mettre en place des comptes utilisateurs : inscription, connexion, pages réservées aux membres et profil ;</li><li>Faire construire un CRUD complet (créer, lire, modifier, supprimer) avec des écrans soignés : chargement, vide, erreur, succès ;</li><li>Protéger les données : chaque utilisateur ne voit que les siennes, et les clés secrètes restent secrètes ;</li><li>Ajouter de la recherche, des filtres et un tableau de bord personnel ;</li><li>Découper le travail en petits tickets confiés à l'agent, vérifiés un par un et sauvegardés (un commit par ticket).</li></ul></div>
     <div class="grid grid-2">
-      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Le repo Next.js (App Router, TypeScript) créé en S3, avec PROJECT.md, DESIGN.md, AGENTS.md et AI-LOG.md à jour</li><li>Un compte Supabase et un projet créé (URL et clés accessibles dans les paramètres API)</li><li>Votre coding agent configuré sur le repo (Claude Code, Codex, Cursor, Copilot…)</li><li>Un second compte e-mail pour tester l&#x27;isolation des données entre utilisateurs</li></ul></div>
-      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Architecture</span><span class="famille-tag f2">Données</span><span class="famille-tag f3">Authentification</span><span class="famille-tag f4">CRUD &amp; UX</span><span class="famille-tag f5">Sécurité</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
+      <div class="mini-card"><h4>🎒 À avoir avec vous</h4><ul class="clean"><li>Le projet créé en séance 3, ouvert dans votre agent, avec PROJECT.md, DESIGN.md, AGENTS.md et AI-LOG.md à jour</li><li>Un compte Supabase gratuit (supabase.com) et un projet créé : l'agent vous guidera pour le connecter</li><li>Votre agent de code (Claude Code, Codex, Cursor, Copilot…)</li><li>Une seconde adresse e-mail pour tester avec un deuxième compte</li></ul></div>
+      <div class="mini-card"><h4>🧩 Les 5 familles de notions</h4><div class="chips" style="margin-top:4px"><span class="famille-tag f1">Fonctionnement</span><span class="famille-tag f2">Données</span><span class="famille-tag f3">Comptes</span><span class="famille-tag f4">Usages</span><span class="famille-tag f5">Sécurité</span></div><p class="muted" style="margin-top:10px">Ces familles organisent les chapitres, les cas pratiques et le glossaire.</p></div>
     </div>
     <div class="instruction-box"><strong class="title">Comment utiliser ce support</strong>Chaque onglet est un chapitre. Lisez-le, explorez les éléments interactifs, puis répondez au <strong>QCM de fin de chapitre</strong> : sa validation fait avancer la barre de progression. Les onglets marqués ✅ sont terminés. La mise en application se fait ensuite dans le <strong>support pratique</strong> de la séance.</div>
     <div class="link-card"><span><strong>🛠️ Support pratique associé</strong><br><span class="muted">Cas pratiques, atelier fil rouge et glossaire de la séance.</span></span><a class="btn btn-success" href="seance-4-construire-une-vraie-application-pratique.html">Ouvrir le support pratique ▸</a></div>
-    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🧱 Architecture Next.js + Supabase ▸</button></div>
+    <div class="nav-bottom"><span></span><button class="btn btn-primary" data-goto="c0">Commencer : 🏢 Les briques d'une application ▸</button></div>
   </div>
 </section>
 <section class="panel" data-panel="c0">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 1 sur 6</span></div>
 <div class="card">
-  <div class="section-title"><span class="icon-bg">🧱</span>Deux mondes : le serveur et le navigateur</div>
-  <p class="lead">Une application Next.js (App Router) s'exécute à deux endroits : sur le serveur (chez Vercel) et dans le navigateur de l'utilisateur. Savoir ce qui tourne où, c'est savoir ce qui est sûr, ce qui est rapide et ce que l'agent doit générer.</p>
-  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre la répartition client / serveur dans Next.js, choisir entre Server Component, Client Component, Server Action et route handler, et brancher Supabase proprement avec <code>@supabase/ssr</code> et les variables d'environnement.</div>
-  <h3>Server Components et Client Components</h3>
-  <p>Dans l'App Router, <strong>tout composant est un Server Component par défaut</strong>. Il s'exécute sur le serveur, peut lire la base directement, n'envoie aucun JavaScript au navigateur pour lui-même, mais ne peut pas utiliser <code>useState</code>, <code>useEffect</code> ni d'événements comme <code>onClick</code>. Dès qu'un fichier commence par la directive <code>'use client'</code>, il devient un <strong>Client Component</strong> : il est hydraté dans le navigateur et devient interactif.</p>
-  <div class="table-wrap"><table>
-    <tr><th></th><th>Server Component <span class="famille-tag f1">Architecture</span></th><th>Client Component</th></tr>
-    <tr><td>Où il s'exécute</td><td>Serveur uniquement</td><td>Rendu serveur puis navigateur (hydratation)</td></tr>
-    <tr><td>Accès aux données</td><td>Direct : client Supabase serveur, cookies, variables secrètes</td><td>Via le client Supabase navigateur (clé publique) ou via une Server Action</td></tr>
-    <tr><td>Interactivité</td><td>Aucune (pas de state, pas d'événements)</td><td>useState, onClick, formulaires contrôlés, animations</td></tr>
-    <tr><td>Exemple CinéList</td><td>La page « Ma watchlist » qui charge les films de l'utilisateur</td><td>Le composant de notation par étoiles cliquables</td></tr>
-  </table></div>
-  <div class="instruction-box"><strong class="title">Règle pratique</strong>Gardez les pages et les listes en Server Components, et descendez <code>'use client'</code> le plus bas possible dans l'arbre : seulement sur les petits composants qui ont besoin d'interactivité (bouton favori, modale de confirmation, champ de recherche en direct).</div>
-</div>
-
-<div class="card">
-  <div class="section-title"><span class="icon-bg green">⚙️</span>Où vit la logique métier ?</div>
-  <p class="lead">Créer un avis, inscrire un étudiant à un événement, changer le statut d'un jeu : ces actions modifient la base. Elles doivent s'exécuter sur le serveur, jamais uniquement dans le navigateur.</p>
-  <div class="grid grid-2">
-    <div class="mini-card"><h4>📝 Server Action</h4><p class="muted">Fonction asynchrone marquée <code>'use server'</code>, appelée directement depuis un formulaire (<code>&lt;form action={addReview}&gt;</code>). Idéale pour les mutations de vos propres écrans : ajouter à la watchlist, supprimer une inscription CampusHub.</p></div>
-    <div class="mini-card"><h4>🔌 Route handler</h4><p class="muted">Fichier <code>app/api/.../route.ts</code> qui exporte <code>GET</code>, <code>POST</code>… Utile pour une vraie API HTTP : webhook, callback d'authentification (<code>app/auth/callback/route.ts</code>), appel depuis un service externe.</p></div>
-    <div class="mini-card"><h4>📄 Server Component</h4><p class="muted">Lecture des données pour l'affichage : la page <code>/backlog</code> de GameBacklog lit les entrées de l'utilisateur au moment du rendu, sans appel fetch côté navigateur.</p></div>
-    <div class="mini-card"><h4>🖱️ Client Component</h4><p class="muted">Interaction et retour visuel immédiat : état « en cours d'envoi », ouverture d'une modale, tri visuel. Il délègue les écritures à une Server Action.</p></div>
+  <div class="section-title"><span class="icon-bg">🏢</span>Une application, c'est un immeuble</div>
+  <p class="lead">Derrière un écran qui s'affiche, il y a toujours trois briques. Savoir les nommer, c'est savoir expliquer à l'agent <em>où</em> quelque chose ne va pas.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre à quoi servent l'interface, le serveur et la base de données, ce que fait Supabase, et comment vous vous répartissez le travail avec l'agent.</div>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🖼️ L'interface</h4><p class="muted">Ce que l'utilisateur voit et touche : pages, boutons, formulaires, listes. C'est <strong>la façade et l'accueil</strong> de l'immeuble.</p></div>
+    <div class="mini-card"><h4>⚙️ Le serveur</h4><p class="muted">Le cerveau : il reçoit les demandes, vérifie qui les envoie, applique les règles. C'est <strong>le gardien</strong> qui décide ce qui passe.</p></div>
+    <div class="mini-card"><h4>🗄️ La base de données</h4><p class="muted">La mémoire, rangée en tableaux, conservée même quand on ferme le navigateur. Ce sont <strong>les archives</strong> du sous-sol.</p></div>
   </div>
-  <h3>Brancher Supabase avec @supabase/ssr</h3>
-  <p>Le paquet <code>@supabase/ssr</code> fournit deux fabriques : <code>createBrowserClient</code> pour les Client Components et <code>createServerClient</code> pour le serveur (Server Components, Server Actions, route handlers, middleware). Le client serveur lit et écrit la session dans les <strong>cookies</strong>, ce qui permet au serveur de savoir qui est connecté. On range ces deux clients dans <code>lib/supabase/client.ts</code> et <code>lib/supabase/server.ts</code>.</p>
-<pre class="prompt"><span class="hl3">// lib/supabase/server.ts</span>
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-
-export async function createClient() {
-  const cookieStore = await cookies()
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =&gt;
-              cookieStore.set(name, value, options))
-          } catch {
-            <span class="hl2">// appelé depuis un Server Component : le middleware rafraîchit la session</span>
-          }
-        },
-      },
-    }
-  )
-}</pre>
-  <div class="warn-box"><strong>⛔ Piège fréquent</strong> L'ancien paquet <code>@supabase/auth-helpers-nextjs</code> est déprécié. Si l'agent le propose, refusez et demandez explicitement <code>@supabase/ssr</code> : notez-le dans AGENTS.md pour que la consigne soit permanente.</div>
+  <h3>Que se passe-t-il quand je clique sur « Ajouter à ma watchlist » ?</h3>
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><span><strong>L'interface</strong> envoie la demande : « ajouter le film Dune pour cet utilisateur ».</span></div>
+    <div class="step"><span class="s-num">2</span><span><strong>Le serveur</strong> vérifie qui vous êtes : êtes-vous bien connecté ?</span></div>
+    <div class="step"><span class="s-num">3</span><span><strong>Le serveur</strong> vérifie que la demande est valide : le film existe, il n'est pas déjà dans la liste.</span></div>
+    <div class="step"><span class="s-num">4</span><span><strong>La base de données</strong> enregistre une nouvelle ligne.</span></div>
+    <div class="step"><span class="s-num">5</span><span><strong>L'interface</strong> se met à jour : le film apparaît dans la liste.</span></div>
+  </div>
+  <div class="key-box"><div class="big">Voir (interface) → Décider (serveur) → Retenir (base de données).</div><p style="margin:8px 0 0">Quand quelque chose ne marche pas, demandez-vous d'abord dans quelle brique ça coince. C'est la meilleure information à donner à l'agent.</p></div>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg amber">🔑</span>Variables d'environnement et structure du repo</div>
-  <p class="lead">Les adresses et clés de Supabase ne s'écrivent jamais en dur dans le code : elles vivent dans des variables d'environnement, différentes en local et en production.</p>
-  <ul class="clean">
-    <li><code>NEXT_PUBLIC_SUPABASE_URL</code> et <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> : le préfixe <code>NEXT_PUBLIC_</code> les rend lisibles dans le navigateur. C'est voulu : elles sont publiques par conception, la sécurité repose sur RLS.</li>
-    <li><code>SUPABASE_SERVICE_ROLE_KEY</code> : sans préfixe, donc accessible uniquement côté serveur. Elle contourne RLS : à n'utiliser que pour des tâches d'administration, jamais dans un Client Component.</li>
-    <li>En local, elles vont dans <code>.env.local</code> (ignoré par Git) ; en production, dans les paramètres Environment Variables du projet Vercel.</li>
-  </ul>
-<pre class="prompt">app/
-  (auth)/login/page.tsx        <span class="hl">// formulaire de connexion</span>
-  auth/callback/route.ts       <span class="hl">// route handler : retour du magic link</span>
-  dashboard/page.tsx           <span class="hl">// Server Component protégé</span>
-  films/[id]/page.tsx
-  films/actions.ts             <span class="hl">// Server Actions ('use server')</span>
-lib/supabase/client.ts         <span class="hl3">// createBrowserClient</span>
-lib/supabase/server.ts         <span class="hl3">// createServerClient</span>
-supabase/migrations/           <span class="hl2">// fichiers SQL versionnés</span>
-middleware.ts                  <span class="hl2">// rafraîchit la session (proxy.ts depuis Next.js 16)</span>
-.env.local                     <span class="hl2">// jamais commité</span></pre>
-  <div class="key-box"><div class="big">Lire côté serveur, interagir côté client, écrire via une Server Action.</div><p style="margin:8px 0 0">Donnez cette règle à votre agent dans AGENTS.md : elle suffit à éviter la plupart des architectures bancales générées par l'IA.</p></div>
+  <div class="section-title"><span class="icon-bg green">☁️</span>Supabase : base, comptes et sécurité clé en main</div>
+  <p class="lead">Vous n'allez pas installer une base de données sur votre ordinateur. Vous utilisez <strong>Supabase</strong>, un service en ligne qui fournit trois choses au même endroit.</p>
+  <div class="grid grid-3">
+    <div class="mini-card"><h4>🗄️ La base de données</h4><p class="muted">Vos tableaux, consultables dans le tableau de bord de Supabase (<strong>Table Editor</strong>), comme dans un tableur.</p></div>
+    <div class="mini-card"><h4>🔐 Les comptes</h4><p class="muted">Inscription, connexion, mots de passe protégés. La liste des comptes se consulte dans <strong>Authentication</strong>.</p></div>
+    <div class="mini-card"><h4>🛡️ Les règles de sécurité</h4><p class="muted">Qui a le droit de voir ou de modifier quoi. Des alertes signalent les oublis (<strong>Security Advisor</strong>).</p></div>
+  </div>
+  <p style="margin-top:14px">Le site lui-même (construit avec Next.js, mis en place en séance 3) se connecte à Supabase grâce à une <strong>adresse</strong> et des <strong>clés</strong>. Ces réglages ne sont pas écrits dans le code : ils vivent dans un fichier à part, dont nous parlerons au chapitre « Sécurité &amp; secrets ».</p>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🤝</span>Qui fait quoi : vous et l'agent</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🤖 L'agent fait</h4><ul class="clean"><li>Écrit le code des écrans et du serveur</li><li>Crée les tableaux dans Supabase</li><li>Branche l'application à Supabase</li><li>Corrige quand vous lui décrivez un problème</li></ul></div>
+    <div class="mini-card good"><h4>🧭 Vous faites</h4><ul class="clean"><li>Décidez quelles informations stocker et qui y accède</li><li>Découpez le travail en petits tickets</li><li>Testez dans le navigateur, vérifiez dans Supabase</li><li>Notez vos décisions dans AI-LOG.md</li></ul></div>
+  </div>
+  <div class="warn-box"><strong>⛔ Piège fréquent</strong> « L'agent a dit que c'était fini » n'est pas une preuve. Une fonctionnalité est terminée quand <em>vous</em> l'avez vue marcher dans le navigateur.</div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>Next.js</strong> : l'outil de construction du site, déjà installé en séance 3.</li><li><strong>Composant serveur / composant client</strong> : un morceau d'écran préparé par le serveur / un morceau interactif qui vit dans le navigateur.</li><li><strong>Action serveur (Server Action)</strong> : la petite fonction qui enregistre une modification quand vous validez un formulaire.</li><li><strong>API</strong> : une « porte d'entrée » par laquelle deux programmes se parlent.</li></ul></div></details>
+</div>
+
+<div class="card" data-explorer="x0">
+  <div class="section-title"><span class="icon-bg purple">🧩</span>Explorer les briques d'une application</div>
+  <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
+  <div class="chain"></div>
+  <div class="concept-detail"></div>
+  <div class="progress-wrap"><div class="progress-label"><span>Notions consultées</span><span>0 / 6</span></div><div class="progress-track"><div class="progress-fill"></div></div></div>
 </div>
 <div class="card">
   <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 1</div>
@@ -423,81 +406,80 @@ middleware.ts                  <span class="hl2">// rafraîchit la session (prox
     <button class="btn btn-ghost" data-qreset="0">↺ Recommencer</button>
   </div>
   <div class="result-panel" id="qres0"></div>
-  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🗂️ Modéliser les données ▸</button></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="0">◂ Précédent</button><button class="btn btn-primary" data-goto="c1">Suite : 🗂️ Organiser les données ▸</button></div>
 </div>
 </section>
 <section class="panel" data-panel="c1">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 2 sur 6</span></div>
 <div class="card">
-  <div class="section-title"><span class="icon-bg">🗂️</span>Entités, attributs et types</div>
-  <p class="lead">Avant la moindre ligne de code, il faut savoir quelles « choses » votre application manipule et comment elles sont reliées. Un schéma de données bancal se paie à chaque écran : c'est le ticket le plus important de la séance.</p>
+  <div class="section-title"><span class="icon-bg">🗂️</span>Des tableaux, comme dans un tableur</div>
+  <p class="lead">Avant la moindre ligne de code, il faut savoir quelles « choses » votre application garde en mémoire et comment elles sont reliées. C'est la décision la plus importante de la séance : une organisation bancale se paie à chaque écran.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Savoir décrire les informations de votre projet en tableaux (entités et colonnes), les relier entre eux, et demander à l'agent de les créer.</div>
   <ul class="clean">
-    <li><strong>Entité</strong> : un type d'objet métier qui devient une table (un film, un jeu, un événement, une inscription).</li>
-    <li><strong>Attribut</strong> : une propriété de l'entité, qui devient une colonne (<code>title</code>, <code>status</code>, <code>rating</code>).</li>
-    <li><strong>Type</strong> : la nature de la valeur en Postgres : <code>text</code>, <code>integer</code>, <code>boolean</code>, <code>timestamptz</code>, <code>uuid</code>, <code>date</code>.</li>
-    <li><strong>Contraintes</strong> : <code>not null</code>, <code>unique</code>, <code>check (rating between 1 and 5)</code>, <code>default now()</code>. Elles protègent la cohérence même si le front se trompe.</li>
+    <li><strong>Entité</strong> : un type de « chose » stockée (un film, un jeu, un événement, une inscription). Chaque entité a son propre tableau.</li>
+    <li><strong>Colonne</strong> (ou champ) : une information sur cette chose (titre, année, statut, note).</li>
+    <li><strong>Ligne</strong> : un exemplaire (le film « Dune »).</li>
+    <li><strong>Type de valeur</strong> : texte, nombre, oui/non ou date. On peut ajouter des règles simples : obligatoire, unique, valeurs permises (une note de 1 à 5).</li>
+    <li><strong>Identifiant unique</strong> : un code propre à chaque ligne, créé automatiquement. Deux films peuvent avoir le même titre, jamais le même identifiant.</li>
   </ul>
-  <h3>Clé primaire et clé étrangère</h3>
-  <p>Chaque ligne a un identifiant unique : la <strong>clé primaire</strong>. Avec Supabase, on utilise un <code>uuid</code> généré par <code>gen_random_uuid()</code> : impossible à deviner, contrairement à un entier auto-incrémenté (<code>/films/3</code> laisse imaginer <code>/films/4</code>). Une <strong>clé étrangère</strong> est une colonne qui référence la clé primaire d'une autre table (<code>references public.films(id)</code>) : Postgres refuse alors une valeur qui n'existe pas.</p>
+  <div class="table-wrap"><table><tr><th>🎬 Tableau « Films »</th><th>titre</th><th>année</th><th>type</th></tr>
+    <tr><td><span class="muted">ligne 1</span></td><td>Dune</td><td>2021</td><td>film</td></tr>
+    <tr><td><span class="muted">ligne 2</span></td><td>Alien</td><td>1979</td><td>film</td></tr>
+    <tr><td><span class="muted">ligne 3</span></td><td>Severance</td><td>2022</td><td>série</td></tr></table></div>
+  <p class="muted">Chaque ligne a aussi son identifiant unique, créé automatiquement : il n'est pas montré ici pour garder le tableau lisible.</p>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg green">🔗</span>Relations 1-N et N-N</div>
+  <div class="section-title"><span class="icon-bg green">🔗</span>Relier les tableaux</div>
   <div class="grid grid-2">
-    <div class="mini-card"><h4>1️⃣ Relation 1-N</h4><p class="muted">Un élément est lié à plusieurs autres, chacun d'eux ne pointant que vers un seul. Un organisateur CampusHub crée plusieurs événements : <code>events.organizer_id</code> référence <code>profiles.id</code>. La clé étrangère se place toujours du côté « plusieurs ».</p></div>
-    <div class="mini-card"><h4>🔀 Relation N-N</h4><p class="muted">Un étudiant s'inscrit à plusieurs événements et un événement accueille plusieurs étudiants. On crée une <strong>table de jointure</strong> <code>registrations(user_id, event_id)</code> avec une contrainte <code>unique (user_id, event_id)</code> pour interdire les doublons.</p></div>
+    <div class="mini-card"><h4>1️⃣ Un-à-plusieurs</h4><p class="muted">Un élément est lié à plusieurs autres, mais chacun d'eux ne dépend que d'un seul. Un organisateur CampusHub crée plusieurs événements ; chaque événement a un seul organisateur. On ajoute dans le tableau des événements une colonne « organisateur » qui pointe vers son profil. <strong>Le lien se place toujours du côté « plusieurs ».</strong></p></div>
+    <div class="mini-card"><h4>🔀 Plusieurs-à-plusieurs</h4><p class="muted">Un étudiant s'inscrit à plusieurs événements et un événement accueille plusieurs étudiants. On crée un <strong>tableau intermédiaire</strong> « Inscriptions », avec une ligne par couple étudiant + événement, et la règle « pas de doublon ».</p></div>
   </div>
+  <h3>Exemple : le tableau intermédiaire « Ma watchlist » de CinéList</h3>
+  <div class="table-wrap"><table><tr><th>Qui (profil)</th><th>Quel film</th><th>Statut</th><th>Favori</th></tr>
+    <tr><td>Léa</td><td>Dune</td><td>vu</td><td>oui</td></tr>
+    <tr><td>Léa</td><td>Alien</td><td>à voir</td><td>non</td></tr>
+    <tr><td>Tom</td><td>Dune</td><td>à voir</td><td>non</td></tr></table></div>
+  <p>Remarquez que ce tableau porte de l'information utile (le statut, le favori). Ce n'est pas un simple lien : c'est souvent <strong>l'entité centrale de l'espace personnel</strong>.</p>
   <div class="table-wrap"><table>
-    <tr><th>Projet</th><th>Entités</th><th>Relations clés</th></tr>
-    <tr><td>🎬 CinéList</td><td>profiles, films, watchlist_items, reviews</td><td>watchlist_items = jointure N-N profils ↔ films (statut, favori) ; reviews = un avis par utilisateur et par film</td></tr>
-    <tr><td>🎮 GameBacklog</td><td>profiles, games, backlog_entries</td><td>backlog_entries relie profil et jeu avec <code>status</code> (a_jouer, en_cours, termine) et <code>rating</code></td></tr>
-    <tr><td>🎓 CampusHub</td><td>profiles, events, registrations</td><td>events 1-N depuis l'organisateur ; registrations = jointure N-N étudiants ↔ événements</td></tr>
+    <tr><th>Projet</th><th>Tableaux</th><th>Liens clés</th></tr>
+    <tr><td>🎬 CinéList</td><td>Profils, Films, Ma watchlist, Avis</td><td>Ma watchlist relie profils et films (statut, favori) ; un seul avis par utilisateur et par film</td></tr>
+    <tr><td>🎮 GameBacklog</td><td>Profils, Jeux, Backlog</td><td>Le backlog relie un profil à un jeu, avec un statut (à jouer, en cours, terminé) et une note</td></tr>
+    <tr><td>🎓 CampusHub</td><td>Profils, Événements, Inscriptions</td><td>Un organisateur crée plusieurs événements ; Inscriptions relie étudiants et événements</td></tr>
   </table></div>
-  <p>Remarquez que la table de jointure porte souvent de l'information utile : le statut dans GameBacklog, la date d'inscription dans CampusHub, le favori dans CinéList. Ce n'est pas un simple lien, c'est souvent l'entité centrale de l'espace personnel.</p>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg amber">📜</span>Migrations SQL</div>
-  <p class="lead">Une migration est un fichier SQL daté et versionné dans Git qui fait évoluer le schéma. On ne clique pas dans l'interface pour créer ses tables : on écrit (ou fait écrire) une migration, relue, commitée, rejouable.</p>
-<pre class="prompt"><span class="hl3">-- supabase/migrations/..._create_watchlist.sql</span>
-create table public.films (
-  id uuid primary key default gen_random_uuid(),
-  title text not null,
-  year integer,
-  kind text not null check (kind in ('film', 'serie')),
-  created_at timestamptz not null default now()
-);
-
-create table public.watchlist_items (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  film_id uuid not null references public.films(id) on delete cascade,
-  status text not null default 'a_voir' check (status in ('a_voir', 'vu')),
-  is_favorite boolean not null default false,
-  created_at timestamptz not null default now(),
-  <span class="hl">unique (user_id, film_id)</span>
-);
-
-alter table public.films enable row level security;
-alter table public.watchlist_items enable row level security;</pre>
-  <p>Avec la CLI Supabase : <code>supabase migration new create_watchlist</code> crée le fichier, <code>supabase db push</code> l'applique au projet distant. Sans CLI, vous pouvez coller le SQL dans le SQL Editor du dashboard, mais gardez quand même le fichier dans <code>supabase/migrations/</code> pour l'historique.</p>
+  <div class="section-title"><span class="icon-bg amber">📜</span>Les migrations : le carnet de chantier de la base</div>
+  <p class="lead">Quand on crée ou modifie un tableau, on ne clique pas au hasard dans Supabase. L'agent écrit un petit fichier daté qui décrit le changement : une <strong>migration</strong>. Il est rangé dans le projet et sauvegardé avec Git, comme le reste.</p>
+  <div class="grid grid-2">
+    <div class="mini-card good"><h4>✅ Pourquoi c'est utile</h4><p class="muted">Chaque changement est <strong>daté, traçable et rejouable</strong>. On peut recréer la base ailleurs et retrouver qui a changé quoi, comme dans le carnet de chantier d'un architecte.</p></div>
+    <div class="mini-card"><h4>👀 Ce que vous faites</h4><p class="muted">Vous n'avez pas à lire le fichier. Vous <strong>vérifiez le résultat</strong> dans Supabase (Table Editor) : les tableaux et colonnes attendus sont-ils là ?</p></div>
+  </div>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Crée les tableaux décrits dans data-model.md avec une migration.
+Ensuite, liste-moi les tableaux et leurs colonnes dans un tableau simple,
+pour que je puisse les comparer avec ce que je vois dans Supabase.
+Explique chaque terme technique en une phrase.</pre>
+  <div class="check-box"><strong class="title">✅ Ce que vous vérifiez dans le navigateur</strong><ul class="clean"><li>Dans Supabase, ouvrez <strong>Table Editor</strong> : chaque tableau annoncé par l'agent est présent.</li><li>Les colonnes correspondent à votre fiche data-model.md (rien de manquant, rien d'inventé).</li><li>Le fichier de migration apparaît dans les changements du projet, prêt à être sauvegardé (commit).</li></ul></div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>Table</strong> : un tableau de la base de données.</li><li><strong>Colonne / ligne</strong> : une information / un exemplaire.</li><li><strong>Clé primaire</strong> : l'identifiant unique d'une ligne.</li><li><strong>Clé étrangère</strong> : la colonne qui pointe vers une ligne d'un autre tableau.</li><li><strong>Table de jointure</strong> : le tableau intermédiaire d'une relation plusieurs-à-plusieurs.</li><li><strong>SQL</strong> : le langage des bases de données ; l'agent l'écrit à votre place.</li></ul></div></details>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg purple">🤖</span>Faire proposer, puis critiquer le schéma par l'IA</div>
+  <div class="section-title"><span class="icon-bg purple">🤖</span>Faire proposer, puis critiquer l'organisation par l'IA</div>
   <div class="steps">
-    <div class="step"><span class="s-num">1</span><span>Donnez PROJECT.md à l'IA et demandez une proposition de schéma : entités, colonnes typées, clés, relations, contraintes.</span></div>
-    <div class="step"><span class="s-num">2</span><span>Dans un second message, demandez-lui de <strong>critiquer</strong> sa propre proposition : doublons possibles, colonnes nullables à tort, relation N-N manquante, données dérivées stockées inutilement.</span></div>
-    <div class="step"><span class="s-num">3</span><span>Confrontez le schéma à vos user stories : chaque écran du MVP doit pouvoir être alimenté par une requête simple.</span></div>
-    <div class="step"><span class="s-num">4</span><span>Figez le résultat dans <code>data-model.md</code>, puis seulement après, faites générer la migration SQL.</span></div>
+    <div class="step"><span class="s-num">1</span><span>Donnez PROJECT.md à l'IA et demandez la liste des tableaux, de leurs colonnes et de leurs liens, <strong>en mots simples</strong>.</span></div>
+    <div class="step"><span class="s-num">2</span><span>Dans un second message, demandez-lui de <strong>critiquer</strong> sa proposition : doublons possibles, informations manquantes, tableau intermédiaire oublié, informations stockées pour rien.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Confrontez le résultat à vos écrans : <strong>pour chaque écran du MVP, de quels tableaux a-t-il besoin ?</strong> Faites-le sur papier.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Figez le résultat dans <code>data-model.md</code>, puis seulement après, faites créer les tableaux.</span></div>
   </div>
   <div class="grid grid-2">
-    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Une colonne <code>favorite_films text</code> dans <code>profiles</code> contenant « Dune, Alien, Heat » : impossible à filtrer, à compter ou à relier proprement.</p></div>
-    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Une table <code>watchlist_items</code> avec <code>is_favorite boolean</code> : une ligne par couple utilisateur / film, filtrable et comptable dans le dashboard.</p></div>
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Une colonne « films favoris » dans le profil, qui contient « Dune, Alien, Heat » : impossible à filtrer, à compter ou à relier proprement.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Un tableau « Ma watchlist » avec une colonne « favori » (oui/non) : une ligne par couple utilisateur + film, filtrable et comptable dans le tableau de bord.</p></div>
   </div>
 </div>
+
 <div class="card" data-explorer="x1">
-  <div class="section-title"><span class="icon-bg purple">🧩</span>Explorer les notions de modélisation</div>
+  <div class="section-title"><span class="icon-bg purple">🧩</span>Explorer l'organisation des données</div>
   <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
   <div class="chain"></div>
   <div class="concept-detail"></div>
@@ -514,80 +496,54 @@ alter table public.watchlist_items enable row level security;</pre>
     <button class="btn btn-ghost" data-qreset="1">↺ Recommencer</button>
   </div>
   <div class="result-panel" id="qres1"></div>
-  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🔐 Authentification ▸</button></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c0">◂ Précédent</button><button class="btn btn-primary" data-goto="c2">Suite : 🔐 Comptes &amp; connexion ▸</button></div>
 </div>
 </section>
 <section class="panel" data-panel="c2">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 3 sur 6</span></div>
 <div class="card">
-  <div class="section-title"><span class="icon-bg">🔐</span>Supabase Auth : qui est connecté ?</div>
-  <p class="lead">Sans authentification, pas d'espace personnel, pas de watchlist à soi, pas de RLS. Supabase Auth gère les comptes dans le schéma <code>auth</code> ; votre application n'a qu'à appeler les bonnes méthodes.</p>
+  <div class="section-title"><span class="icon-bg">🔐</span>Qui est connecté ?</div>
+  <p class="lead">Sans comptes, pas d'espace personnel, pas de watchlist « à soi », pas de protection des données. Supabase gère les comptes pour vous : mots de passe protégés, e-mail de confirmation, déconnexion. Vous demandez les écrans à l'agent.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Connaître les fonctions d'un système de comptes, comprendre les pages réservées aux membres et le rôle du profil, et savoir les tester dans le navigateur.</div>
   <div class="table-wrap"><table>
-    <tr><th>Méthode</th><th>Appel supabase-js</th><th>Usage</th></tr>
-    <tr><td>Inscription e-mail / mot de passe</td><td><code>supabase.auth.signUp({ email, password })</code></td><td>Crée le compte ; un e-mail de confirmation est envoyé si l'option est active.</td></tr>
-    <tr><td>Connexion e-mail / mot de passe</td><td><code>supabase.auth.signInWithPassword({ email, password })</code></td><td>Ouvre une session.</td></tr>
-    <tr><td>Magic link</td><td><code>supabase.auth.signInWithOtp({ email })</code></td><td>Envoie un lien de connexion sans mot de passe.</td></tr>
-    <tr><td>Déconnexion</td><td><code>supabase.auth.signOut()</code></td><td>Supprime la session et les cookies.</td></tr>
-    <tr><td>Utilisateur courant</td><td><code>supabase.auth.getUser()</code></td><td>Côté serveur, vérifie le jeton auprès de Supabase.</td></tr>
+    <tr><th>Fonction</th><th>Ce que voit l'utilisateur</th><th>À prévoir</th></tr>
+    <tr><td>Inscription</td><td>Un formulaire e-mail + mot de passe</td><td>Un e-mail de confirmation peut être envoyé</td></tr>
+    <tr><td>Connexion</td><td>Un formulaire e-mail + mot de passe</td><td>Messages d'erreur clairs (mauvais mot de passe, e-mail non confirmé)</td></tr>
+    <tr><td>Lien magique</td><td>Un lien reçu par e-mail, sans mot de passe</td><td>Pratique pour CampusHub ; l'adresse de retour doit être déclarée dans les réglages de Supabase</td></tr>
+    <tr><td>Déconnexion</td><td>Un bouton qui ferme la session</td><td>Doit renvoyer vers l'accueil</td></tr>
+    <tr><td>Mot de passe oublié</td><td>Un lien qui envoie un e-mail de réinitialisation</td><td>Souvent oublié : pensez à le demander</td></tr>
   </table></div>
   <div class="grid grid-2">
-    <div class="mini-card"><h4>🔑 E-mail / mot de passe</h4><p class="muted">Simple et attendu par les utilisateurs. Pensez aux messages d'erreur clairs (identifiants invalides, e-mail non confirmé) et au lien « mot de passe oublié ».</p></div>
-    <div class="mini-card"><h4>✉️ Magic link</h4><p class="muted">Aucun mot de passe à retenir, pratique pour CampusHub. Le lien renvoie vers une URL de retour (<code>/auth/callback</code>) qui doit figurer dans Authentication &gt; URL Configuration de Supabase.</p></div>
+    <div class="mini-card"><h4>🔑 E-mail + mot de passe</h4><p class="muted">Simple et attendu par les utilisateurs. Demandez des messages d'erreur compréhensibles.</p></div>
+    <div class="mini-card"><h4>✉️ Lien magique</h4><p class="muted">Aucun mot de passe à retenir. Demandez à l'agent de vous indiquer où déclarer l'adresse de retour dans Supabase.</p></div>
   </div>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg green">🍪</span>Session, cookies et middleware</div>
-  <p>Une <strong>session</strong> est composée d'un jeton d'accès (JWT) de courte validité et d'un jeton de rafraîchissement. Avec <code>@supabase/ssr</code>, elle est stockée dans des <strong>cookies</strong> : le serveur peut donc savoir qui fait la requête, dès le rendu de la page.</p>
-  <p>Le <strong>middleware</strong> (<code>middleware.ts</code>, renommé <code>proxy.ts</code> à partir de Next.js 16) s'exécute avant chaque requête : il crée un client serveur, appelle <code>supabase.auth.getUser()</code> pour rafraîchir la session si besoin et réécrit les cookies. Il peut aussi rediriger vers <code>/login</code> un visiteur non connecté qui tente d'ouvrir <code>/dashboard</code>.</p>
-  <div class="warn-box"><strong>⛔ Ne faites pas confiance à getSession() côté serveur</strong> Elle lit le cookie sans vérifier le jeton. Pour décider d'un accès côté serveur, utilisez <code>getUser()</code> (ou <code>getClaims()</code>), qui valide réellement l'utilisateur.</div>
-  <h3>Protéger une page</h3>
-<pre class="prompt"><span class="hl3">// app/dashboard/page.tsx (Server Component)</span>
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-
-export default async function DashboardPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login?next=/dashboard')
-  <span class="hl">// ici, user.id est fiable : on peut charger ses données</span>
-}</pre>
-  <p>Le middleware fait une première barrière, la vérification dans la page (ou dans la Server Action) fait la seconde, et RLS dans la base fait la dernière. Trois couches, car chacune peut être contournée ou oubliée seule.</p>
+  <div class="section-title"><span class="icon-bg green">🎟️</span>La session et les pages réservées</div>
+  <p>Une fois connecté, l'application garde une <strong>session</strong> : comme un <strong>bracelet de festival</strong>, elle prouve que vous avez déjà été identifié, pour ne pas redemander le mot de passe à chaque page.</p>
+  <p>Une <strong>page réservée</strong> (par exemple <code>/dashboard</code>) vérifie ce bracelet : sans lui, le visiteur est renvoyé vers la connexion, puis ramené sur la page qu'il voulait ouvrir.</p>
+  <div class="warn-box"><strong>⛔ Trois verrous, pas un seul</strong> La protection d'une page ne suffit pas. Il y a trois verrous : <strong>1.</strong> la page réservée, <strong>2.</strong> la vérification refaite par le serveur à chaque action, <strong>3.</strong> les règles d'accès de la base (chapitre suivant). Chacun peut être oublié ou contourné seul : c'est leur cumul qui protège.</div>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Ajoute l'inscription, la connexion et la déconnexion avec Supabase.
+Crée automatiquement un profil à chaque nouveau compte.
+Protège la page /dashboard : un visiteur non connecté est renvoyé
+vers la connexion, puis revient sur /dashboard après s'être connecté.
+Explique-moi comment tester chaque point dans le navigateur.</pre>
+  <div class="check-box"><strong class="title">✅ Ce que vous vérifiez dans le navigateur</strong><ul class="clean"><li>Ouvrez <code>/dashboard</code> dans une fenêtre de navigation privée, sans être connecté : vous êtes renvoyé vers la connexion.</li><li>Connectez-vous : vous arrivez bien sur <code>/dashboard</code>.</li><li>Déconnectez-vous, puis tapez à nouveau l'adresse <code>/dashboard</code> : l'accès est refusé.</li><li>Dans Supabase (<strong>Authentication</strong>), votre nouveau compte apparaît dans la liste.</li></ul></div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>JWT / jeton</strong> : le contenu du bracelet : une preuve d'identité de courte durée.</li><li><strong>Cookie</strong> : le petit fichier du navigateur qui garde le bracelet.</li><li><strong>Middleware</strong> : le portier qui contrôle les visiteurs avant chaque page.</li><li><strong>getUser()</strong> : la vérification réelle de l'identité côté serveur (à préférer à getSession(), qui lit seulement le cookie).</li></ul></div></details>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg purple">👤</span>Profil lié à auth.users et redirection</div>
-  <p class="lead">La table <code>auth.users</code> appartient à Supabase : on n'y ajoute pas de colonnes métier. On crée une table <code>public.profiles</code> dont la clé primaire est aussi une clé étrangère vers <code>auth.users(id)</code>.</p>
-<pre class="prompt">create table public.profiles (
-  id uuid primary key references auth.users(id) on delete cascade,
-  username text unique,
-  avatar_url text,
-  created_at timestamptz not null default now()
-);
-
-create function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = ''
-as $$
-begin
-  insert into public.profiles (id, username)
-  values (new.id, new.raw_user_meta_data -&gt;&gt; 'username');
-  return new;
-end;
-$$;
-
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();</pre>
-  <p>Grâce au trigger, chaque inscription crée automatiquement son profil. Toutes vos tables métier (<code>watchlist_items</code>, <code>backlog_entries</code>, <code>registrations</code>) référencent ensuite <code>profiles.id</code>.</p>
-  <h3>Redirection après connexion</h3>
+  <div class="section-title"><span class="icon-bg purple">👤</span>Le profil, lié à chaque compte</div>
+  <p class="lead">Les comptes eux-mêmes appartiennent à Supabase : vous n'y ajoutez rien. Pour garder un pseudo, un avatar ou d'autres informations, on crée un tableau <strong>Profils</strong> : une ligne par compte, créée automatiquement à l'inscription.</p>
+  <p>Tous vos tableaux personnels (ma watchlist, mon backlog, mes inscriptions) pointent ensuite vers le profil : « qui a ajouté ce film ? ».</p>
+  <h3>Après la connexion</h3>
   <ul class="clean">
-    <li>Transmettez la page d'origine dans l'URL : <code>/login?next=/events/b3f1…</code>, puis redirigez vers <code>next</code> après succès (en vérifiant que c'est un chemin interne commençant par <code>/</code>).</li>
-    <li>Après un magic link, le route handler <code>/auth/callback</code> appelle <code>exchangeCodeForSession(code)</code> puis redirige vers <code>/dashboard</code>.</li>
-    <li>Un utilisateur déjà connecté qui ouvre <code>/login</code> est renvoyé directement vers son dashboard.</li>
+    <li>Si le visiteur voulait ouvrir une page précise, on l'y ramène après la connexion (en restant toujours sur votre site).</li>
+    <li>Après un lien magique, il arrive directement sur son tableau de bord.</li>
+    <li>Un utilisateur déjà connecté qui ouvre la page de connexion est renvoyé vers son tableau de bord.</li>
   </ul>
-  <div class="key-box"><div class="big">Auth = savoir qui ; RLS = décider ce qu'il peut faire.</div><p style="margin:8px 0 0">L'authentification ne protège rien toute seule : elle fournit l'identité que les policies utiliseront au chapitre sécurité.</p></div>
+  <div class="key-box"><div class="big">Comptes = savoir qui. Règles d'accès = décider ce qu'il peut faire.</div><p style="margin:8px 0 0">Les comptes ne protègent rien tout seuls : ils fournissent l'identité que les règles d'accès utiliseront au chapitre suivant.</p></div>
 </div>
 <div class="card">
   <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 3</div>
@@ -600,82 +556,64 @@ create trigger on_auth_user_created
     <button class="btn btn-ghost" data-qreset="2">↺ Recommencer</button>
   </div>
   <div class="result-panel" id="qres2"></div>
-  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : ✏️ CRUD &amp; formulaires ▸</button></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c1">◂ Précédent</button><button class="btn btn-primary" data-goto="c3">Suite : ✏️ Créer, modifier, supprimer ▸</button></div>
 </div>
 </section>
 <section class="panel" data-panel="c3">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 4 sur 6</span></div>
 <div class="card">
   <div class="section-title"><span class="icon-bg">✏️</span>Les quatre opérations du CRUD</div>
-  <p class="lead">CRUD signifie Create, Read, Update, Delete : créer, lire, modifier, supprimer. C'est le cœur fonctionnel du socle : au moins une entité doit supporter les quatre, proprement.</p>
+  <p class="lead">CRUD signifie <em>Create, Read, Update, Delete</em> : créer, lire, modifier, supprimer. C'est le cœur fonctionnel du socle : au moins une entité doit supporter les quatre, proprement.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Savoir demander et vérifier un CRUD complet : les quatre opérations, la double vérification, les quatre états d'écran et l'actualisation de l'affichage.</div>
   <div class="table-wrap"><table>
-    <tr><th>Opération</th><th>supabase-js</th><th>Exemple fil rouge</th></tr>
-    <tr><td>Create</td><td><code>.from('reviews').insert({ ... })</code></td><td>CinéList : publier un avis noté sur un film</td></tr>
-    <tr><td>Read</td><td><code>.from('backlog_entries').select('*, games(title)')</code></td><td>GameBacklog : afficher mon backlog avec le titre de chaque jeu</td></tr>
-    <tr><td>Update</td><td><code>.from('backlog_entries').update({ status: 'termine' }).eq('id', id)</code></td><td>GameBacklog : passer un jeu en « terminé »</td></tr>
-    <tr><td>Delete</td><td><code>.from('registrations').delete().eq('id', id)</code></td><td>CampusHub : annuler une inscription</td></tr>
+    <tr><th>Opération</th><th>Ce que voit l'utilisateur</th><th>Exemple fil rouge</th></tr>
+    <tr><td><strong>Créer</strong></td><td>Un formulaire « Ajouter »</td><td>CinéList : publier un avis noté sur un film</td></tr>
+    <tr><td><strong>Lire</strong></td><td>Une liste ou une fiche</td><td>GameBacklog : afficher mon backlog avec le titre de chaque jeu</td></tr>
+    <tr><td><strong>Modifier</strong></td><td>Un bouton « Modifier » ou un changement de statut</td><td>GameBacklog : passer un jeu en « terminé »</td></tr>
+    <tr><td><strong>Supprimer</strong></td><td>Un bouton « Supprimer » avec confirmation</td><td>CampusHub : annuler une inscription</td></tr>
   </table></div>
-  <div class="warn-box"><strong>⛔ Un update ou un delete sans filtre</strong> Oublier <code>.eq('id', id)</code> ou filtrer sur une colonne trop large vise toutes les lignes autorisées. L'API Supabase refuse un update ou un delete sans aucun filtre, mais un filtre trop large passe : relisez toujours la requête générée par l'agent.</div>
+  <div class="warn-box"><strong>⛔ Modifier ou supprimer « trop de choses »</strong> Une demande mal ciblée peut toucher plusieurs lignes au lieu d'une seule. Après chaque modification ou suppression, vérifiez que <em>seul l'élément voulu</em> a changé, dans l'application <strong>et</strong> dans Supabase.</div>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg green">🛡️</span>Valider côté client ET côté serveur</div>
-  <p>La validation côté client (attributs <code>required</code>, <code>min</code>, <code>max</code>, messages sous les champs) sert le <strong>confort</strong> de l'utilisateur. La validation côté serveur sert la <strong>sécurité</strong> : n'importe qui peut envoyer une requête sans passer par votre formulaire. Un même schéma <strong>Zod</strong> peut décrire la forme attendue des données et être réutilisé des deux côtés.</p>
-<pre class="prompt"><span class="hl3">// app/films/actions.ts</span>
-'use server'
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
-
-const ReviewSchema = z.object({
-  filmId: z.uuid(),
-  rating: z.coerce.number().int().min(1).max(5),
-  content: z.string().trim().max(1000).optional(),
-})
-
-export async function addReview(prevState: unknown, formData: FormData) {
-  const parsed = ReviewSchema.safeParse(Object.fromEntries(formData))
-  if (!parsed.success) return { error: "La note doit être comprise entre 1 et 5." }
-
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: "Connexion requise." }
-
-  const { error } = await supabase.from('reviews').insert({
-    user_id: user.id,
-    film_id: parsed.data.filmId,
-    rating: parsed.data.rating,
-    content: parsed.data.content,
-  })
-  if (error) return { error: "Impossible d'enregistrer votre avis." }
-
-  <span class="hl">revalidatePath(`/films/${parsed.data.filmId}`)</span>
-  return { success: true }
-}</pre>
-  <p>Remarquez que <code>user_id</code> vient de la session, jamais d'un champ du formulaire : un utilisateur ne doit pas pouvoir publier au nom d'un autre.</p>
-</div>
-
-<div class="card">
-  <div class="section-title"><span class="icon-bg amber">🎛️</span>Les états d'interface</div>
-  <p class="lead">Une interface générée par l'IA montre souvent seulement le cas où tout va bien. Une vraie application gère quatre états pour chaque liste et chaque formulaire.</p>
+  <div class="section-title"><span class="icon-bg green">🛡️</span>Vérifier deux fois : à l'écran et au serveur</div>
+  <p>Pensez à une boîte de nuit : <strong>le panneau à l'entrée</strong> prévient les gens (c'est le confort), mais c'est <strong>le videur</strong> qui décide vraiment (c'est la sécurité). Pour vos formulaires, c'est pareil.</p>
   <div class="grid grid-2">
-    <div class="mini-card"><h4>⏳ Chargement</h4><p class="muted">Squelette de liste via <code>loading.tsx</code>, bouton désactivé et libellé « Enregistrement… » pendant l'envoi (<code>useActionState</code> fournit un indicateur <code>pending</code>).</p></div>
-    <div class="mini-card"><h4>📭 Vide</h4><p class="muted">« Votre backlog est vide. Ajoutez votre premier jeu » avec un bouton d'action, plutôt qu'une page blanche.</p></div>
-    <div class="mini-card"><h4>⚠️ Erreur</h4><p class="muted">Message compréhensible près du champ ou du formulaire, sans afficher l'erreur SQL brute. <code>error.tsx</code> capture les erreurs de rendu d'une route.</p></div>
-    <div class="mini-card"><h4>✅ Succès</h4><p class="muted">Confirmation visible (toast, message, redirection vers la fiche) et liste à jour.</p></div>
+    <div class="mini-card"><h4>🖥️ À l'écran</h4><p class="muted">Le formulaire signale tout de suite une erreur (« La note doit être comprise entre 1 et 5 »). Cela sert le <strong>confort</strong> de l'utilisateur, mais peut être contourné.</p></div>
+    <div class="mini-card"><h4>⚙️ Au serveur</h4><p class="muted">Le serveur refuse une donnée invalide, même si elle n'est pas venue du formulaire. Cela sert la <strong>sécurité</strong> : n'importe qui peut envoyer une demande sans passer par votre écran.</p></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Une règle d'or</strong>L'auteur d'une action (qui publie l'avis, qui s'inscrit) vient <strong>toujours du compte connecté</strong>, jamais d'un champ du formulaire. Sinon, quelqu'un pourrait agir au nom d'un autre.</div>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Ajoute la vérification de la note (de 1 à 5) à la fois dans le formulaire
+et côté serveur. L'auteur de l'avis doit toujours être l'utilisateur connecté.
+Montre-moi comment tester avec une note de 7, un champ vide
+et un texte de 5000 caractères.</pre>
+  <div class="check-box"><strong class="title">✅ Ce que vous vérifiez dans le navigateur</strong><ul class="clean"><li>Saisissez une note de 7 : un message clair apparaît, rien n'est enregistré.</li><li>Laissez un champ obligatoire vide : même résultat.</li><li>Dans Supabase, aucune ligne invalide n'a été créée.</li></ul></div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>Zod</strong> : une petite bibliothèque qui décrit les données attendues et sert à les valider.</li><li><strong>Validation côté client / serveur</strong> : la vérification à l'écran / au serveur.</li><li><strong>Server Action</strong> : la fonction du serveur appelée quand on valide un formulaire.</li></ul></div></details>
+</div>
+
+<div class="card">
+  <div class="section-title"><span class="icon-bg amber">🎛️</span>Les quatre états d'un écran</div>
+  <p class="lead">Une interface générée par l'IA montre souvent seulement le cas où tout va bien. Une vraie application gère <strong>quatre états</strong> pour chaque liste et chaque formulaire.</p>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>⏳ Chargement</h4><p class="muted">Un indicateur pendant l'attente ; le bouton est désactivé et affiche « Enregistrement… » pendant l'envoi.</p></div>
+    <div class="mini-card"><h4>📭 Vide</h4><p class="muted">« Votre backlog est vide. Ajoutez votre premier jeu », avec un bouton d'action, plutôt qu'une page blanche.</p></div>
+    <div class="mini-card"><h4>⚠️ Erreur</h4><p class="muted">Un message compréhensible près du champ ou du formulaire, jamais un message technique brut.</p></div>
+    <div class="mini-card"><h4>✅ Succès</h4><p class="muted">Une confirmation visible (message, redirection vers la fiche) et une liste à jour.</p></div>
   </div>
   <h3>Confirmer une suppression</h3>
-  <p>Une suppression est irréversible : demandez confirmation dans une modale qui nomme l'élément (« Supprimer votre avis sur Dune ? »), avec un bouton destructif clairement identifié et un bouton d'annulation. La modale est un Client Component ; la suppression elle-même reste une Server Action qui revérifie l'utilisateur.</p>
+  <p>Une suppression est irréversible : demandez confirmation dans une fenêtre qui nomme l'élément (« Supprimer votre avis sur Dune ? »), avec un bouton de suppression clairement identifié et un bouton d'annulation. Côté serveur, l'identité est revérifiée avant de supprimer.</p>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg purple">🔄</span>Revalidation : afficher des données à jour</div>
-  <p>Next.js met en cache le rendu des pages. Après une mutation, il faut invalider ce cache pour que la liste reflète la modification : <code>revalidatePath('/watchlist')</code> dans la Server Action, ou <code>revalidateTag</code> si vous étiquetez vos requêtes. Sans cela, l'utilisateur ajoute un film et… ne le voit pas apparaître.</p>
+  <div class="section-title"><span class="icon-bg purple">🔄</span>Afficher des données à jour</div>
+  <p>Après une modification, l'écran doit se mettre à jour <strong>tout de suite</strong>. Sinon, l'utilisateur ajoute un film et… ne le voit pas apparaître. C'est un défaut très fréquent dans les applications générées : l'enregistrement a réussi (la donnée est dans Supabase), mais l'affichage n'a pas été actualisé.</p>
   <div class="grid grid-2">
-    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Forcer un <code>window.location.reload()</code> après chaque ajout, ou dupliquer la liste dans un state client qui finit par diverger de la base.</p></div>
-    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Server Action → écriture → <code>revalidatePath</code> des pages concernées (liste et dashboard) → retour d'un état succès affiché par le formulaire.</p></div>
+    <div class="mini-card bad"><h4>❌ À éviter</h4><p class="muted">Recharger la page entière après chaque ajout, ou garder une copie de la liste à l'écran qui finit par différer de la base.</p></div>
+    <div class="mini-card good"><h4>✅ À faire</h4><p class="muted">Demander à l'agent d'actualiser l'affichage après chaque enregistrement : la liste <em>et</em> le tableau de bord, avec un message de succès.</p></div>
   </div>
-  <div class="key-box"><div class="big">Un CRUD fini = 4 opérations × 4 états, validés deux fois.</div><p style="margin:8px 0 0">Faites de cette phrase un critère d'acceptation dans chaque ticket CRUD confié à l'agent.</p></div>
+  <div class="instruction-box"><strong class="title">Comment le signaler à l'agent</strong>Décrivez ce que vous observez, pas ce que vous supposez : <em>« Après l'ajout d'un film, la liste ne change que si je recharge la page. La ligne est bien dans Supabase. »</em></div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>revalidatePath / cache</strong> : la commande qui force Next.js à rafraîchir une page déjà préparée.</li></ul></div></details>
+  <div class="key-box"><div class="big">Un CRUD fini = 4 opérations × 4 états, vérifiés deux fois.</div><p style="margin:8px 0 0">Faites de cette phrase un critère de fin dans chaque ticket CRUD confié à l'agent.</p></div>
 </div>
 <div class="card">
   <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 4</div>
@@ -688,69 +626,62 @@ export async function addReview(prevState: unknown, formData: FormData) {
     <button class="btn btn-ghost" data-qreset="3">↺ Recommencer</button>
   </div>
   <div class="result-panel" id="qres3"></div>
-  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🛡️ RLS &amp; secrets ▸</button></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c2">◂ Précédent</button><button class="btn btn-primary" data-goto="c4">Suite : 🛡️ Sécurité &amp; secrets ▸</button></div>
 </div>
 </section>
 <section class="panel" data-panel="c4">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 5 sur 6</span></div>
 <div class="card">
-  <div class="section-title"><span class="icon-bg red">🛡️</span>Row Level Security : la base décide</div>
-  <p class="lead">Avec Supabase, le navigateur peut interroger la base directement grâce à la clé anon. Ce qui empêche un étudiant de lire la watchlist d'un autre, ce n'est pas votre interface : ce sont les règles RLS dans Postgres.</p>
+  <div class="section-title"><span class="icon-bg red">🛡️</span>Les règles d'accès : la base décide</div>
+  <p class="lead">Dans votre application, un étudiant ne peut pas lire la watchlist d'un autre. Ce n'est pas l'apparence des écrans qui l'empêche (on peut la contourner) : ce sont des <strong>règles de sécurité enregistrées dans la base de données elle-même</strong>. Supabase les appelle <strong>RLS</strong> (<em>Row Level Security</em>, « sécurité ligne par ligne »).</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Comprendre le principe des règles d'accès, les adapter à chaque tableau, gérer les clés et secrets, et tester l'isolation des données avec un second compte.</div>
+  <p>Image : chaque ligne de données est une <strong>boîte d'archives</strong> avec le badge de son propriétaire collé dessus. À chaque demande, la base regarde le badge du demandeur avant d'ouvrir la boîte.</p>
   <ul class="clean">
-    <li><strong>RLS activé</strong> (<code>alter table ... enable row level security</code>) et aucune policy : plus personne ne peut lire ni écrire via l'API. C'est l'état sûr par défaut.</li>
-    <li><strong>Policy</strong> : une règle qui autorise une opération (<code>select</code>, <code>insert</code>, <code>update</code>, <code>delete</code>) pour un rôle, sous condition.</li>
-    <li><strong><code>auth.uid()</code></strong> : fonction qui renvoie l'id de l'utilisateur authentifié à l'origine de la requête ; c'est la brique de presque toutes vos conditions.</li>
-    <li><code>using (...)</code> filtre les lignes existantes visibles ou modifiables ; <code>with check (...)</code> vérifie les lignes écrites (insert, update).</li>
+    <li><strong>Sécurité activée, aucune règle</strong> : plus personne n'a accès. « Tout est verrouillé » est l'état sûr par défaut. On ouvre ensuite, opération par opération.</li>
+    <li><strong>Une règle d'accès</strong> dit qui peut <em>voir</em>, <em>ajouter</em>, <em>modifier</em> ou <em>supprimer</em>, et à quelle condition (par exemple « seulement ses propres lignes »).</li>
+    <li><strong>L'identité</strong> de chaque demande vient du compte connecté : c'est le badge.</li>
   </ul>
-<pre class="prompt">create policy "Lire ses entrées de watchlist"
-on public.watchlist_items for select
-to authenticated
-using ( (select auth.uid()) = user_id );
-
-create policy "Ajouter dans sa propre watchlist"
-on public.watchlist_items for insert
-to authenticated
-with check ( (select auth.uid()) = user_id );
-
-create policy "Modifier ses entrées"
-on public.watchlist_items for update
-to authenticated
-using ( (select auth.uid()) = user_id )
-with check ( (select auth.uid()) = user_id );
-
-create policy "Supprimer ses entrées"
-on public.watchlist_items for delete
-to authenticated
-using ( (select auth.uid()) = user_id );</pre>
-  <p>Écrire <code>(select auth.uid())</code> plutôt que <code>auth.uid()</code> seul est la forme recommandée par Supabase : la valeur est calculée une fois par requête au lieu d'une fois par ligne.</p>
+  <h3>Exemple en mots : le tableau « Ma watchlist »</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Opération</th><th>La règle, en une phrase</th></tr>
+    <tr><td>Voir</td><td>Je ne vois que mes propres lignes.</td></tr>
+    <tr><td>Ajouter</td><td>Je peux ajouter une ligne seulement à mon nom.</td></tr>
+    <tr><td>Modifier</td><td>Je ne modifie que mes lignes, sans pouvoir les attribuer à quelqu'un d'autre.</td></tr>
+    <tr><td>Supprimer</td><td>Je ne supprime que mes lignes.</td></tr>
+  </table></div>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg amber">📋</span>Adapter les règles à chaque table</div>
+  <div class="section-title"><span class="icon-bg amber">📋</span>Adapter les règles à chaque tableau</div>
   <div class="table-wrap"><table>
-    <tr><th>Table</th><th>select</th><th>insert / update / delete</th></tr>
-    <tr><td>films (CinéList)</td><td>Tout utilisateur connecté (catalogue partagé)</td><td>Aucune policy : alimentée par une migration de seed ou par un script d'administration</td></tr>
-    <tr><td>reviews (CinéList)</td><td>Tout utilisateur connecté (avis publics)</td><td>Seulement l'auteur : <code>(select auth.uid()) = user_id</code></td></tr>
-    <tr><td>backlog_entries (GameBacklog)</td><td>Seulement le propriétaire</td><td>Seulement le propriétaire</td></tr>
-    <tr><td>events (CampusHub)</td><td>Tout utilisateur connecté</td><td>Seulement l'organisateur : <code>(select auth.uid()) = organizer_id</code></td></tr>
-    <tr><td>registrations (CampusHub)</td><td>L'étudiant inscrit (et l'organisateur de l'événement, via une sous-requête)</td><td>insert et delete par l'étudiant lui-même</td></tr>
+    <tr><th>Tableau</th><th>Qui peut voir ?</th><th>Qui peut ajouter, modifier, supprimer ?</th></tr>
+    <tr><td>Films (CinéList)</td><td>Tout utilisateur connecté (catalogue partagé)</td><td>Personne depuis l'application : le catalogue est alimenté par l'agent ou par un import préparé</td></tr>
+    <tr><td>Avis (CinéList)</td><td>Tout utilisateur connecté (avis publics)</td><td>Seulement l'auteur de l'avis</td></tr>
+    <tr><td>Backlog (GameBacklog)</td><td>Seulement le propriétaire</td><td>Seulement le propriétaire</td></tr>
+    <tr><td>Événements (CampusHub)</td><td>Tout utilisateur connecté</td><td>Seulement l'organisateur</td></tr>
+    <tr><td>Inscriptions (CampusHub)</td><td>L'étudiant inscrit (et l'organisateur de l'événement)</td><td>L'étudiant lui-même, pour s'inscrire et annuler</td></tr>
   </table></div>
-  <div class="instruction-box"><strong class="title">Consigne pour l'agent</strong>Demandez les policies <strong>opération par opération</strong>, avec un nom explicite, et exigez une justification pour chaque règle permissive. Une policy <code>using (true)</code> sur une table personnelle est un signal d'alerte immédiat.</div>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Pour chaque tableau de data-model.md, écris en une phrase qui peut voir,
+ajouter, modifier et supprimer. Justifie chaque règle un peu large.
+Puis applique ces règles avec une migration et vérifie que la sécurité
+par ligne est activée sur tous les tableaux.</pre>
+  <div class="warn-box"><strong>⛔ Signal d'alerte immédiat</strong> Une règle du type « tout le monde peut tout lire » sur un tableau personnel (backlog, watchlist) : demandez à l'agent de la justifier, ou de la corriger.</div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>Policy</strong> : une règle d'accès, écrite pour une opération.</li><li><strong>auth.uid()</strong> : l'identité de la personne connectée, utilisée dans les règles.</li><li><strong>using / with check</strong> : les deux morceaux d'une règle : « quelles lignes sont concernées » et « quelles données sont acceptées ».</li></ul></div></details>
 </div>
 
 <div class="card">
   <div class="section-title"><span class="icon-bg red">🔑</span>Clés et secrets</div>
   <div class="grid grid-2">
-    <div class="mini-card"><h4>🟢 Clé anon</h4><p class="muted">Publique, présente dans le navigateur via <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>. Elle agit avec les rôles <code>anon</code> ou <code>authenticated</code> : soumise à RLS.</p></div>
-    <div class="mini-card"><h4>🔴 Clé service_role</h4><p class="muted">Secrète (<code>SUPABASE_SERVICE_ROLE_KEY</code>), <strong>contourne RLS</strong>. Uniquement côté serveur, pour des scripts d'administration. Jamais préfixée <code>NEXT_PUBLIC_</code>, jamais dans un Client Component.</p></div>
+    <div class="mini-card"><h4>🟢 Clé publique</h4><p class="muted">Présente dans le navigateur : <strong>elle peut être vue de tous</strong>. Elle ne donne que ce que les règles d'accès autorisent. Sa sécurité vient des règles, pas de son secret.</p></div>
+    <div class="mini-card"><h4>🔴 Clé secrète</h4><p class="muted">Le <strong>passe-partout</strong> : elle contourne toutes les règles. Elle reste côté serveur, jamais dans le code visible, jamais sur GitHub, jamais collée dans une conversation avec une IA.</p></div>
   </div>
   <ul class="clean">
-    <li><code>.env.local</code> est listé dans <code>.gitignore</code> (c'est le cas par défaut avec <code>npx create-next-app@latest</code>) : vérifiez-le avant le premier <code>git add</code>.</li>
-    <li>Fournissez un <code>.env.example</code> avec les noms des variables et des valeurs vides, pour documenter sans exposer.</li>
-    <li>Si une clé secrète a été commitée, la supprimer du fichier ne suffit pas : elle reste dans l'historique. Il faut la <strong>régénérer</strong> dans Supabase.</li>
+    <li>Les clés sont dans un fichier réservé, <code>.env.local</code>, qui <strong>n'est pas envoyé sur GitHub</strong>. Demandez à l'agent de le vérifier avant le premier envoi.</li>
+    <li>Un fichier <code>.env.example</code> sert de modèle : il liste les noms, sans les valeurs.</li>
+    <li>Si une clé secrète a été envoyée sur GitHub, la retirer du fichier ne suffit pas : elle reste dans l'historique. Il faut la <strong>régénérer</strong> dans Supabase.</li>
   </ul>
-  <details class="acc"><summary>Et les nouvelles clés « publishable » et « secret » de Supabase ?</summary><div>Supabase propose désormais des clés au format <code>sb_publishable_...</code> et <code>sb_secret_...</code> en complément des clés anon et service_role historiques. La logique est identique : la clé publishable est publique et soumise à RLS, la clé secret contourne RLS et reste côté serveur. Utilisez les noms de variables que votre projet et AGENTS.md ont fixés, et restez cohérent.</div></details>
-  <div class="warn-box"><strong>⛔ Interdit</strong> Utiliser la clé service_role « pour que ça marche » quand une requête est bloquée par RLS. Le blocage signale une policy manquante : c'est la policy qu'il faut écrire.</div>
+  <details class="acc"><summary>Et les nouvelles clés « publishable » et « secret » de Supabase ?</summary><div>Supabase propose désormais des clés au format <code>sb_publishable_...</code> et <code>sb_secret_...</code> en complément des clés historiques (anon et service_role). La logique est identique : la clé publishable est publique et soumise aux règles d'accès, la clé secret contourne les règles et reste côté serveur.</div></details>
+  <div class="warn-box"><strong>⛔ Interdit</strong> Utiliser la clé secrète « pour que ça marche » quand une action est bloquée. Le blocage signale qu'une règle d'accès manque : c'est cette règle qu'il faut ajouter. Si l'agent propose de « désactiver la sécurité » ou d'utiliser le passe-partout, <strong>refusez</strong>.</div>
 </div>
 
 <div class="card">
@@ -758,12 +689,13 @@ using ( (select auth.uid()) = user_id );</pre>
   <div class="steps">
     <div class="step"><span class="s-num">1</span><span>Avec le compte A, créez quelques données (ajouts à la watchlist, entrées de backlog, inscriptions).</span></div>
     <div class="step"><span class="s-num">2</span><span>Connectez-vous avec le compte B dans une fenêtre de navigation privée.</span></div>
-    <div class="step"><span class="s-num">3</span><span>Vérifiez que B ne voit pas les données personnelles de A, et qu'ouvrir l'URL d'un élément de A ne l'affiche pas.</span></div>
-    <div class="step"><span class="s-num">4</span><span>Tentez une modification ou suppression d'un élément de A depuis B : elle doit échouer ou n'affecter aucune ligne.</span></div>
-    <div class="step"><span class="s-num">5</span><span>Consultez le Security Advisor du dashboard Supabase et corrigez chaque table signalée sans RLS.</span></div>
+    <div class="step"><span class="s-num">3</span><span>Vérifiez que B ne voit pas les données personnelles de A, et qu'ouvrir l'adresse d'un élément de A ne l'affiche pas.</span></div>
+    <div class="step"><span class="s-num">4</span><span>Essayez de modifier ou supprimer un élément de A depuis B : l'action doit échouer ou ne rien changer.</span></div>
+    <div class="step"><span class="s-num">5</span><span>Dans Supabase, consultez les alertes de sécurité (<strong>Security Advisor</strong>) et faites corriger chaque tableau signalé sans règles d'accès.</span></div>
   </div>
-  <div class="key-box"><div class="big">Pas de RLS vérifié avec deux comptes = pas de MVP.</div><p style="margin:8px 0 0">Notez le résultat de ce test dans AI-LOG.md : il fait partie des critères « qualité &amp; sécurité » de l'évaluation.</p></div>
+  <div class="key-box"><div class="big">Pas de test avec deux comptes = pas de MVP.</div><p style="margin:8px 0 0">Notez le résultat de ce test dans AI-LOG.md : il fait partie des critères « qualité &amp; sécurité » de l'évaluation.</p></div>
 </div>
+
 <div class="card" data-explorer="x4">
   <div class="section-title"><span class="icon-bg purple">🛡️</span>Explorer les briques de sécurité</div>
   <p class="muted">Cliquez sur chaque notion pour afficher sa fiche.</p>
@@ -788,76 +720,58 @@ using ( (select auth.uid()) = user_id );</pre>
 <section class="panel" data-panel="c5">
 <div class="card" style="padding:14px 22px;background:#f8fafc"><span class="muted" style="font-weight:600">Chapitre 6 sur 6</span></div>
 <div class="card">
-  <div class="section-title"><span class="icon-bg">🔎</span>Requêtes filtrées, recherche et tri</div>
-  <p class="lead">Le socle exige une recherche ou un filtrage. Avec supabase-js, on enchaîne des filtres sur la requête, et on garde les critères dans l'URL pour qu'une recherche soit partageable et survive au rechargement.</p>
-<pre class="prompt"><span class="hl3">// app/films/page.tsx (Server Component)</span>
-export default async function FilmsPage({ searchParams }: {
-  searchParams: Promise&lt;{ q?: string; kind?: string; page?: string }&gt;
-}) {
-  const { q = '', kind, page = '1' } = await searchParams
-  const pageSize = 10
-  const from = (Number(page) - 1) * pageSize
-  const to = from + pageSize - 1
-
-  const supabase = await createClient()
-  let query = supabase
-    .from('films')
-    .select('id, title, year, kind', { count: 'exact' })
-    <span class="hl">.ilike('title', `%${q}%`)</span>
-    .order('title', { ascending: true })
-    <span class="hl2">.range(from, to)</span>
-  if (kind) query = query.eq('kind', kind)
-
-  const { data: films, count, error } = await query
-  <span class="hl3">// afficher la liste, l'état vide, et la pagination à partir de count</span>
-}</pre>
-  <ul class="clean">
-    <li><code>.eq('status', 'en_cours')</code> : égalité stricte, pour les filtres à valeurs fixes (statut GameBacklog, type film / série).</li>
-    <li><code>.ilike('title', '%dune%')</code> : recherche partielle insensible à la casse ; les <code>%</code> signifient « n'importe quels caractères ».</li>
-    <li><code>.order('created_at', { ascending: false })</code> : tri, ici les plus récents d'abord.</li>
-    <li><code>.range(0, 9)</code> : pagination, bornes incluses, donc 10 résultats ; <code>{ count: 'exact' }</code> renvoie le total pour calculer le nombre de pages.</li>
-  </ul>
+  <div class="section-title"><span class="icon-bg">🔎</span>Chercher, filtrer, trier, paginer</div>
+  <p class="lead">Le socle exige une recherche ou un filtre. Côté utilisateur, cela se résume à quatre fonctions que vous décrivez à l'agent.</p>
+  <div class="objectif-box"><strong class="title">Objectif du chapitre</strong>Savoir demander et vérifier la recherche, le tableau de bord, puis découper tout le socle en tickets que l'agent traite un par un.</div>
+  <div class="grid grid-2">
+    <div class="mini-card"><h4>🔍 Recherche</h4><p class="muted">Taper « dune » affiche les titres qui contiennent ce texte, sans tenir compte des majuscules.</p></div>
+    <div class="mini-card"><h4>🎚️ Filtre</h4><p class="muted">Choisir un statut (« en cours ») ou un type (film / série) pour réduire la liste.</p></div>
+    <div class="mini-card"><h4>↕️ Tri</h4><p class="muted">Les plus récents d'abord, ou par ordre alphabétique.</p></div>
+    <div class="mini-card"><h4>📄 Pagination</h4><p class="muted">10 résultats par page, avec « page suivante », pour ne pas tout charger d'un coup.</p></div>
+  </div>
+  <div class="instruction-box"><strong class="title">Astuce</strong>Demandez que les critères apparaissent <strong>dans l'adresse de la page</strong> : une recherche devient partageable et survit au rechargement.</div>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Sur la page /films, ajoute une barre de recherche par titre, un filtre
+film / série et une pagination de 10 résultats.
+Garde les critères dans l'adresse de la page et affiche un message
+« Aucun résultat » quand rien ne correspond.</pre>
+  <div class="check-box"><strong class="title">✅ Ce que vous vérifiez dans le navigateur</strong><ul class="clean"><li>Tapez un mot, la liste se réduit. Rechargez la page : la recherche est toujours là.</li><li>Cherchez un mot qui n'existe pas : le message « Aucun résultat » s'affiche.</li><li>Passez à la page suivante, puis revenez : la liste reste cohérente.</li></ul></div>
+  <details class="acc"><summary>🔧 Le jargon que votre agent va employer</summary><div><p class="muted">À reconnaître si votre agent les emploie, pas à maîtriser. Tous ces termes sont aussi dans le glossaire du support pratique.</p><ul class="clean"><li><strong>ilike</strong> : la recherche partielle qui ignore les majuscules.</li><li><strong>range / count</strong> : les commandes de pagination et de comptage.</li><li><strong>searchParams</strong> : la lecture des critères dans l'adresse de la page.</li></ul></div></details>
 </div>
 
 <div class="card">
-  <div class="section-title"><span class="icon-bg green">📊</span>Le dashboard personnel</div>
-  <p>Le dashboard est l'espace personnel exigé par le socle : il résume l'activité de l'utilisateur connecté. Des compteurs simples suffisent, obtenus sans charger les lignes grâce à <code>head: true</code>.</p>
-<pre class="prompt">const [toWatch, seen, favorites] = await Promise.all([
-  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id).eq('status', 'a_voir'),
-  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id).eq('status', 'vu'),
-  supabase.from('watchlist_items').select('*', { count: 'exact', head: true })
-    .eq('user_id', user.id).eq('is_favorite', true),
-])
-<span class="hl">// toWatch.count, seen.count, favorites.count</span></pre>
+  <div class="section-title"><span class="icon-bg green">📊</span>Le tableau de bord personnel</div>
+  <p class="lead">Le tableau de bord (dashboard) est l'espace personnel exigé par le socle : il résume l'activité de la personne connectée par quelques chiffres et listes récentes. Des compteurs simples suffisent.</p>
   <div class="grid grid-3">
     <div class="mini-card"><h4>🎬 CinéList</h4><p class="muted">À voir, vus, favoris, derniers avis publiés.</p></div>
     <div class="mini-card"><h4>🎮 GameBacklog</h4><p class="muted">À jouer, en cours, terminés, note moyenne.</p></div>
     <div class="mini-card"><h4>🎓 CampusHub</h4><p class="muted">Mes prochaines inscriptions, événements que j'organise, nombre d'inscrits.</p></div>
   </div>
-  <p>Même si RLS filtre déjà par utilisateur, ajouter <code>.eq('user_id', user.id)</code> rend l'intention explicite et évite les surprises sur les tables dont la lecture est publique (comme <code>reviews</code>).</p>
+  <h3>🤖 Ce que vous demandez à l'agent</h3><pre class="prompt">Ajoute sur /dashboard trois compteurs pour l'utilisateur connecté :
+films à voir, films vus, films favoris.
+Les compteurs doivent se mettre à jour après chaque modification.
+Explique-moi comment les vérifier.</pre>
+  <div class="check-box"><strong class="title">✅ Ce que vous vérifiez dans le navigateur</strong><ul class="clean"><li>Ajoutez deux films « à voir » et un « vu » : les compteurs affichent 2 et 1.</li><li>Comparez avec le tableau « Ma watchlist » dans Supabase : les chiffres correspondent.</li><li>Avec un second compte, les compteurs sont à zéro : ce ne sont pas les vôtres.</li></ul></div>
 </div>
 
 <div class="card">
   <div class="section-title"><span class="icon-bg purple">🎫</span>Découper le socle en tickets pour l'agent</div>
-  <p class="lead">Demander « construis-moi l'application » produit un gros bloc impossible à relire. Un agent travaille bien sur des tâches petites, ordonnées, avec un critère de fin vérifiable.</p>
-  <div class="chain"><span class="term-item">Schéma</span><span class="chain-arrow">→</span><span class="term-item">Auth</span><span class="chain-arrow">→</span><span class="term-item">CRUD entité 1</span><span class="chain-arrow">→</span><span class="term-item">Relation</span><span class="chain-arrow">→</span><span class="term-item">Recherche</span><span class="chain-arrow">→</span><span class="term-item">Dashboard</span></div>
-  <p>Cet ordre respecte les dépendances : pas de CRUD sans tables, pas de données personnelles sans utilisateur, pas de dashboard sans données. Chaque ticket s'appuie sur le précédent, déjà testé et commité.</p>
+  <p class="lead">Demander « construis-moi l'application » produit un gros bloc impossible à relire. Un agent travaille bien sur des tâches <strong>petites, ordonnées, avec un critère de fin vérifiable</strong>.</p>
+  <div class="chain"><span class="term-item">Données</span><span class="chain-arrow">→</span><span class="term-item">Comptes</span><span class="chain-arrow">→</span><span class="term-item">CRUD entité 1</span><span class="chain-arrow">→</span><span class="term-item">Lien entre entités</span><span class="chain-arrow">→</span><span class="term-item">Recherche</span><span class="chain-arrow">→</span><span class="term-item">Tableau de bord</span></div>
+  <p>Cet ordre respecte les dépendances : pas de CRUD sans tableaux, pas de données personnelles sans utilisateur, pas de tableau de bord sans données. Chaque ticket s'appuie sur le précédent, déjà testé et sauvegardé.</p>
   <div class="table-wrap"><table>
     <tr><th>#</th><th>Ticket (CinéList)</th><th>Terminé quand…</th></tr>
-    <tr><td>T1</td><td>Migrations profiles, films, watchlist_items, reviews + RLS</td><td>Tables visibles dans Supabase, RLS actif partout</td></tr>
-    <tr><td>T2</td><td>Inscription, connexion, déconnexion, middleware, trigger profil</td><td>Un nouveau compte crée son profil ; /dashboard redirige si déconnecté</td></tr>
-    <tr><td>T3</td><td>CRUD watchlist (ajout, liste, statut, retrait)</td><td>4 opérations et 4 états d'interface OK</td></tr>
-    <tr><td>T4</td><td>Avis liés à un film (relation reviews ↔ films)</td><td>Un avis par utilisateur et par film, visible sur la fiche</td></tr>
-    <tr><td>T5</td><td>Recherche par titre + filtre film / série + pagination</td><td>Critères dans l'URL, état vide géré</td></tr>
-    <tr><td>T6</td><td>Dashboard avec compteurs</td><td>Compteurs justes, testés avec deux comptes</td></tr>
+    <tr><td>T1</td><td>Créer les tableaux (profils, films, ma watchlist, avis) avec la sécurité par ligne</td><td>Les tableaux sont visibles dans Supabase, la sécurité est activée partout</td></tr>
+    <tr><td>T2</td><td>Inscription, connexion, déconnexion, profil automatique</td><td>Un nouveau compte crée son profil ; /dashboard renvoie vers la connexion si on est déconnecté</td></tr>
+    <tr><td>T3</td><td>CRUD de la watchlist (ajout, liste, statut, retrait)</td><td>Les 4 opérations et les 4 états d'écran fonctionnent</td></tr>
+    <tr><td>T4</td><td>Avis liés à un film</td><td>Un avis par utilisateur et par film, visible sur la fiche</td></tr>
+    <tr><td>T5</td><td>Recherche par titre, filtre film / série, pagination</td><td>Critères dans l'adresse, message « Aucun résultat » géré</td></tr>
+    <tr><td>T6</td><td>Tableau de bord avec compteurs</td><td>Compteurs justes, vérifiés avec deux comptes</td></tr>
   </table></div>
   <div class="grid grid-2">
-    <div class="mini-card"><h4>🌿 Un commit par ticket</h4><p class="muted">Branche dédiée (<code>git switch -c feat/watchlist-crud</code>), relecture du diff, <code>npm run lint</code> et <code>npm run build</code>, puis <code>git add</code> et <code>git commit -m "feat: CRUD watchlist"</code>. Un historique lisible permet de revenir en arrière proprement.</p></div>
-    <div class="mini-card"><h4>📓 AI-LOG.md</h4><p class="muted">Pour chaque ticket : ce qui a été demandé à l'agent, ce qu'il a proposé, ce que vous avez corrigé ou refusé, et pourquoi. C'est votre mémoire pendant la phase d'autonomie.</p></div>
+    <div class="mini-card"><h4>💾 Un commit par ticket</h4><p class="muted">Quand un ticket est vérifié, demandez : « Résume ce que tu as changé, lance les vérifications automatiques du projet (lint et build), puis fais un commit avec un message clair. » Un historique lisible permet de revenir en arrière proprement.</p></div>
+    <div class="mini-card"><h4>📓 AI-LOG.md</h4><p class="muted">Pour chaque ticket : ce que vous avez demandé, ce que l'agent a proposé, ce que vous avez corrigé ou refusé, et pourquoi. C'est votre mémoire pendant la phase d'autonomie.</p></div>
   </div>
-  <div class="key-box"><div class="big">Petit ticket, critère clair, diff relu, commit.</div><p style="margin:8px 0 0">C'est la boucle qui transforme un agent rapide en application fiable, et que vous répéterez seul pendant la phase d'autonomie.</p></div>
+  <div class="key-box"><div class="big">Petit ticket, critère clair, résultat vérifié, sauvegarde.</div><p style="margin:8px 0 0">C'est la boucle qui transforme un agent rapide en application fiable, et que vous répéterez seul pendant la phase d'autonomie.</p></div>
 </div>
 <div class="card">
   <div class="section-title"><span class="icon-bg amber">❓</span>QCM — Chapitre 6</div>
@@ -870,25 +784,25 @@ export default async function FilmsPage({ searchParams }: {
     <button class="btn btn-ghost" data-qreset="5">↺ Recommencer</button>
   </div>
   <div class="result-panel" id="qres5"></div>
-  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Synthèse de la séance ▸</button></div>
+  <div class="nav-bottom" style="margin-top:20px"><button class="btn btn-ghost" data-goto="c4">◂ Précédent</button><button class="btn btn-primary" data-goto="syn">Suite : Synthèse de la séance ▸</button></div>
 </div>
 </section>
 <section class="panel" data-panel="syn">
   <div class="card">
     <div class="section-title"><span class="icon-bg green">📊</span>Vos résultats aux QCM</div>
-    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🧱 Architecture Next.js + Supabase</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🗂️ Modéliser les données</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🔐 Authentification</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>✏️ CRUD &amp; formulaires</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🛡️ RLS &amp; secrets</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>🔎 Recherche, dashboard &amp; tickets</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
+    <div class="table-wrap score-table"><table><tr><th>Chapitre</th><th>Thème</th><th>Meilleur score</th></tr><tr><td>Chapitre 1</td><td>🏢 Les briques d'une application</td><td id="score0">—</td></tr><tr><td>Chapitre 2</td><td>🗂️ Organiser les données</td><td id="score1">—</td></tr><tr><td>Chapitre 3</td><td>🔐 Comptes &amp; connexion</td><td id="score2">—</td></tr><tr><td>Chapitre 4</td><td>✏️ Créer, modifier, supprimer</td><td id="score3">—</td></tr><tr><td>Chapitre 5</td><td>🛡️ Sécurité &amp; secrets</td><td id="score4">—</td></tr><tr><td>Chapitre 6</td><td>🔎 Recherche, dashboard &amp; tickets</td><td id="score5">—</td></tr><tr><td colspan="2"><strong>Total</strong></td><td id="scoreTotal">0 / 30</td></tr></table></div>
     <p class="muted">Un chapitre sous 4 / 5 ? Relisez-le et refaites son QCM avant de passer au support pratique.</p>
   </div>
   <div class="card">
     <div class="section-title"><span class="icon-bg">🔑</span>Le message clé</div>
-    <div class="key-box"><div class="big">Une vraie application, ce n&#x27;est pas plus d&#x27;écrans : c&#x27;est un modèle de données solide, des utilisateurs authentifiés et des règles de sécurité appliquées par la base, construits en petits tickets vérifiés un par un.</div></div>
-    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Comprendre l&#x27;architecture d&#x27;une application Next.js + Supabase et savoir où placer chaque morceau de logique ;</li><li>Modéliser les données de votre projet (entités, clés, relations 1-N et N-N) et les créer par migrations SQL ;</li><li>Mettre en place l&#x27;authentification Supabase, protéger les pages et lier un profil à chaque utilisateur ;</li><li>Construire un CRUD complet avec validation client et serveur et des états d&#x27;interface soignés ;</li><li>Sécuriser les données avec Row Level Security et une gestion rigoureuse des clés et secrets ;</li><li>Ajouter recherche, filtres, pagination et un dashboard personnel ;</li><li>Découper le socle en tickets ordonnés confiés à l&#x27;agent, avec un commit par ticket.</li></ul></div>
+    <div class="key-box"><div class="big">Une vraie application, ce n'est pas plus d'écrans : ce sont des données bien rangées, des utilisateurs authentifiés et des règles de sécurité appliquées par la base, construites en petits tickets que vous vérifiez un par un.</div></div>
+    <div class="objectif-box"><strong class="title">À la fin de cette séance, vous serez capable de :</strong><ul class="clean"><li>Expliquer en mots simples les trois briques d'une application (écrans, serveur, base de données) et le rôle de Supabase ;</li><li>Organiser les informations de votre projet en tableaux reliés entre eux, et demander à l'agent de les créer ;</li><li>Mettre en place des comptes utilisateurs : inscription, connexion, pages réservées aux membres et profil ;</li><li>Faire construire un CRUD complet (créer, lire, modifier, supprimer) avec des écrans soignés : chargement, vide, erreur, succès ;</li><li>Protéger les données : chaque utilisateur ne voit que les siennes, et les clés secrètes restent secrètes ;</li><li>Ajouter de la recherche, des filtres et un tableau de bord personnel ;</li><li>Découper le travail en petits tickets confiés à l'agent, vérifiés un par un et sauvegardés (un commit par ticket).</li></ul></div>
   </div>
   <div class="card">
     <div class="section-title"><span class="icon-bg amber">📦</span>À la fin de la séance, vous devez avoir</div>
-    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un fichier data-model.md validé (entités, champs, relations, règles RLS) dans le repo</label><label><input type="checkbox"> Les tables créées dans Supabase via des migrations SQL versionnées, avec RLS activé partout</label><label><input type="checkbox"> Une inscription / connexion fonctionnelle, des pages protégées et un profil lié à auth.users</label><label><input type="checkbox"> Au moins une entité avec un CRUD complet, validé côté client et côté serveur</label><label><input type="checkbox"> Une recherche ou un filtre et un premier dashboard personnel</label><label><input type="checkbox"> Un historique Git lisible : un commit par ticket, et les décisions notées dans AI-LOG.md</label></div>
+    <div class="checklist" id="finCheck"><label><input type="checkbox"> Un fichier data-model.md validé (informations stockées, liens entre tableaux, règles d'accès) dans le projet</label><label><input type="checkbox"> Les tableaux créés dans Supabase par des migrations, avec la sécurité par ligne (RLS) activée partout</label><label><input type="checkbox"> Une inscription / connexion fonctionnelle, des pages réservées aux membres et un profil lié au compte</label><label><input type="checkbox"> Au moins une entité avec un CRUD complet, vérifié à l'écran et côté serveur</label><label><input type="checkbox"> Une recherche ou un filtre et un premier tableau de bord personnel</label><label><input type="checkbox"> Un historique Git lisible : un commit par ticket, et les décisions notées dans AI-LOG.md</label></div>
     <div class="link-card"><span><strong>🛠️ Passez à la pratique</strong><br><span class="muted">Cas 1, 2, 3, atelier fil rouge et glossaire à débloquer.</span></span><a class="btn btn-success" href="seance-4-construire-une-vraie-application-pratique.html">Ouvrir le support pratique ▸</a></div>
-    <div class="objectif-box"><strong class="title">Prochaine séance — Phase d&#x27;autonomie, puis « Je sais contrôler ce que l&#x27;IA produit »</strong>Avant la séance 5, vous entrez en phase d&#x27;autonomie : vous avancez seul (ou en binôme) sur le socle fonctionnel, ticket après ticket, en vous appuyant sur PROJECT.md, DESIGN.md, AGENTS.md, data-model.md et votre AI-LOG.md. En séance 5, vous apprendrez à contrôler ce que l&#x27;IA a produit : relecture de code, tests, sécurité et qualité.</div>
+    <div class="objectif-box"><strong class="title">Prochaine séance — Phase d'autonomie, puis « Je sais contrôler ce que l'IA produit »</strong>Avant la séance 5, vous entrez en phase d'autonomie : vous avancez seul (ou en binôme) sur le socle fonctionnel, ticket après ticket, en vous appuyant sur PROJECT.md, DESIGN.md, AGENTS.md, data-model.md et votre AI-LOG.md. En séance 5, vous apprendrez à contrôler ce que l'IA a produit : relecture, tests, sécurité et qualité.</div>
   </div>
 </section>
 </main>
@@ -897,9 +811,9 @@ export default async function FilmsPage({ searchParams }: {
 <script>
 (function(){
 "use strict";
-const FAMILIES={"f1": "Architecture", "f2": "Données", "f3": "Authentification", "f4": "CRUD & UX", "f5": "Sécurité"};
-const EXPLORERS={"x1": {"title": "Explorer les notions de modélisation", "icon": "🧩", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "Entité", "fam": "f2", "rows": [["Définition", "Type d'objet métier stocké en base, qui devient une table."], ["Exemple", "GameBacklog : games (le catalogue) et backlog_entries (la ligne personnelle de chaque joueur)."], ["Piège", "Confondre entité et écran : la page « Dashboard » n'est pas une table."], ["À retenir", "Le socle exige au moins deux entités métier reliées entre elles."]]}, {"id": "Clé primaire uuid", "fam": "f2", "rows": [["Définition", "Identifiant unique de chaque ligne, généré par gen_random_uuid()."], ["Exemple", "events.id = 'b3f1…' dans CampusHub, utilisé dans l'URL /events/b3f1…"], ["Piège", "Utiliser le titre comme identifiant : deux films peuvent avoir le même titre."], ["À retenir", "id uuid primary key default gen_random_uuid() sur toutes vos tables."]]}, {"id": "Clé étrangère", "fam": "f2", "rows": [["Définition", "Colonne qui référence la clé primaire d'une autre table."], ["Exemple", "reviews.film_id references public.films(id) on delete cascade."], ["Piège", "Oublier on delete cascade : supprimer un film échoue tant que des avis le référencent."], ["À retenir", "Dans une relation 1-N, elle se place du côté « plusieurs »."]]}, {"id": "Relation 1-N", "fam": "f2", "rows": [["Définition", "Un élément parent possède plusieurs enfants, chaque enfant a un seul parent."], ["Exemple", "Un organisateur CampusHub crée plusieurs événements (events.organizer_id)."], ["Piège", "Stocker une liste d'identifiants dans une colonne texte du parent."], ["À retenir", "Une clé étrangère dans la table enfant suffit."]]}, {"id": "Relation N-N", "fam": "f2", "rows": [["Définition", "Chaque élément d'un côté peut être lié à plusieurs éléments de l'autre, et inversement."], ["Exemple", "CinéList : un utilisateur suit plusieurs films, un film est suivi par plusieurs utilisateurs."], ["Piège", "Oublier la contrainte unique (user_id, film_id) : un film ajouté deux fois."], ["À retenir", "Elle impose une table de jointure, qui porte souvent des attributs utiles (statut, date)."]]}, {"id": "Migration", "fam": "f2", "rows": [["Définition", "Fichier SQL versionné qui fait évoluer le schéma de la base."], ["Exemple", "supabase migration new add_rating_to_backlog puis supabase db push."], ["Piège", "Modifier les tables à la main en production sans laisser de trace dans le repo."], ["À retenir", "Une migration par changement de schéma, commitée avec le ticket correspondant."]]}]}, "x4": {"title": "Explorer les briques de sécurité", "icon": "🛡️", "intro": "Cliquez sur chaque notion pour afficher sa fiche.", "items": [{"id": "RLS", "fam": "f5", "rows": [["Définition", "Filtrage des lignes appliqué par Postgres à chaque requête, selon des règles."], ["Exemple", "backlog_entries : chaque joueur ne voit que ses propres lignes."], ["Piège", "Créer une table par SQL et oublier enable row level security."], ["À retenir", "Activé sur toutes les tables du schéma public, sans exception."]]}, {"id": "Policy select", "fam": "f5", "rows": [["Définition", "Règle qui détermine les lignes lisibles, via une clause using."], ["Exemple", "using ( (select auth.uid()) = user_id ) sur watchlist_items."], ["Piège", "using (true) sur une table personnelle : tout le monde lit tout."], ["À retenir", "Une policy par opération, nommée explicitement."]]}, {"id": "with check", "fam": "f5", "rows": [["Définition", "Condition vérifiée sur les lignes insérées ou modifiées."], ["Exemple", "Insert dans registrations seulement si user_id = auth.uid()."], ["Piège", "Une policy update avec using mais sans with check : l'utilisateur peut réattribuer la ligne à quelqu'un d'autre."], ["À retenir", "insert : with check ; update : using + with check."]]}, {"id": "auth.uid()", "fam": "f5", "rows": [["Définition", "Fonction Supabase qui renvoie l'id de l'utilisateur authentifié de la requête."], ["Exemple", "(select auth.uid()) = organizer_id pour modifier un événement CampusHub."], ["Piège", "Elle renvoie null pour un visiteur anonyme : la condition est alors fausse."], ["À retenir", "L'écrire (select auth.uid()) pour de meilleures performances."]]}, {"id": "Clé service_role", "fam": "f5", "rows": [["Définition", "Clé secrète qui contourne toutes les règles RLS."], ["Exemple", "Script serveur d'import du catalogue de jeux dans games."], ["Piège", "La préfixer NEXT_PUBLIC_ : elle devient visible dans le navigateur."], ["À retenir", "Serveur uniquement, jamais commitée, régénérée si elle a fuité."]]}, {"id": ".env.local", "fam": "f5", "rows": [["Définition", "Fichier local des variables d'environnement, lu par Next.js en développement."], ["Exemple", "NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."], ["Piège", "Le commiter parce qu'il n'est pas dans .gitignore."], ["À retenir", "Jamais commité ; documenté via un .env.example sans valeurs."]]}]}};
-const QCMS=[[{"q": "Dans l'App Router de Next.js, quel est le type d'un composant sans directive particulière ?", "o": ["Client Component", "Server Component", "Route handler", "Server Action"], "a": 1, "e": "Par défaut, tout composant de l'App Router est un Server Component ; il faut 'use client' pour le rendre interactif dans le navigateur."}, {"q": "Le composant de notation par étoiles de CinéList utilise useState et onClick. Que faut-il ?", "o": ["Le placer dans un route handler", "Le déclarer avec 'use server'", "Ajouter 'use client' en tête du fichier", "Le transformer en migration SQL"], "a": 2, "e": "Les hooks d'état et les événements ne fonctionnent que dans un Client Component, activé par la directive 'use client'."}, {"q": "Quel outil convient le mieux pour recevoir le retour d'un lien magique envoyé par e-mail ?", "o": ["Un route handler comme app/auth/callback/route.ts", "Un Client Component avec useEffect", "Un fichier .env.local", "Une policy RLS"], "a": 0, "e": "Le lien de connexion arrive sur une URL HTTP : un route handler côté serveur échange le code contre une session et pose les cookies."}, {"q": "Pourquoi NEXT_PUBLIC_SUPABASE_ANON_KEY peut-elle être exposée au navigateur ?", "o": ["Parce qu'elle est chiffrée par Next.js", "Parce qu'elle expire après chaque requête", "Parce que Vercel la masque automatiquement", "Parce qu'elle est publique par conception et que la sécurité repose sur RLS"], "a": 3, "e": "La clé anon n'accorde que ce que les policies RLS autorisent ; c'est la base qui protège les données, pas le secret de cette clé."}, {"q": "Quel paquet faut-il utiliser en 2026 pour intégrer Supabase à Next.js avec les cookies ?", "o": ["@supabase/auth-helpers-nextjs", "@supabase/ssr", "next-auth-supabase", "@supabase/cookies"], "a": 1, "e": "@supabase/ssr fournit createServerClient et createBrowserClient ; les auth-helpers sont dépréciés."}], [{"q": "Dans CampusHub, comment modéliser le fait qu'un étudiant s'inscrit à plusieurs événements et qu'un événement a plusieurs inscrits ?", "o": ["Une colonne events_ids de type text dans profiles", "Une table de jointure registrations(user_id, event_id)", "Une clé étrangère event_id dans profiles", "Une seule table events contenant les noms des inscrits"], "a": 1, "e": "Une relation N-N se modélise par une table de jointure, ici registrations, avec une contrainte d'unicité sur le couple."}, {"q": "Où se place la clé étrangère dans une relation 1-N entre organisateur et événements ?", "o": ["Dans la table profiles", "Dans une table de jointure obligatoire", "Dans la table events (côté plusieurs)", "Dans le fichier .env.local"], "a": 2, "e": "La clé étrangère se place côté « plusieurs » : chaque événement pointe vers son organisateur via organizer_id."}, {"q": "Pourquoi préférer un uuid à un entier auto-incrémenté comme clé primaire ?", "o": ["Il n'est pas devinable et reste unique même entre environnements", "Il prend moins de place en base", "Il est trié par ordre alphabétique", "Il remplace RLS"], "a": 0, "e": "Un uuid ne permet pas d'énumérer les ressources et évite les collisions ; il ne remplace en rien les règles RLS."}, {"q": "À quoi sert la contrainte unique (user_id, film_id) dans watchlist_items ?", "o": ["À accélérer l'authentification", "À chiffrer les données", "À rendre film_id obligatoire", "À empêcher d'ajouter deux fois le même film à la même watchlist"], "a": 3, "e": "Elle garantit au niveau de la base qu'un couple utilisateur / film n'existe qu'une fois, même si le front envoie deux requêtes."}, {"q": "Quelle démarche est la plus fiable pour obtenir un bon schéma avec l'IA ?", "o": ["Laisser l'agent créer les tables directement en production", "Faire proposer le schéma, le faire critiquer, le confronter aux user stories, puis générer la migration", "Copier le schéma d'un autre projet", "Créer les tables au fil des écrans, sans document"], "a": 1, "e": "Proposer puis critiquer fait ressortir les erreurs ; figer le résultat dans data-model.md avant la migration garde une trace validée."}], [{"q": "Quelle méthode envoie un lien de connexion sans mot de passe ?", "o": ["supabase.auth.signUp()", "supabase.auth.signInWithPassword()", "supabase.auth.signOut()", "supabase.auth.signInWithOtp()"], "a": 3, "e": "signInWithOtp({ email }) envoie un magic link (ou un code) par e-mail."}, {"q": "Où @supabase/ssr stocke-t-il la session pour que le serveur y ait accès ?", "o": ["Dans des cookies", "Dans localStorage uniquement", "Dans la table profiles", "Dans .env.local"], "a": 0, "e": "Les cookies sont envoyés avec chaque requête : le serveur (pages, actions, middleware) peut ainsi lire et rafraîchir la session."}, {"q": "Pourquoi créer une table public.profiles plutôt qu'ajouter des colonnes à auth.users ?", "o": ["Parce que auth.users est limitée à 10 lignes", "Parce que auth.users est gérée par Supabase ; les données métier vont dans une table publique liée par son id", "Parce que profiles est plus rapide", "Parce que RLS est interdit sur les tables publiques"], "a": 1, "e": "Le schéma auth appartient à Supabase ; profiles.id référence auth.users(id) et porte les données métier (pseudo, avatar)."}, {"q": "Côté serveur, quelle méthode faut-il utiliser pour décider si l'utilisateur peut accéder au dashboard ?", "o": ["getSession(), car elle lit le cookie", "Lire l'e-mail dans l'URL", "getUser(), qui vérifie réellement le jeton", "Aucune, le middleware suffit toujours"], "a": 2, "e": "getSession() lit le cookie sans le valider ; getUser() (ou getClaims()) vérifie l'identité avant d'accorder l'accès."}, {"q": "Un visiteur non connecté ouvre /dashboard. Quel comportement est attendu ?", "o": ["Afficher un dashboard vide", "Rediriger vers /login?next=/dashboard puis revenir au dashboard après connexion", "Afficher une erreur 500", "Créer un compte automatiquement"], "a": 1, "e": "La page protégée redirige vers la connexion en conservant la destination, pour y renvoyer l'utilisateur après succès."}], [{"q": "Pourquoi valider les données côté serveur si le formulaire les valide déjà ?", "o": ["Pour afficher les erreurs plus vite", "Parce que Zod ne fonctionne que sur le serveur", "Parce que n'importe qui peut envoyer une requête sans passer par le formulaire", "Pour éviter d'écrire des migrations"], "a": 2, "e": "La validation client est contournable ; seule la validation serveur protège réellement la base."}, {"q": "Dans la Server Action addReview, d'où doit venir user_id ?", "o": ["De la session, via supabase.auth.getUser()", "D'un champ caché du formulaire", "Du localStorage", "D'un paramètre d'URL"], "a": 0, "e": "L'identité doit provenir de la session vérifiée côté serveur ; un champ envoyé par le client peut être falsifié."}, {"q": "Après l'ajout d'un film, la liste de la watchlist ne se met pas à jour. Quelle est la cause la plus probable ?", "o": ["RLS est désactivé", "La clé anon est expirée", "La migration n'a pas été commitée", "La Server Action n'appelle pas revalidatePath('/watchlist')"], "a": 3, "e": "Sans revalidation, Next.js sert le rendu mis en cache ; revalidatePath force le rafraîchissement de la page."}, {"q": "Quel message illustre correctement un état vide ?", "o": ["« Erreur 404 »", "« Votre backlog est vide. Ajoutez votre premier jeu » avec un bouton d'ajout", "Une page blanche", "« Chargement… » affiché en permanence"], "a": 1, "e": "Un état vide explique la situation et propose l'action suivante, au lieu de laisser l'utilisateur face à rien."}, {"q": "Comment gérer la suppression d'un avis ?", "o": ["Supprimer dès le clic, sans retour", "Supprimer toutes les lignes de reviews de l'utilisateur", "Confirmer dans une modale nommant l'élément, puis appeler une Server Action filtrée par id", "Masquer l'avis en CSS"], "a": 2, "e": "Une action irréversible se confirme explicitement, et la requête delete doit cibler précisément l'élément par son id."}], [{"q": "Une table a RLS activé mais aucune policy. Que se passe-t-il pour une requête faite avec la clé anon ?", "o": ["Toutes les lignes sont lisibles", "Aucune ligne n'est accessible", "Seules les lignes récentes sont lisibles", "La requête contourne RLS automatiquement"], "a": 1, "e": "RLS activé sans policy bloque tout accès via l'API : c'est l'état sûr par défaut, on ouvre ensuite opération par opération."}, {"q": "Quelle clause vérifie les données écrites lors d'un insert ?", "o": ["using", "order by", "with check", "on delete cascade"], "a": 2, "e": "with check contrôle les nouvelles lignes ; using filtre les lignes existantes visibles ou ciblées."}, {"q": "Une requête de l'app est bloquée par RLS. Quelle est la bonne réaction ?", "o": ["Écrire la policy manquante pour l'opération concernée", "Passer la clé service_role dans le client navigateur", "Désactiver RLS sur la table", "Supprimer la table et la recréer"], "a": 0, "e": "Le blocage indique qu'aucune règle n'autorise l'opération ; contourner RLS supprimerait toute protection."}, {"q": "Une clé secrète a été commitée puis retirée du fichier au commit suivant. Que faut-il faire ?", "o": ["Rien, elle n'est plus dans le code", "Renommer la variable", "Rendre le repo privé suffit", "La régénérer dans Supabase, car elle reste dans l'historique Git"], "a": 3, "e": "L'historique Git conserve la valeur ; seule la rotation de la clé la rend inutilisable."}, {"q": "Quel test prouve que l'isolation des données fonctionne ?", "o": ["Vérifier que la page s'affiche sans erreur", "Se connecter avec un second compte et tenter de lire et modifier les données du premier", "Lancer npm run lint", "Relire le README"], "a": 1, "e": "Seul un second compte réel permet de constater que RLS empêche l'accès aux données d'autrui."}], [{"q": "Quel filtre supabase-js permet une recherche partielle, insensible à la casse, sur le titre d'un jeu ?", "o": [".eq('title', q)", ".order('title')", ".range(0, 9)", ".ilike('title', `%${q}%`)"], "a": 3, "e": "ilike fait une correspondance de motif insensible à la casse ; les % encadrent le texte recherché."}, {"q": "Que renvoie .range(0, 9) ?", "o": ["Les 10 premières lignes (bornes incluses)", "Les 9 premières lignes", "Les lignes dont l'id est entre 0 et 9", "Le nombre total de lignes"], "a": 0, "e": "range utilise des bornes incluses : de l'index 0 à l'index 9, soit 10 résultats."}, {"q": "Comment obtenir le nombre de jeux « terminés » pour le dashboard sans charger les lignes ?", "o": ["Charger toutes les lignes et utiliser .length", "select('*', { count: 'exact', head: true }) avec .eq('status', 'termine')", "Stocker un compteur dans .env.local", "Utiliser la clé service_role"], "a": 1, "e": "head: true ne renvoie aucune ligne, seulement le total calculé par la base : c'est léger et exact."}, {"q": "Quel ordre de tickets est le plus logique pour construire le socle ?", "o": ["Dashboard → recherche → auth → schéma", "Auth → dashboard → schéma → CRUD", "Schéma → auth → CRUD entité 1 → relation → recherche → dashboard", "CRUD → schéma → dashboard → auth"], "a": 2, "e": "Chaque étape dépend de la précédente : les tables d'abord, puis les utilisateurs, puis les données qu'ils manipulent."}, {"q": "Pourquoi garder les critères de recherche dans l'URL (searchParams) ?", "o": ["Pour que la recherche soit partageable, survive au rechargement et soit lue par le Server Component", "Pour contourner RLS", "Parce que Supabase l'exige", "Pour éviter la pagination"], "a": 0, "e": "L'URL devient la source de vérité des filtres : le serveur les lit et l'utilisateur peut revenir ou partager le lien."}]];
+const FAMILIES={"f1":"Fonctionnement","f2":"Données","f3":"Comptes","f4":"Usages","f5":"Sécurité"};
+const EXPLORERS={"x0":{"title":"Explorer les briques d'une application","icon":"🧩","intro":"Cliquez sur chaque notion pour afficher sa fiche.","items":[{"id":"Interface","fam":"f1","rows":[["Définition","Tout ce que l'utilisateur voit et touche : pages, boutons, formulaires, listes."],["Exemple","La page « Ma watchlist » de CinéList, avec ses cartes de films et son bouton Ajouter."],["Piège","Croire qu'un bouton caché suffit à interdire une action : n'importe qui peut envoyer une demande sans passer par l'écran."],["À retenir","L'interface est la partie la plus visible, mais jamais la seule qui protège."]]},{"id":"Serveur","fam":"f1","rows":[["Définition","Le cerveau de l'application : il reçoit les demandes, vérifie qui les envoie, applique les règles et parle à la base de données."],["Exemple","Quand vous cliquez sur « S'inscrire », le serveur vérifie que vous êtes connecté avant d'enregistrer quoi que ce soit."],["Piège","Oublier de vérifier côté serveur parce que l'écran « semble déjà vérifier »."],["À retenir","Les décisions qui comptent (qui a le droit ? est-ce valide ?) se prennent côté serveur."]]},{"id":"Base de données","fam":"f1","rows":[["Définition","La mémoire de l'application : des informations rangées dans des tableaux, conservées même quand on ferme le navigateur."],["Exemple","Les films, les avis et la liste de chaque utilisateur de CinéList."],["Piège","Garder une information importante uniquement à l'écran : tout disparaît au rechargement de la page."],["À retenir","Si une information doit survivre à un rechargement, elle doit être enregistrée dans la base."]]},{"id":"Supabase","fam":"f1","rows":[["Définition","Un service en ligne qui fournit au même endroit la base de données, les comptes utilisateurs et les règles de sécurité."],["Exemple","Vous voyez vos tableaux et vos comptes dans son tableau de bord, un peu comme dans un tableur."],["Piège","Modifier la base à la main dans Supabase sans qu'aucune trace n'en reste dans le projet."],["À retenir","Vous ne l'installez pas : vous créez un projet en ligne et l'agent y connecte votre application."]]},{"id":"Réglages de connexion","fam":"f1","rows":[["Définition","L'adresse du projet Supabase et ses clés, rangées dans un fichier à part et non écrites dans le code."],["Exemple","Un fichier .env.local sur votre ordinateur, et les mêmes valeurs saisies dans les réglages de la version en ligne."],["Piège","Copier une clé secrète dans le code ou dans une conversation avec l'IA."],["À retenir","Les réglages changent entre votre ordinateur et la version en ligne : ils restent hors du code."]]},{"id":"Agent de code","fam":"f1","rows":[["Définition","L'assistant qui écrit et modifie le code de l'application à partir de vos demandes."],["Exemple","Vous demandez « ajoute un formulaire d'avis » et il crée les fichiers nécessaires."],["Piège","Lui confier toute l'application d'un coup : impossible à relire, impossible à corriger proprement."],["À retenir","Vous décidez, il exécute, vous vérifiez : un petit ticket après l'autre."]]}]},"x1":{"title":"Explorer l'organisation des données","icon":"🧩","intro":"Cliquez sur chaque notion pour afficher sa fiche.","items":[{"id":"Entité","fam":"f2","rows":[["Définition","Un type de « chose » que l'application garde en mémoire ; chaque entité a son propre tableau."],["Exemple","GameBacklog : les jeux (le catalogue) et les entrées de backlog (la ligne personnelle de chaque joueur)."],["Piège","Confondre entité et écran : la page « Tableau de bord » n'est pas un tableau de données."],["À retenir","Le socle exige au moins deux entités reliées entre elles."]]},{"id":"Colonne (champ)","fam":"f2","rows":[["Définition","Une information sur la chose stockée : titre, année, statut, note… Chaque ligne du tableau est un exemplaire."],["Exemple","Le tableau Films a les colonnes titre, année et type ; la ligne « Dune, 2021, film » est un exemplaire."],["Piège","Mettre plusieurs informations dans une seule colonne (« Dune, Alien, Heat ») : impossible à filtrer ou à compter."],["À retenir","Une colonne = une seule information, d'un seul type (texte, nombre, oui/non, date)."]]},{"id":"Identifiant unique","fam":"f2","rows":[["Définition","Un code propre à chaque ligne, créé automatiquement (on parle aussi de clé primaire)."],["Exemple","Chaque événement CampusHub a son code : l'adresse de la page désigne cet événement précisément."],["Piège","Utiliser le titre comme identifiant : deux films peuvent porter le même titre."],["À retenir","Un identifiant unique, généré automatiquement, sur chaque tableau."]]},{"id":"Lien entre tableaux","fam":"f2","rows":[["Définition","Une colonne qui contient l'identifiant d'une ligne d'un autre tableau (on parle de clé étrangère)."],["Exemple","Dans le tableau Avis, la colonne « film » pointe vers la ligne du film concerné."],["Piège","Ne pas décider ce qui arrive aux avis quand le film est supprimé."],["À retenir","Dans une relation un-à-plusieurs, le lien se place du côté « plusieurs »."]]},{"id":"Relation plusieurs-à-plusieurs","fam":"f2","rows":[["Définition","Chaque élément d'un côté peut être lié à plusieurs éléments de l'autre, et inversement : on passe par un tableau intermédiaire."],["Exemple","CinéList : un utilisateur suit plusieurs films et un film est suivi par plusieurs utilisateurs → tableau « Ma watchlist »."],["Piège","Oublier d'interdire les doublons : le même film ajouté deux fois à la même liste."],["À retenir","Le tableau intermédiaire porte souvent des informations utiles (statut, date, favori)."]]},{"id":"Migration","fam":"f2","rows":[["Définition","Un petit fichier daté, écrit par l'agent, qui décrit une modification de la base ; il est rangé dans le projet et sauvegardé avec Git."],["Exemple","« Ajouter la colonne note au backlog » devient une migration sauvegardée avec son ticket."],["Piège","Modifier les tableaux à la main dans Supabase sans laisser de trace dans le projet."],["À retenir","Une migration par changement, dont vous vérifiez le résultat dans Table Editor."]]}]},"x4":{"title":"Explorer les briques de sécurité","icon":"🛡️","intro":"Cliquez sur chaque notion pour afficher sa fiche.","items":[{"id":"RLS (règles d'accès par ligne)","fam":"f5","rows":[["Définition","Un mécanisme de la base de données qui décide, ligne par ligne, qui a le droit de voir ou de modifier quoi (Row Level Security)."],["Exemple","Dans le backlog de GameBacklog, chaque joueur ne voit que ses propres lignes."],["Piège","Créer un tableau et oublier d'activer la sécurité par ligne."],["À retenir","Activée sur tous vos tableaux, sans exception."]]},{"id":"Règle d'accès","fam":"f5","rows":[["Définition","Une phrase de sécurité du type « seul le propriétaire peut modifier sa ligne » (on parle de policy). Il en faut une par opération : voir, ajouter, modifier, supprimer."],["Exemple","Événements : tout le monde peut les voir, seul l'organisateur peut les modifier."],["Piège","Une règle trop large (« tout le monde peut tout lire ») sur un tableau personnel."],["À retenir","Demandez à l'agent d'écrire chaque règle en une phrase et de la justifier."]]},{"id":"Isolation des données","fam":"f5","rows":[["Définition","Le fait qu'un utilisateur ne puisse ni voir ni modifier les données personnelles d'un autre."],["Exemple","Le compte B ouvre l'adresse d'un élément du compte A et ne voit rien."],["Piège","Croire qu'un écran qui n'affiche que vos données suffit : il faut tester avec un second compte."],["À retenir","Se vérifie avec deux comptes réels, pas en lisant le code."]]},{"id":"Clé publique","fam":"f5","rows":[["Définition","La clé présente dans le navigateur : elle est publique par conception et ne donne que ce que les règles d'accès autorisent (clé anon ou publishable)."],["Exemple","Elle permet à l'application de parler à Supabase au nom de l'utilisateur connecté."],["Piège","Croire qu'il faut la cacher à tout prix, ou au contraire l'utiliser sans règles d'accès."],["À retenir","Sa sécurité vient des règles d'accès, pas de son secret."]]},{"id":"Clé secrète","fam":"f5","rows":[["Définition","Le passe-partout : elle contourne toutes les règles d'accès (clé service_role ou secret)."],["Exemple","Un script d'administration, côté serveur uniquement, qui importe le catalogue de jeux."],["Piège","La laisser dans le code, l'envoyer sur GitHub ou la coller dans une conversation avec une IA."],["À retenir","Serveur uniquement, jamais partagée, et régénérée si elle a fuité."]]},{"id":"Fichier .env.local","fam":"f5","rows":[["Définition","Le fichier local qui contient l'adresse et les clés du projet ; il n'est pas envoyé sur GitHub."],["Exemple","Il contient l'adresse Supabase et les clés ; un fichier modèle .env.example ne liste que les noms, sans les valeurs."],["Piège","L'envoyer sur GitHub parce qu'il n'est pas dans la liste des fichiers ignorés."],["À retenir","Jamais sauvegardé sur GitHub : demandez à l'agent de le vérifier avant le premier envoi."]]}]}};
+const QCMS=[[{"q":"Vous ajoutez un film à votre watchlist, vous fermez le navigateur, puis vous le retrouvez le lendemain. Quelle brique l'a conservé ?","o":["L'interface, qui garde l'écran en mémoire","La base de données","Le fichier DESIGN.md","L'agent de code"],"a":1,"e":"Seule la base de données conserve les informations de façon durable. L'interface n'est qu'un affichage : elle disparaît quand on ferme la page."},{"q":"Où doit se faire la vérification « cette personne a-t-elle le droit de supprimer cet avis ? »","o":["Uniquement dans l'apparence du bouton, en le cachant aux autres","Côté serveur, avant que la suppression soit enregistrée","Dans le fichier .env.local","Nulle part : l'utilisateur est toujours de confiance"],"a":1,"e":"Cacher un bouton ne suffit pas : on peut envoyer une demande sans passer par l'écran. La décision se prend côté serveur."},{"q":"À quoi sert Supabase dans notre projet ?","o":["À dessiner les maquettes de l'application","À écrire le code à la place de l'agent","À fournir la base de données, les comptes et les règles de sécurité sous forme de service en ligne","À héberger le dépôt GitHub"],"a":2,"e":"Supabase regroupe trois services : la base de données, les comptes utilisateurs et les règles de sécurité. Le code, lui, est écrit par l'agent."},{"q":"Quelle répartition des rôles est la bonne entre vous et l'agent ?","o":["Vous écrivez le code, l'agent le relit","L'agent écrit le code ; vous décidez, vous testez dans le navigateur et vous vérifiez","L'agent décide des fonctionnalités ; vous validez sans tester","L'agent fait tout, y compris les tests ; vous n'intervenez pas"],"a":1,"e":"L'agent exécute ; vous gardez la décision et la vérification. Ne pas tester, c'est perdre le contrôle sur ce qui est produit."},{"q":"Pourquoi l'adresse et les clés de Supabase ne sont-elles pas écrites directement dans le code ?","o":["Parce qu'elles changent entre votre ordinateur et la version en ligne, et qu'elles ne doivent pas être diffusées avec le code","Parce que le code serait trop long","Parce que Supabase les change à chaque visite","Pour que l'application s'affiche plus vite"],"a":0,"e":"Ces réglages sont rangés dans un fichier à part, différent selon l'endroit où tourne l'application, et jamais envoyés sur GitHub."}],[{"q":"Dans CampusHub, un étudiant s'inscrit à plusieurs événements et un événement a plusieurs inscrits. Comment l'organiser ?","o":["Une colonne « mes événements » dans le profil, avec les noms séparés par des virgules","Un tableau intermédiaire « Inscriptions » avec une ligne par couple étudiant + événement","Un seul tableau Événements contenant les noms de tous les inscrits","Un nouveau tableau créé pour chaque étudiant"],"a":1,"e":"Une relation plusieurs-à-plusieurs passe par un tableau intermédiaire : une ligne par inscription, filtrable et comptable."},{"q":"Dans la relation « un organisateur crée plusieurs événements », où place-t-on le lien ?","o":["Dans le tableau des profils","Dans le tableau des événements, côté « plusieurs »","Dans un tableau intermédiaire obligatoire","Dans le fichier .env.local"],"a":1,"e":"Chaque événement indique son organisateur : le lien se met toujours du côté « plusieurs »."},{"q":"Pourquoi donner à chaque ligne un identifiant unique plutôt que d'utiliser le titre ?","o":["Parce que cela remplace les règles de sécurité","Parce que le titre est trop long à afficher","Parce que l'identifiant désigne une ligne sans ambiguïté, alors que deux films peuvent avoir le même titre","Parce que cela trie les films par ordre alphabétique"],"a":2,"e":"Le titre peut se répéter ou changer ; un identifiant unique, créé automatiquement, désigne toujours la même ligne."},{"q":"À quoi sert la règle « un film ne peut être ajouté qu'une fois à la même watchlist » ?","o":["À accélérer la connexion","À chiffrer les données","À rendre le titre obligatoire","À empêcher les doublons, même si l'écran envoie la demande deux fois"],"a":3,"e":"La règle est appliquée par la base elle-même : elle protège la cohérence des données même si l'écran se trompe."},{"q":"Quelle démarche est la plus fiable pour obtenir de bons tableaux avec l'IA ?","o":["Laisser l'agent créer les tableaux directement dans la version en ligne","Faire proposer l'organisation, la faire critiquer, la confronter à vos écrans, la figer dans data-model.md, puis seulement faire créer les tableaux","Copier l'organisation d'un autre projet sans la relire","Créer les tableaux au fil des écrans, sans document"],"a":1,"e":"Proposer puis critiquer fait ressortir les erreurs ; figer le résultat dans data-model.md avant de créer les tableaux garde une trace validée."}],[{"q":"Quelle fonction envoie un lien de connexion par e-mail, sans mot de passe à retenir ?","o":["L'inscription","La déconnexion","Le profil","Le lien magique"],"a":3,"e":"Le lien magique envoie par e-mail un lien qui connecte directement la personne."},{"q":"Pourquoi créer un tableau Profils plutôt que d'ajouter des colonnes aux comptes eux-mêmes ?","o":["Parce que les comptes sont gérés par Supabase : vos informations (pseudo, avatar) vont dans un tableau à vous, relié au compte","Parce que les comptes sont limités à dix utilisateurs","Parce que les profils sont plus rapides à afficher","Parce que la sécurité interdit les tableaux publics"],"a":0,"e":"Les comptes appartiennent à Supabase. Le profil porte les informations propres à votre application et est créé automatiquement à chaque inscription."},{"q":"Un visiteur non connecté ouvre la page /dashboard. Quel comportement est attendu ?","o":["Afficher un tableau de bord vide","Afficher une erreur technique","Le renvoyer vers la connexion, puis le ramener sur le tableau de bord une fois connecté","Créer un compte automatiquement"],"a":2,"e":"Une page réservée aux membres redirige vers la connexion en gardant la destination, pour y revenir après succès."},{"q":"Cacher le bouton « Supprimer » aux visiteurs non connectés suffit-il à protéger la suppression ?","o":["Oui, ils ne peuvent plus cliquer","Oui, si le bouton est caché sur tous les écrans","Non : la vérification doit aussi se faire côté serveur, car on peut envoyer la demande sans passer par le bouton","Non, il faut supprimer la page"],"a":2,"e":"Un écran peut être contourné. La vérification de l'identité doit être refaite côté serveur à chaque action."},{"q":"Qu'est-ce que la session ?","o":["Le nombre de fois où un utilisateur s'est connecté","La preuve que vous êtes connecté, conservée par le navigateur pour ne pas redemander le mot de passe à chaque page","Une sauvegarde de la base de données","Le fichier qui contient les clés du projet"],"a":1,"e":"La session est comme un bracelet de festival : elle prouve que vous avez déjà été identifié, le temps de la visite."}],[{"q":"Le formulaire vérifie déjà la note. Pourquoi vérifier aussi côté serveur ?","o":["Pour afficher les erreurs plus vite","Parce que le formulaire ne sait pas vérifier une note","Parce que n'importe qui peut envoyer une demande sans passer par le formulaire","Pour éviter de créer des tableaux"],"a":2,"e":"La vérification à l'écran sert le confort ; seule la vérification côté serveur protège réellement les données."},{"q":"Quand un avis est publié, d'où doit venir l'identité de son auteur ?","o":["Du compte connecté, vérifié par le serveur","D'un champ caché du formulaire","D'une valeur saisie par l'utilisateur","De l'adresse de la page"],"a":0,"e":"Un champ envoyé par l'écran peut être falsifié : quelqu'un pourrait alors publier au nom d'un autre. L'auteur vient toujours du compte connecté."},{"q":"Après l'ajout d'un film, la liste ne change que si on recharge la page. Que signalez-vous à l'agent ?","o":["La base de données est cassée","Votre compte a expiré","L'affichage n'est pas actualisé après l'enregistrement","Les sauvegardes Git n'ont pas été faites"],"a":2,"e":"L'enregistrement a fonctionné (la donnée est dans Supabase) : c'est l'affichage qui n'est pas rafraîchi. Décrivez ce que vous observez à l'agent."},{"q":"Quel message illustre correctement un état vide ?","o":["« Erreur 404 »","« Chargement… » affiché en permanence","Une page blanche","« Votre backlog est vide. Ajoutez votre premier jeu » avec un bouton d'ajout"],"a":3,"e":"Un état vide explique la situation et propose l'action suivante, au lieu de laisser l'utilisateur face à une page blanche."},{"q":"Comment gérer la suppression d'un avis ?","o":["Supprimer dès le clic, sans rien dire","Supprimer tous les avis de l'utilisateur pour être sûr","Demander confirmation en nommant l'avis, puis supprimer uniquement celui-ci","Le masquer visuellement sans le supprimer"],"a":2,"e":"Une action irréversible se confirme explicitement, et la suppression doit viser précisément l'élément choisi."}],[{"q":"Un tableau a la sécurité par ligne (RLS) activée, mais aucune règle d'accès. Que peut faire un utilisateur connecté ?","o":["Tout voir et tout modifier","Rien : tout est verrouillé par défaut","Seulement lire les lignes récentes","Contourner la sécurité automatiquement"],"a":1,"e":"Sans règle, personne n'a accès : c'est l'état sûr par défaut. On ouvre ensuite opération par opération."},{"q":"Une action de l'application est bloquée par les règles d'accès. Quelle est la bonne réaction ?","o":["Demander à l'agent d'ajouter la règle manquante pour cette opération","Utiliser la clé secrète pour que ça passe","Désactiver la sécurité sur le tableau","Supprimer le tableau et le recréer"],"a":0,"e":"Le blocage signale qu'aucune règle n'autorise l'opération : c'est cette règle qu'il faut écrire. Contourner la sécurité supprimerait toute protection."},{"q":"Quelle clé est le « passe-partout » qui ne doit jamais apparaître dans le navigateur, sur GitHub ou dans une conversation avec une IA ?","o":["La clé publique","L'adresse du projet","La clé secrète","Le nom du projet"],"a":2,"e":"La clé secrète contourne toutes les règles d'accès. La clé publique, elle, est conçue pour être visible, car ce sont les règles qui protègent."},{"q":"Une clé secrète a été envoyée sur GitHub, puis retirée du fichier au commit suivant. Que faut-il faire ?","o":["Rien : elle a disparu du code","Renommer la variable","Rendre le dépôt privé suffit","La régénérer dans Supabase, car elle reste dans l'historique"],"a":3,"e":"L'historique conserve la valeur : seule la régénération de la clé la rend inutilisable."},{"q":"Quel test prouve que l'isolation des données fonctionne ?","o":["Vérifier que la page s'affiche sans erreur","Se connecter avec un second compte et tenter de voir et de modifier les données du premier","Relire le fichier README","Lancer les vérifications automatiques du projet"],"a":1,"e":"Seul un second compte réel permet de constater que les règles d'accès empêchent l'accès aux données d'autrui."}],[{"q":"Quel ordre de tickets est le plus logique pour construire le socle ?","o":["Tableau de bord → recherche → comptes → données","Comptes → tableau de bord → données → CRUD","Données → comptes → CRUD d'une première entité → lien entre entités → recherche → tableau de bord","CRUD → données → tableau de bord → comptes"],"a":2,"e":"Chaque étape dépend de la précédente : les tableaux d'abord, puis les utilisateurs, puis les données qu'ils manipulent."},{"q":"Quel critère de fin est le plus utile pour un ticket de recherche ?","o":["« Ça marche »","« Je tape un mot dans la barre, la liste se réduit ; si rien ne correspond, un message Aucun résultat apparaît »","« Le code est propre »","« L'agent a terminé »"],"a":1,"e":"Un bon critère se vérifie dans le navigateur, par une action précise et un résultat observable."},{"q":"Pourquoi demander que les critères de recherche apparaissent dans l'adresse de la page ?","o":["Pour contourner les règles de sécurité","Parce que Supabase l'exige","Pour éviter la pagination","Pour que la recherche soit partageable et survive au rechargement de la page"],"a":3,"e":"L'adresse devient la mémoire de la recherche : on peut recharger la page ou envoyer le lien sans perdre ses filtres."},{"q":"Comment vérifier que les compteurs du tableau de bord sont justes ?","o":["Les comparer avec les données visibles dans Supabase et tester avec un second compte","Faire confiance à l'agent, qui a dit que c'était bon","Regarder si la page se charge vite","Relire le fichier PROJECT.md"],"a":0,"e":"On compare ce qui est affiché avec ce qui est réellement stocké, et on s'assure que chaque compte voit ses propres chiffres."},{"q":"Pourquoi est-ce une mauvaise idée de demander à l'agent de construire toute l'application en une seule fois ?","o":["Parce que l'agent refuse les longues demandes","Parce que le résultat est impossible à relire et à vérifier, et qu'un défaut caché est difficile à retrouver et à annuler","Parce que cela coûte plus cher en e-mails","Parce que Supabase limite le nombre de tableaux"],"a":1,"e":"De petits tickets ordonnés, vérifiés un par un et sauvegardés (un commit chacun) permettent de comprendre, corriger et revenir en arrière."}]];
 const ACTS=["ch0", "ch1", "ch2", "ch3", "ch4", "ch5"];
 const params = new URLSearchParams(location.search);
 if (params.has('formateur') || location.hash === '#formateur') document.body.classList.add('formateur');
