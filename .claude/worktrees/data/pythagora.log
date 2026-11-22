@@ -1,0 +1,18 @@
+2026-11-22T22:54:18.954Z INFO Is remote: false
+2026-11-22T22:54:18.957Z INFO Starting Local. Installation path: c:\Users\gabistam\Desktop\Formateur Technique\Formateur Web\Hinformatique\IPSSI\S4\owasp
+2026-11-22T22:54:18.959Z INFO [MainProvider] Creating new MainProvider instance...
+2026-11-22T22:54:18.961Z INFO [TabsManager] Code view listener set up at initialization
+2026-11-22T22:54:18.963Z INFO Installation path exists: c:\Users\gabistam\Desktop\Formateur Technique\Formateur Web\Hinformatique\IPSSI\S4\owasp
+2026-11-22T22:54:18.965Z INFO Initializing database with URL: file:c:\Users\gabistam\Desktop\Formateur Technique\Formateur Web\Hinformatique\IPSSI\S4\owasp\pythagora-core\data\database\pythagora.db
+2026-11-22T22:54:18.974Z INFO Database file exists, skipping prisma generate/push for faster startup
+2026-11-22T22:54:18.976Z INFO Database initialized successfully
+2026-11-22T22:54:18.978Z INFO [Migration] Checking for database migration...
+2026-11-22T22:54:19.463Z INFO [Migration] No migration needed
+2026-11-22T23:42:45.086Z INFO [TabsManager] First file opened, triggering split view
+2026-11-22T23:42:45.087Z INFO [MainProvider] First file opened, creating split view
+2026-11-22T23:42:46.567Z INFO [TabsManager] First file opened, triggering split view
+2026-11-22T23:42:46.569Z INFO [MainProvider] First file opened, creating split view
+2026-11-22T23:42:47.564Z INFO [TabsManager] First file opened, triggering split view
+2026-11-22T23:42:47.565Z INFO [MainProvider] First file opened, creating split view
+2026-11-22T23:42:51.581Z INFO [TabsManager] First file opened, triggering split view
+2026-11-22T23:42:51.582Z INFO [MainProvider] First file opened, creating split view
